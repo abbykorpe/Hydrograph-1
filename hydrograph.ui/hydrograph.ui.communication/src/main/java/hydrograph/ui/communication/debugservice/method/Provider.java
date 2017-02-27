@@ -18,7 +18,7 @@ import java.net.URL;
 
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
@@ -38,7 +38,6 @@ import hydrograph.ui.logging.factory.LogFactory;
  *
  */
 public class Provider {	
-	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private static String POST_PROTOCOL="http";
 	public static Provider INSTANCE = new Provider();
 	private static Logger LOGGER = LogFactory.INSTANCE.getLogger(Provider.class);
@@ -70,8 +69,16 @@ public class Provider {
 	}
 
 	private Integer getPortNo(JobDetails jobDetails) {
-		String localPortNo=Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.LOCAL_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
-		String remotePortNo=Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+		String localPortNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.LOCAL_PORT_NO);
+		if(StringUtils.isBlank(localPortNo)){
+			localPortNo =PreferenceConstants.DEFAULT_PORT_NO;
+		}
+		
+		
+		String remotePortNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+		if(StringUtils.isBlank(remotePortNo)){
+			remotePortNo = PreferenceConstants.DEFAULT_PORT_NO;
+		}
 		if(jobDetails.isRemote() && StringUtils.isNotBlank(remotePortNo)){
 			return	Integer.parseInt(remotePortNo);
 		}else
@@ -79,8 +86,8 @@ public class Provider {
 	}
 
 	private String getHost(JobDetails jobDetails) {
-		String remoteHost=Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_HOST, "", null);
-		if(jobDetails.isRemote() && Platform.getPreferencesService().getBoolean(PLUGIN_ID,PreferenceConstants.USE_REMOTE_CONFIGURATION ,false, null)){
+		String remoteHost=PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
+			if(jobDetails.isRemote() && PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.USE_REMOTE_CONFIGURATION)){
 			return remoteHost;
 		}
 		return jobDetails.getHost();
@@ -106,7 +113,7 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, jobDetails.getComponentSocketID());
 		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, jobDetails.getBasepath());
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, jobDetails.getUsername());
-		postMethod.addParameter(DebugServicePostParameters.PASSWORD, jobDetails.getPassword());
+		postMethod.addParameter(DebugServicePostParameters.DEBUG_SERVICE_PWD, jobDetails.getPassword());
 		postMethod.addParameter(DebugServicePostParameters.FILE_SIZE, fileSize);
 		postMethod.addParameter(DebugServicePostParameters.HOST_NAME, getHost(jobDetails));
 		
@@ -134,12 +141,14 @@ public class Provider {
 			) throws NumberFormatException, MalformedURLException {
 		
 		if (isRemote) {
-			port = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_PORT_NO,
-					PreferenceConstants.DEFAULT_PORT_NO, null);
-			if (Platform.getPreferencesService().getBoolean(PLUGIN_ID, PreferenceConstants.USE_REMOTE_CONFIGURATION,
-					false, null)) {
-				host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST,
-						"", null);
+			
+			port =PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+			if(StringUtils.isBlank(port)){
+				port = PreferenceConstants.DEFAULT_PORT_NO;
+			}
+			
+				if (PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.USE_REMOTE_CONFIGURATION)) {
+					host = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
 			}
 		}
 		
@@ -149,7 +158,7 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.JOB_ID, uniqJobID);
 		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, basePath);
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, user);
-		postMethod.addParameter(DebugServicePostParameters.PASSWORD, password);
+		postMethod.addParameter(DebugServicePostParameters.DEBUG_SERVICE_PWD, password);
 		
 		LOGGER.debug("Calling debug service to delete basepath debug files through url :: "+url);
 		

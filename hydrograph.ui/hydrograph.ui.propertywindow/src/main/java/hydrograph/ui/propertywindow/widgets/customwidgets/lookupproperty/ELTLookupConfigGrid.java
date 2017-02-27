@@ -14,16 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.LookupConfigProperty;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +27,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowData;
@@ -49,6 +38,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.LookupConfigProperty;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 
 public class ELTLookupConfigGrid extends Dialog {
@@ -149,8 +148,8 @@ public class ELTLookupConfigGrid extends Dialog {
 
 		driverText = textBoxWidget(keyComposite, new int[] { 191, 31, 220, 21 }, "", false);
 		lookupText = textBoxWidget(keyComposite, new int[] { 191, 58, 220, 21 }, "", false);
-		driverText.setBackground(new Color(null, 255, 255, 255));
-		lookupText.setBackground(new Color(null, 255, 255, 255));
+		driverText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
+		lookupText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 		labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 10, 10, 175, 15 }, PORT);
 
 		driverEditLableAsButton = labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 415, 28, 20, 20 },

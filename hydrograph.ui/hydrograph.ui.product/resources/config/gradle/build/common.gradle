@@ -12,6 +12,7 @@ ext.hydrographExecution='hydrograph.server.execution.tracking.client.main.Hydrog
 */
 ext.AWUrl='http://10.30.127.67:9091/artifactory/hydrograph-for-spark';
 ext.BWUrl='http://10.30.127.67:9091/artifactory/libs-release';
+ext.RedShiftUrl='http://redshift-maven-repository.s3-website-us-east-1.amazonaws.com/release';
 /*
 -------------------------------------------------------------------------------------------------
                                        Version Section  
@@ -94,6 +95,13 @@ def getArgsForRunJob(runEvent) {
        	runParameters.add(executionTrackingPort)
         println " executionTrackingPort is: "+executionTrackingPort
     }
+    
+     if(project.hasProperty("loglevel")){
+   	    runParameters.add("-loglevel")
+       	runParameters.add(loglevel)
+        println " loglevel is: "+loglevel
+    }
+    
   	  return runParameters+"";
 }
 

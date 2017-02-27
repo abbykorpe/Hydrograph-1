@@ -1766,4 +1766,7 @@ public abstract class Component extends Model {
 	public String getDefaultPrefix() {
 		return defaultPrefix;
 	}
+	public ArrayList<Link> getInputLinks() {
+	  	return inputLinks;
+	  		}
 }

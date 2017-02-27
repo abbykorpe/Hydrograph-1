@@ -14,6 +14,8 @@
  
 package hydrograph.ui.graph.action.subjob;
 
+import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -47,7 +49,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
-import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
 
 /**
  * The Class SubJobTrackingAction use to view subjob tracking,on this action new temp subjob tracking container will be open.
@@ -80,7 +81,7 @@ public class SubJobTrackingAction extends SelectionAction{
 		super.init();
 
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Constants.SUBJOB_TRACKING); 
+		setText(Constants.VIEW_TRACKING_OR_WATCH_POINT_DATA);
 		setId(Constants.SUBJOB_TRACKING);
 		setEnabled(false);
 	}
@@ -126,6 +127,7 @@ public class SubJobTrackingAction extends SelectionAction{
 						editorPart.setDeleteOnDispose(true);
 						eltGraphicalEditor.addSubJobEditor(editorPart);
 						editorPart.getContainer().openedForTracking(true);
+						editorPart.getContainer().setSubjobComponentEditPart(obj);
 						COOLBAR_ITEMS_UTILITY.disableCoolBarIcons(false);
 						} catch (PartInitException e) {
 							logger.error("Failed to open tracking view for subjob", e);

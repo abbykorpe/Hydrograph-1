@@ -116,8 +116,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			super.deactivate();
 			((Component) getModel()).removePropertyChangeListener(this);
 			getComponentFigure().disposeFonts();
-			getComponentFigure().disposeImages();
-			getComponentFigure().disposeColors();
 		}
 	}
 
@@ -288,14 +286,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		// container
 		// (the Figure of the ShapesDiagramEditPart), will not know the bounds
 		// of this figure and will not draw it correctly.
-		/*
-		 * Component component = (Component) getModel();
-		 * 
-		 * Rectangle bounds = new Rectangle(component.getLocation(),
-		 * component.getSize()); ((ContainerEditPart)
-		 * getParent()).setLayoutConstraint(this, getFigure(), bounds);
-		 */
-		
 		Component component = getCastedModel();
 		ComponentFigure componentFigure = getComponentFigure();
 				

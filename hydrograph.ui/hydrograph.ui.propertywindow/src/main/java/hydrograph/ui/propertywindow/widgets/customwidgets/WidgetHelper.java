@@ -250,10 +250,10 @@ public class WidgetHelper {
 	public WidgetConfig getNoOfRecordsWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_NO_OF_RECORDS);
-		textBoxConfig.setCharacterLimit(10);
-		addTextBoxListeners(textBoxConfig);
-		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
-		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
+		textBoxConfig.getListeners().add(Listners.MODIFY);
+		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC_OR_PARAMETER_FOCUS_IN);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC_OR_PARAMETER_FOCUS_OUT);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
@@ -282,6 +282,7 @@ public class WidgetHelper {
 			portCount = String.valueOf(minimumPortCount);
 		}
 		textBoxConfig.getOtherAttributes().put(HelperType.MINIMUM_PORT_COUNT.toString(), portCount);
+		listeners.add(Listners.MODIFY);
 		listeners.add(Listners.VERIFY_NUMERIC);
 		listeners.add(Listners.JOIN_INPUT_COUNT);
 		listeners.add(Listners.JOIN_INPUT_COUNT_FOCUS_OUT);

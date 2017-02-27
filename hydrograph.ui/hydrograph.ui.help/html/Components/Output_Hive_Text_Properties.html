@@ -23,9 +23,9 @@
 <p><span><b>Properties</b>&nbsp;for the Output Hive Text File component can be viewed by double clicking the component on canvas. The properties window can also be opened by right-clicking the component icon on the job canvas and clicking on the 'Properties' option.</span</p>
 <p><span>The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common properties are present in the General tab. Schema tab displays the option to accept the field schema i.e. field name, data type, scale etc. </span></p>
 
-<p><a name="general_properties"></a><span class="header-2"><b>General Properties</b></span></p>
+<p><a name="general_properties"></a><span class="header-2">General Properties</span></p>
 
-<p><img alt="" src="../images/Output_Hive_Text_File_Properties_General.png" /></p>
+<p><img alt="" src="../images/output_hive_text_general.png" /></p>
 
 <p><span class="header-2">Display</span></p>
 
@@ -69,7 +69,7 @@
 <ul>
 	<li><a name="partiton_keys"></a><span><b>Partition Keys</b> - Partition keys accepts the partition field names. The window also allows users to specify the partition field values to read filtered data. As per Hive requirement, the partition keys should always be at the end of the schema. The partition keys window validates whether the partition fields are at the end of the schema.</span></li>
 </ul>
-	<p><img alt="" src="../images/Output_Hive_Text_File_PartitionKeys.png" /></p>
+	<p><img alt="" src="../images/output_hive_text_partition_keys.png" /></p>
 <ul>
 	<li><a name="runtime_properties"></a><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Output Hive TextFile component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span>
 	<p><span>Check <a href="../How To Steps/How_To_Pass_Hadoop_Properties_To_Component.html"> How to pass Hadoop properties to component</a></span></p></li>
@@ -81,14 +81,14 @@
 
 <p><a name="schema"></a><span class="header-2">Schema Tab</span></p>
 
-<p><img alt="" src="../images/Output_Hive_Text_File_Properties_Schema.png" /></p>
+<p><img alt="" src="../images/output_hive_text_schema.png" /></p>
 <p><span>Schema is <b>mandatory</b> for Output Hive Text File component. Schema tab defines the record format on the in port of the Output Hive Text File component. A field in schema has multiple attributes as described below.</span></p>
 <ul>
 	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Input Delimited file.</span></li>
 	<ul>
 		<li><span><b>Field Name</b> - User needs to enter all the Field names in this column.</span></li>
 		<li><span><b>Data type</b> - The data type for the field. This is a mandatory attribute. The default data type is "String". Check <a href="../references/SupportedDataTypes.html">supported data types</a> page for list of supported data types.</span></li>
-		<li><span><b>Date Format</b> - The format for date data type. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</span></li>
+		<li><span><b>Date Format</b> - The format for date data type. Refer to <a href="../references/Date_formats.html">Date formats</a> page for acceptable date formats.</span></li>
 		<li><span><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></li>
 		<li><span><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></li>
 		<li><span><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></li>
@@ -103,7 +103,7 @@
 <img src="../images/Output_Hive_Text_File_Warning.png" alt="Warning icon displayed on component" />
 
 <p><span>The properties window also displays error icon on mandatory fields if it has an incorrect value. The error icon is displayed on the tab as well, if any of the field within the tab has some error.</span></p>
-<img src="../images/Output_Hive_Text_File_Tab_Error.png" alt="Error icon displayed on tabs" />
+<img src="../images/output_hive_text_error.png" alt="Error icon displayed on tabs" />
 
 <p><span>If the properties window has some error even after user visit's it once, then the warning icon on the Output Hive Text File component on the job canvas changes to error icon. This error icon is removed only when all the mandatory fields are supplied with correct values.</span></p>
 <img src="../images/Output_Hive_Text_File_Canvas_Error.png" alt="Error icon on component" />

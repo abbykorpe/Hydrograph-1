@@ -13,13 +13,6 @@
 
 package hydrograph.ui.expression.editor.util;
 
-import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
-import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -44,13 +37,20 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
+import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
+import hydrograph.ui.logging.factory.LogFactory;
 
 public class ExpressionEditorUtil {
 
@@ -112,7 +112,7 @@ public class ExpressionEditorUtil {
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				searchTextBox.setForeground(new Color(null,128,128,128));
+				searchTextBox.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry(128,128,128));
 				if(StringUtils.isBlank(searchTextBox.getText())){
 					searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
 				}
@@ -120,7 +120,7 @@ public class ExpressionEditorUtil {
 			
 			@Override
 			public void focusGained(FocusEvent e) {
-				searchTextBox.setForeground(new Color(null,0,0,0));
+				searchTextBox.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry(0,0,0));
 				if(StringUtils.equalsIgnoreCase(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())){
 					searchTextBox.setText(Constants.EMPTY_STRING);
 				}

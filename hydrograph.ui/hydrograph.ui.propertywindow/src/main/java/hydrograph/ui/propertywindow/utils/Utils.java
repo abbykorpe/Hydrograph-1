@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -36,7 +37,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
@@ -45,6 +45,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -207,22 +208,43 @@ public class Utils {
 		 * @return value of Parameter if found in Map otherwise Parameter not found
 		 */
 	 public String getParamValue(String value){
-		 if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
-			String param = null;
-			value=StringUtils.substringBetween(value, "@{", "}");
-			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
-				param = entry.getKey();
-			 if(StringUtils.equals(param, value)){
-				 if(entry.getValue().endsWith("/")){
-					 return entry.getValue();
-				 }
-				return entry.getValue();
-	    			}
-				} 
+		 Optional<String> optional = Optional.of(value);
+		 if(jobProps != null && !jobProps.isEmpty() && optional.isPresent() && value.contains("@{")){
+			String param = "";
+			String[] splitString = value.split("/");
+			for(String field : splitString){
+				if(field.startsWith("@{")){
+					field = StringUtils.substringBetween(field, "@{", "}");
+					for (Map.Entry<String, String> entry : paramsMap.entrySet()){
+						if(StringUtils.equals(entry.getKey(), field)){
+							if(entry.getValue().endsWith("/")){
+								param = param == null ? entry.getValue() : param.concat(entry.getValue() + "/");
+							}
+							param = param == null ? entry.getValue() : param.concat(entry.getValue() + "/");
+						}
+					}
+				}else{
+					param += field + "/";
+				}
 			}
-				return PARAMETER_NOT_FOUND;
-			
-		}		
+			return getResult(param);
+		}
+			return PARAMETER_NOT_FOUND;
+	}		
+	 
+	 /**
+	  * The function will remove last char of string.
+	 * @param value
+	 * @return
+	 */
+	private String getResult(String value){
+		StringBuffer buffer = new StringBuffer();
+		if(value.endsWith("/")){
+			buffer.append(value);
+			buffer = buffer.deleteCharAt(value.lastIndexOf("/"));
+		}
+		return buffer.toString();
+	 }
 		
 	 	/**
 		 * 
@@ -234,7 +256,7 @@ public class Utils {
 		 */
 	 public String getParamFilePath(String extSchemaPath, String paramValue, Text extSchemaPathText){
 			String remainingString = "";
-		    if( ParameterUtil.isParameter(extSchemaPath)){
+		    if( checkParameterValue(extSchemaPath)){
 		    	if(StringUtils.isNotEmpty(paramValue)){
 		    		extSchemaPathText.setToolTipText(paramValue+remainingString);
 		    	}else{
@@ -250,6 +272,17 @@ public class Utils {
 			return paramValue+remainingString;
 		}		
 		
+	 private boolean checkParameterValue(String value){
+		 boolean isParam = false;
+		 String[] splitString = value.split("/");
+			for(String field : splitString){
+				if(ParameterUtil.isParameter(field)){
+					isParam = true;
+					break;
+				}
+			}
+		return isParam;
+	 }
 	 	/**
 		 * 
 		 * Add MouseMoveListner 
@@ -258,13 +291,13 @@ public class Utils {
 		 */
 	 public void addMouseMoveListener(Text extSchemaPathText , Cursor cursor){
 		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
-				extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 255));	
+				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255));	
 				extSchemaPathText.setCursor(cursor);
 				extSchemaPathText.addMouseMoveListener(getMouseListner(extSchemaPathText));
 					}
 			else{
 				extSchemaPathText.removeMouseMoveListener(getMouseListner(extSchemaPathText));
-				extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
 				extSchemaPathText.setCursor(null);
 			}
 	 }		

@@ -14,8 +14,6 @@
 
 package hydrograph.ui.perspective.dialog;
 
-import hydrograph.ui.perspective.Messages;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -24,7 +22,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,6 +32,9 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.perspective.Messages;
 
 /**
  * Dialog class for getting JDK path from user.
@@ -163,7 +163,7 @@ public class JdkPathDialog extends Dialog {
 		composite.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		
 		errorLbl = new Label(composite, SWT.NONE);
-		errorLbl.setForeground(new Color(null, 250,0,0));
+		errorLbl.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 250,0,0));
 		errorLbl.setText("Invalid JDK  bin path");
 		errorLbl.setVisible(false);
 	}

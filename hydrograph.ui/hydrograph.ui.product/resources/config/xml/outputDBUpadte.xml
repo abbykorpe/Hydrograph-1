@@ -18,7 +18,8 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/DBUpdate_palette.png"
 		canvasIconPath="/icons/DBUpdate_canvas.png" name="ODBUpdate"
-		nameInPalette="DB Update" defaultNamePrefix="DBUpdate" description=""
+
+		nameInPalette="DB Update" defaultNamePrefix="DBUpdate" description="It is used to connect different database and update the data in existing tables based on the keys specified by the user. "
 		helpFilePath="/hydrograph.ui.help/html/Components/ODBUpdate.html" acronym="DBUpd">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
@@ -86,7 +87,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
-		<tns:property dataType="string" name="runtimeProperties"
+		<tns:property dataType="string" name="runtime_properties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL"

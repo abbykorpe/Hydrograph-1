@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -26,7 +27,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
@@ -50,6 +51,10 @@ import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyTextListener;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * @author Bitwise 
@@ -176,9 +181,9 @@ public class AggregateCumulateExpressionComposite extends AbstractExpressionComp
 			textAccumulator.setText(mappingSheetRow.getAccumulator());
 		}
 		if (StringUtils.isBlank(textAccumulator.getText())) {
-			textAccumulator.setBackground(new Color(null, 255, 255, 000));
+			textAccumulator.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 000));
 		} else {
-			textAccumulator.setBackground(new Color(null, 255, 255, 255));
+			textAccumulator.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 		}
 		addDataTypes();
 		if (!StringUtils.isBlank(mappingSheetRow.getComboDataType())) {
@@ -361,6 +366,14 @@ public class AggregateCumulateExpressionComposite extends AbstractExpressionComp
 			if (StringUtils.isNotBlank(mappingSheetRow.getOutputList().get(0).getPropertyname()))
 				outputFieldTextBox.setText(mappingSheetRow.getOutputList().get(0).getPropertyname());
 		}
+				
+		ControlDecoration txtDecorator = WidgetUtility.addDecorator(outputFieldTextBox, Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
+		txtDecorator.setMarginWidth(2);
+		txtDecorator.hide();
+		ListenerHelper helper = new ListenerHelper();
+		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		outputFieldTextBox.addListener(SWT.Verify, new ELTVerifyTextListener().getListener(null, helper, outputFieldTextBox));
+		
 		if (mappingSheetRow.getExpressionEditorData() != null
 				&& StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression())) {
 			expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());

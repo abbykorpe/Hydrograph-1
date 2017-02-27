@@ -21,14 +21,13 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -84,7 +83,7 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 					logger.debug("new text: {}", newName);
 					if (newName == null || newName.equals("")) {
 						// e.doit=false;
-						text.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						text.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 						text.setToolTipText(Messages.FIELD_LABEL_ERROR);
 						propertyDialogButtonBar.enableOKButton(false);
 						propertyDialogButtonBar.enableApplyButton(false);
@@ -96,7 +95,7 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 						txtDecorator.show();
 						e.doit=false;
 					} else if(!newName.equalsIgnoreCase(oldName) && !isUniqueCompName(newName)) {
-						text.setBackground(new Color(Display.getDefault(),255,255,204));
+						text.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry(255,255,204));
 						text.setToolTipText(Messages.FIELD_LABEL_ERROR);
 						propertyDialogButtonBar.enableOKButton(false);
 						propertyDialogButtonBar.enableApplyButton(false);

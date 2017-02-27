@@ -168,7 +168,7 @@ public class SubJobUtility {
 		int sourceTerminal;
 		for (int i = 0; i < inLinks.size(); i++) {
 			Component oldTarget = inLinks.get(i).getTarget();
-			sourceTerminal = oldTarget.getInPortCount();
+			sourceTerminal = getInPortCount(oldTarget);
 			inLinks.get(i).getSource();
 			Link link = inLinks.get(i);
 			link.detachTarget();
@@ -180,17 +180,19 @@ public class SubJobUtility {
 			edComponentEditPart.getCastedModel().engageInputPort(Constants.INPUT_SOCKET_TYPE + i);
 			edComponentEditPart.refresh();
 			Integer returnedValue = inputSubjobCompCache.put(oldTarget, sourceTerminal);
-			if (returnedValue != null) {
-				PortDetails portDetails = oldTarget.getPortDetails(PortAlignmentEnum.LEFT);
-				if (portDetails != null && portDetails.isAllowMultipleLinks()) {
-					inputSubjobCompCache.put(oldTarget, ++returnedValue);
-				} else {
-					inputSubjobCompCache.put(oldTarget, returnedValue);
-				}
+			if (returnedValue != null  && returnedValue>sourceTerminal) {
+				inputSubjobCompCache.put(oldTarget, returnedValue);
 			}
-
 		}
+	}
 
+	private int getInPortCount(Component oldTarget) {
+		PortDetails portDetails = oldTarget.getPortDetails(PortAlignmentEnum.LEFT);
+		if ((portDetails != null && portDetails.isAllowMultipleLinks())
+				&& (oldTarget.getTargetConnections()!=null && !oldTarget.getTargetConnections().isEmpty())) {
+		return	oldTarget.getTargetConnections().size();
+		} 
+		return	oldTarget.getInPortCount();
 	}
 
 	/**
@@ -285,6 +287,7 @@ public class SubJobUtility {
 		 */
 		Component inputSubComponent = SubJobPortLinkUtilty.addInputSubJobComponentAndLink(container,
 				inputSubjobCompCache, clipboardList);
+		System.out.println("aa");
 		Component outSubComponent = SubJobPortLinkUtilty.addOutputSubJobComponentAndLink(container,
 				inputSubjobCompCache, outputSubjobCompCache, clipboardList);
 

@@ -130,10 +130,33 @@ public abstract class Converter {
 			bigInteger = new BigInteger(String.valueOf(propertyValue));
 		} else if (ParameterUtil.isParameter(propertyValue)) {
 			ComponentXpath.INSTANCE.getXpathMap()
-					.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(ID, componentName))
+					.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(ID, componentId))
 							.replace(Constants.PARAM_PROPERTY_NAME, propertyName),
 							new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
 			bigInteger = new BigInteger(String.valueOf(0));
+		}
+		return bigInteger;
+
+	}
+	
+	/**
+	 * Converts the String to {@link BigInteger} for port
+	 * 
+	 * @param propertyName
+	 * @return {@link BigInteger}
+	 */
+	protected BigInteger getPortValue(String propertyName) {
+		logger.debug("Getting boolean Value for {}={}", new Object[] { propertyName, properties.get(propertyName) });
+		BigInteger bigInteger = null;
+		String propertyValue = (String) properties.get(propertyName);
+		if (StringUtils.isNotBlank(propertyValue) && StringUtils.isNumeric(propertyValue)) {
+			bigInteger = new BigInteger(String.valueOf(propertyValue));
+		} else if (ParameterUtil.isParameter(propertyValue)) {
+			ComponentXpath.INSTANCE.getXpathMap()
+					.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(ID, componentId))
+							.replace(Constants.PARAM_PROPERTY_NAME, propertyName),
+							new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
+			return null;
 		}
 		return bigInteger;
 

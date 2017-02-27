@@ -29,7 +29,8 @@
 
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>config/logger/tool_logs/Hydrograph.log</File>
+              
+        <File>${hydrograph.installation.location}config/logger/tool_logs/Hydrograph.log</File>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
                 %d [%thread] %-5level %logger.%M - %msg%n

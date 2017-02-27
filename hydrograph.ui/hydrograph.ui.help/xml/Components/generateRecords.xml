@@ -15,7 +15,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Clone" link_to="xml\Components\components.xml#GenerateRecords"> 
+<toc label="Generate Records" link_to="xml\Components\components.xml#GenerateRecords"> 
 	<topic label="Properties"  href="html/Components/Generate_Records_Properties.html"> 
 	</topic>
 </toc>

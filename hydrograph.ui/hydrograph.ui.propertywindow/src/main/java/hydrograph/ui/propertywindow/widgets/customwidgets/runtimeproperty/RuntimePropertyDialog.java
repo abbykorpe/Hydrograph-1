@@ -13,15 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
-
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,15 +35,12 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -60,6 +48,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 
@@ -160,7 +157,7 @@ public class RuntimePropertyDialog extends Dialog {
 		cld_lblPropertyError.heightHint = 25;
 		lblPropertyError.setLayoutData(cld_lblPropertyError);
 		lblPropertyError.setVisible(false);
-		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		lblPropertyError.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 	}
 
 	/**

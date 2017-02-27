@@ -41,9 +41,9 @@ public class ClassDetails implements Comparable<ClassDetails> {
 	private String cName;
 	private String javaDoc;
 	private List<MethodDetails> methodList = new ArrayList<MethodDetails>();
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ClassDetails.class);
 
 	public ClassDetails(IClassFile classFile, String jarFileName, String packageName, boolean isUserDefined) {
-		Logger LOGGER = LogFactory.INSTANCE.getLogger(ClassDetails.class);
 		LOGGER.debug("Extracting methods from "+classFile.getElementName());
 	
 		try {
@@ -92,9 +92,13 @@ public class ClassDetails implements Comparable<ClassDetails> {
 
 	private String getJavaDoc(SourceType javaClassFile) throws JavaModelException {
 		StringBuffer source = new StringBuffer(javaClassFile.getSource());
-		String javaDoc = StringUtils.substring(source.toString(), 0, javaClassFile.getJavadocRange().getLength());
-		javaDoc = StringUtils.replaceEachRepeatedly(javaDoc, new String[] { "/*", "*/", "*" }, new String[] {
-				Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING });
+		try {
+			String javaDoc = StringUtils.substring(source.toString(), 0, javaClassFile.getJavadocRange().getLength());
+			javaDoc = StringUtils.replaceEachRepeatedly(javaDoc, new String[] { "/*", "*/", "*" },
+					new String[] { Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING });
+		} catch (Exception exception) {
+			LOGGER.warn("Failed to build java-doc for :{}", javaClassFile);
+		}
 		return javaDoc;
 	}
 	

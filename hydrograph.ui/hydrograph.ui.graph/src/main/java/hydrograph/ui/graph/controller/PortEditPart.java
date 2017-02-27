@@ -26,6 +26,7 @@ import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.graphics.Color;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
@@ -50,7 +51,7 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		Component component = ((ComponentEditPart) getParent()).getCastedModel();
 		PortFigure port = null;
 
-		Color borderColor = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
+		Color borderColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
 		Point portPoint = null;
 		
 		int height = component.getSize().height-componentFigure.getComponentLabelMargin();

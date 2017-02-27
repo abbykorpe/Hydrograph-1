@@ -23,14 +23,13 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -149,7 +148,7 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 				String str = ((Combo)event.getSource()).getText();
 				if(dropDownConfig.getItems().contains(str)){
 					jdbcDriverClassTextBoxDecorator.hide();
-					jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+					jdbcDriverClassTextBox.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 					if(str.equalsIgnoreCase(Messages.ORACLE)){
 						jdbcDriverClassTextBox.setText(Messages.ORACLE_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Messages.REDSHIFT)){
@@ -160,7 +159,7 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 						jdbcDriverClassTextBox.setText(Messages.TERADATA_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Messages.OTHERS)){
 						jdbcDriverClassTextBox.setText("");
-						jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						jdbcDriverClassTextBox.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 						jdbcDriverClassTextBoxDecorator.setMarginWidth(3);
 						jdbcDriverClassTextBoxDecorator.show();
 					}

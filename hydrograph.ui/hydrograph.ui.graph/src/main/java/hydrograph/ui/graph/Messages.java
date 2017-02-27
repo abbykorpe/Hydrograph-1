@@ -152,6 +152,14 @@ public class Messages extends NLS {
 	
 	public static String DO_YOU_WANT_TO_SAVE_CHANGES;
 	
+	public static String LOG_LEVEL_PREF_MESSAGE;
+	
+	public static String LOG_LEVEL_CONSOLE_PREF_MESSAGE;
+	
+	public static String COMBO_LOG_LEVELS;
+	public static String OPEN_SUBJOB_THROUGH_TRACK_SUBJOB;
+  	public static String RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

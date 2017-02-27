@@ -48,6 +48,7 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.preferences.Utils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.GradleCommandConstants;
@@ -188,7 +189,8 @@ public class JobScpAndProcessUtility {
 					.append(GradleCommandConstants.GPARAM_UNIQUE_JOB_ID).append(job.getUniqueJobId()) 
 					.append(GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH).append(userFunctionsPropertyFile)
 					.append(GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON).append(job.isExecutionTrack())
-					.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getPortFromPreference());
+					.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getRemotePortFromPreference())
+					.append(GradleCommandConstants.GPARAM_CONSOLE_LOGGING_LEVEL+Utils.INSTANCE.getConsoleLogLevel());
 
 		}else{
 			command.append(GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB)
@@ -202,7 +204,8 @@ public class JobScpAndProcessUtility {
 			.append(GradleCommandConstants.GPARAM_UNIQUE_JOB_ID).append(job.getUniqueJobId())
 			.append(GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH).append(userFunctionsPropertyFile)
 			.append(GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON).append(job.isExecutionTrack())
-			.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getPortFromPreference());
+			.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getRemotePortFromPreference())
+			.append(GradleCommandConstants.GPARAM_CONSOLE_LOGGING_LEVEL+Utils.INSTANCE.getConsoleLogLevel());
 		}
 		logger.debug("Gradle Command: {}", command.toString());
 		return command.toString();
@@ -354,7 +357,7 @@ public class JobScpAndProcessUtility {
 			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
 					.getAdapter(GraphicalViewer.class);
 			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
-				EditPart editPart = (EditPart) ite.next();
+				EditPart editPart = ite.next();
 				if (editPart instanceof ComponentEditPart) {
 					Component component = ((ComponentEditPart) editPart).getCastedModel();
 					Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
@@ -382,7 +385,7 @@ public class JobScpAndProcessUtility {
 			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
 					.getAdapter(GraphicalViewer.class);
 			for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
-				EditPart editPart = (EditPart) ite.next();
+				EditPart editPart = ite.next();
 				if (editPart instanceof ComponentEditPart) {
 					Component component = ((ComponentEditPart) editPart).getCastedModel();
 					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){

@@ -196,23 +196,6 @@ public class PortFigure extends Figure {
 		}
 	}
 	
-	/**
-	 * Calls dispose method on Colors. Called by EditPart.
-	 */
-	public void disposeColors(){
-		if(portColor!=null){
-			this.portColor.dispose();
-		}
-		if(componentBorderSelectedColor!=null){
-			this.componentBorderSelectedColor.dispose();
-		}
-		if(componentBorder!=null){
-			this.componentBorder.dispose();
-		}
-		if(watchColor!=null){
-			this.watchColor.dispose();
-		}
-	}
 	
 	/**
 	 * Sets whether to display portlabels. If set to true, port labels will be displayed in canvas.

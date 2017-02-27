@@ -73,7 +73,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 		try {
 			BigInteger bigInteger = inputOracle.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : inputOracle.getPort().getValue());
+					inputOracle.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}

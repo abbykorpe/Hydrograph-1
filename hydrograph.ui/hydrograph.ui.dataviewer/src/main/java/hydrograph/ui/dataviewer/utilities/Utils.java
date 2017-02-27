@@ -25,6 +25,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * 
@@ -142,8 +143,10 @@ public class Utils {
 	 * @return port no
 	 */
 	public String getServicePortNo(){
-		String portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
-				PreferenceConstants.LOCAL_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+		String portNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.LOCAL_PORT_NO);
+		if(StringUtils.isBlank(portNo)){
+			portNo = PreferenceConstants.DEFAULT_PORT_NO;
+		}		
 		return portNo;
 	}
 	

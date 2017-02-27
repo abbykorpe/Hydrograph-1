@@ -102,17 +102,6 @@ public class LoadTypeConfigurationWidget extends AbstractWidget {
 
 		loadConfigurationComposite.attachWidget(eltDefaultButton);
 
-		buttonDecorator = WidgetUtility.addDecorator(
-				(Control) eltDefaultButton.getSWTWidgetControl(),
-				Messages.bind(Messages.EmptyValueNotification, runtimeConfig.getLabel()));
-		if (OSValidator.isMac()) {
-			buttonDecorator.setMarginWidth(-2);
-		}
-		else{
-			buttonDecorator.setMarginWidth(3);
-		}
-		setDecoratorsVisibility();
-		
 
 		try {
 			eltDefaultButton
@@ -145,10 +134,9 @@ public class LoadTypeConfigurationWidget extends AbstractWidget {
 
 			initialMap = loadTypeConfigurationPropertyDialog.getSelectedPropertyValue();
 			
-			showHideErrorSymbol(widgets);
 		}
-		setDecoratorsVisibility();
-
+		showHideErrorSymbol(widgets);
+		propertyDialogButtonBar.enableApplyButton(true);
 	}
 	
 	/**
@@ -194,24 +182,7 @@ public class LoadTypeConfigurationWidget extends AbstractWidget {
 	protected void setToolTipErrorMessage() {
 		String toolTipErrorMessage = null;
 
-		if (buttonDecorator.isVisible())
-			toolTipErrorMessage = buttonDecorator.getDescriptionText();
-
 		setToolTipMessage(toolTipErrorMessage);
 	}
 	
-	/**
-	 * Show or hide the decorator
-	 */
-	protected void setDecoratorsVisibility() {
-
-		if (!isWidgetValid()) {
-			buttonDecorator.show();
-		} else {
-          buttonDecorator.hide();
-		}
-
-	}
-	
-
 }

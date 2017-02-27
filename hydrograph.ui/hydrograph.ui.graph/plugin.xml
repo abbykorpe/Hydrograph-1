@@ -407,6 +407,7 @@
  <extension
        point="org.eclipse.ui.preferencePages">
     <page
+          category="hydrograph.ui.Services"
           class="hydrograph.ui.graph.execution.tracking.preferences.ExecutionTrackPreference"
           id="hydrograph.ui.graph"
           name="Execution Tracking">

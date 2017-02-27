@@ -50,7 +50,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -74,6 +73,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
@@ -1147,9 +1147,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				mappingSheetRow.setComboDataType( accumulatorDataType.getText());
 				boolean isValidValue = validate(expressionComposite.getTextAccumulator().getText(),accumulatorDataType.getText());
 				if(!isValidValue){
-					expressionComposite.getTextAccumulator().setBackground(new Color(null,255,255,000));
+					expressionComposite.getTextAccumulator().setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,255,000));
 				}else{
-					expressionComposite.getTextAccumulator().setBackground(new Color(null,255,255,255));
+					expressionComposite.getTextAccumulator().setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,255,255));
 				}
 				showHideValidationMessage();
 			}
@@ -1164,9 +1164,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				mappingSheetRow.setAccumulator(accumulatorTextBox.getText());
 				boolean isValidValue = validate(accumulatorTextBox.getText(),expressionComposite.getComboDataTypes().getText());
 				if(!isValidValue && (!expressionComposite.getIsParamAccumulator().getSelection()||StringUtils.isBlank(accumulatorTextBox.getText()))){
-					expressionComposite.getTextAccumulator().setBackground(new Color(null,255,255,000));
+					expressionComposite.getTextAccumulator().setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,255,000));
 				}else{
-					expressionComposite.getTextAccumulator().setBackground(new Color(null,255,255,255));
+					expressionComposite.getTextAccumulator().setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,255,255));
 				}
 				showHideValidationMessage();
 			}
@@ -1217,6 +1217,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	 operationalOutputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalOutputFieldTableViewer, this));
     	 operationalOutputFieldTableViewer.setInput(mappingSheetRowForOperationClass.getOutputList());
     	 operationalOutputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());
+    	 
+    	 CellEditor[] operationalOutputFieldEditor=operationalOutputFieldTableViewer.getCellEditors();
+    	 ControlDecoration operationalOutputfieldDecorator = WidgetUtility.addDecorator(operationalOutputFieldEditor[0].getControl(),Messages.FIELDNAME_SHOULD_NOT_BE_BLANK);
+    	 ControlDecoration operationalOutputfieldAlphaNumeric = WidgetUtility.addDecorator(operationalOutputFieldEditor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
+    	 operationalOutputFieldEditor[0].setValidator(new TransformCellEditorFieldValidator(operationalOutputfieldDecorator,operationalOutputfieldAlphaNumeric));
+    	 operationalOutputfieldAlphaNumeric.setMarginWidth(8);
+    	 operationalOutputfieldDecorator.setMarginWidth(8);
+    	 
     	 attachFocuListenerToParamaterTextBox(operationClassComposite.getParameterTextBox());
     	 addSelectionListenerToBrowseButton(operationClassComposite);
     	 operationClassComposite.getBrowseButton().setData(Messages.MAPPING_SHEET,mappingSheetRowForOperationClass);
@@ -1714,7 +1722,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		   setErrorMessageForAccumulator();
 		   setErrorMessageIfExpressionIsNotValid();
 		   Set<String> setToCheckDuplicates = showErrorIfOperationClassOrExpressionBlankOrOperationIDDuplicate(); 	
-     	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
+     	   errorTableViewer.getTable().setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 	       errorTableViewer.refresh();
 	       errorLabelList.clear();
 	       setToCheckDuplicates.clear();
@@ -1845,9 +1853,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	}
     	for(int indices=0 ; indices<mappingTableViewer.getTable().getItemCount();indices++){
     		if(outputFieldIndices.contains(indices)){
-    			mappingTableViewer.getTable().getItem(indices).setForeground(new Color(Display.getDefault(), 255,0,0));
+    			mappingTableViewer.getTable().getItem(indices).setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,0,0));
     		}else{
-    			mappingTableViewer.getTable().getItem(indices).setForeground(new Color(Display.getDefault(), 0, 0, 0));
+    			mappingTableViewer.getTable().getItem(indices).setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
     		}
     	}
     }

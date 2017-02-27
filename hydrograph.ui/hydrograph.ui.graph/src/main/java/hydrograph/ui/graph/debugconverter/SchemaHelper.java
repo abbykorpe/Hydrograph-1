@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -39,12 +40,16 @@ import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -88,8 +93,11 @@ public class SchemaHelper {
 						for(Link link : links){
 							 Component component = link.getSource();
 							 if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+								 Link inputLink=component.getInputLinks().get(0);
+								 String previousComponent=inputLink.getSource().getComponentId();
 								 ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
 								 removeDuplicateKeys(oldComponentIdList, componentNameAndLink);
+								 createDebugXmls(component,schemaFilePath,component.getComponentId(),previousComponent);
 								 for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
 									String comp_soc = entry.getKey();
 									oldComponentIdList.add(comp_soc);
@@ -131,7 +139,101 @@ public class SchemaHelper {
 		}
 		
 	}
+	
+	private void createDebugXmls(Component component, String schemaFilePath, String componentId,
+			String previousComponent) {
+		Container container = (Container) component.getProperties().get(Constants.CONTAINER);
+		ComponentsOutputSchema componentsOutputSchema = null;
+		for (Component componentObject : container.getUIComponentList()) {
+			if (componentObject instanceof SubjobComponent) {
+				Link link = componentObject.getInputLinks().get(0);
+				String previousComponentObject = componentId + Constants.DOT_SEPERATOR
+						+ link.getSource().getComponentId();
+				createDebugXmls(componentObject, schemaFilePath,
+						componentId + Constants.DOT_SEPERATOR + componentObject.getComponentId(),
+						previousComponentObject);
+			}
 
+			componentsOutputSchema = getComponentOutputSchema(componentsOutputSchema, componentObject);
+
+			Map<String, Long> watchPoints = componentObject.getWatcherTerminals();
+			if (watchPoints != null && !watchPoints.isEmpty()) {
+				if (componentObject instanceof InputSubjobComponent) {
+					createXmlCorrospondingToEachWatchPoint(schemaFilePath, previousComponent, componentsOutputSchema,
+							componentObject);
+				} else {
+					createXmlCorrospondingToEachWatchPoint(schemaFilePath, componentId, componentsOutputSchema,
+							componentObject);
+				}
+			}
+		}
+	}
+	
+	private ComponentsOutputSchema getComponentOutputSchema(ComponentsOutputSchema componentsOutputSchema,
+			Component componentObject) {
+		HashMap<String, ComponentsOutputSchema> componentOutputSchema = (HashMap<String, ComponentsOutputSchema>) componentObject
+				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
+		Set<String> keys = componentOutputSchema.keySet();
+		for (String key : keys) {
+			componentsOutputSchema = (ComponentsOutputSchema) componentOutputSchema.get(key);
+		}
+		return componentsOutputSchema;
+	}
+
+
+	private void createXmlCorrospondingToEachWatchPoint(String schemaFilePath, String componentId,
+			ComponentsOutputSchema componentsOutputSchema, Component componentObject) {
+		String path;
+		String componentObjectId = null;
+		path = getFilePath(schemaFilePath, componentId, componentObject, componentObjectId);
+		String xmlFilePath = ((IPath) new Path(path)).addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
+		List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
+		File file = new File(xmlFilePath);
+		GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
+		gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
+	}
+
+	private String getFilePath(String schemaFilePath, String componentId, Component componentObject,
+			String componentObjectId) {
+		String path;
+		if (componentObject instanceof InputSubjobComponent) {
+			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.UNDERSCORE_SEPERATOR
+					+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
+		} else if (componentObject instanceof SubjobComponent) {
+			Map<String, Long> watchPoints = componentObject.getWatcherTerminals();
+			if (watchPoints != null && !watchPoints.isEmpty()) {
+				componentObjectId = getComponentId(componentObject);
+			}
+			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.DOT_SEPERATOR
+					+ componentObject.getComponentId() + Constants.DOT_SEPERATOR + componentObjectId;
+
+		} else {
+			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.DOT_SEPERATOR
+					+ componentObject.getComponentId() + Constants.UNDERSCORE_SEPERATOR
+					+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
+		}
+		return path;
+	}
+	
+	private String getComponentId(Component component) {
+		String componentId = "";
+		Component componentPrevToOutput = null;
+		String portNumber = null;
+		Component outputSubjobComponent = (Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
+		if (outputSubjobComponent != null) {
+			for (Link link : outputSubjobComponent.getTargetConnections()) {
+				componentPrevToOutput = link.getSource();
+				if (Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())) {
+					componentId = componentPrevToOutput.getComponentId() + Constants.DOT_SEPERATOR
+							+ getComponentId(componentPrevToOutput);
+				} else {
+					portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
+					componentId = componentPrevToOutput.getComponentId() + "_" + portNumber;
+				}
+			}
+		}
+		return componentId;
+	}
 	private List<GridRow> getSchemaGridRowList(Link link) {
 		List<GridRow> gridRowList = new ArrayList<GridRow>();
 		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);

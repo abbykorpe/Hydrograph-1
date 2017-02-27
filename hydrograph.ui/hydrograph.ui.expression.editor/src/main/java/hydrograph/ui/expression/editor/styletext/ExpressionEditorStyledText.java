@@ -12,18 +12,18 @@
  *******************************************************************************/
 package hydrograph.ui.expression.editor.styletext;
 
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
 
 
 public class ExpressionEditorStyledText extends StyledText{
@@ -34,7 +34,7 @@ public class ExpressionEditorStyledText extends StyledText{
     public ExpressionEditorStyledText(Composite parent, int style, SourceViewer viewer) {
         super(parent, style);
         setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		setBackground(new Color(null , 255,255,255));
+		setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,255,255));
         this.viewer = viewer;
        
     }

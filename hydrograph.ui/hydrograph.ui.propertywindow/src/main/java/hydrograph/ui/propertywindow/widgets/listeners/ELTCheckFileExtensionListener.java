@@ -15,20 +15,18 @@
 package hydrograph.ui.propertywindow.widgets.listeners;
 
 
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 /**
@@ -58,12 +56,12 @@ public class ELTCheckFileExtensionListener implements IELTListener{
 				ControlDecoration	fieldNameMustJava = WidgetUtility.addDecorator((Text)widgetList[0],Messages.INVALID_FILE);
 				if(!WidgetUtility.isFileExtention((((Text)widgetList[0]).getText()).trim(), ".java") && !(((Text)widgetList[0]).getText().trim().isEmpty())){
 					fieldNameMustJava.show();
-				((Text)widgetList[0]).setBackground(new Color(Display.getDefault(), 255,
+				((Text)widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,
 						255, 204));
 				}
 					else  
 					{   
-						((Text)widgetList[0]).setBackground(new Color(Display.getDefault(), 255,
+						((Text)widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,
 							255, 255));
 					fieldNameMustJava.hide(); 
 					}

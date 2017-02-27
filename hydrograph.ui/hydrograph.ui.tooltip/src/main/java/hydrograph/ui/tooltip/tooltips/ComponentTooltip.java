@@ -28,7 +28,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -42,6 +41,8 @@ import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.WordUtils;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
@@ -307,7 +308,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 			{
 				lookupMappingGrid.setAddPassThroughFields(true);
 			}	
-				link.setLinkForeground(new Color(null, 0,0,255));
+				link.setLinkForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0,0,255));
 		    }
 		});
 	}
@@ -681,10 +682,10 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 				}
 
 			} else if(propertyInfo.getPropertyValue() != null && StringUtils.equalsIgnoreCase(propertyInfo.getPropertyName().toString(), "PORT")){
-				if(!propertyInfo.getPropertyValue().toString().matches(Constants.REGEX_NUMERIC_AND_PARAMETER)){
-					lblDecorator.show();
-				}else{
+				if(propertyInfo.getPropertyValue().toString().matches(Constants.PORT_VALIDATION_REGEX)|| ParameterUtil.isParameter(propertyInfo.getPropertyValue().toString())){
 					lblDecorator.hide();
+				}else{
+					lblDecorator.show();
 				}
 			}else {
 				if (propertyInfo.getPropertyValue() != null && (!propertyInfo.getPropertyValue().equals(""))) {

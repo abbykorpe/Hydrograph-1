@@ -77,7 +77,7 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 		try {
 			BigInteger bigInteger = outputTeradata.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : outputTeradata.getPort().getValue());
+					outputTeradata.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}

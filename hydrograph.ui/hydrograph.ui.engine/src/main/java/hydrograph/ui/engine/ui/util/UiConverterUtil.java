@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.Properties;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
@@ -46,12 +49,14 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.thoughtworks.xstream.XStream;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.ui.common.component.config.Config;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
@@ -307,6 +312,28 @@ public class UiConverterUtil {
 
 	}
 	
+	private static String unformatXMLString(String input) {
+		BufferedReader reader = new BufferedReader(new StringReader(input));
+		StringBuffer result = new StringBuffer();
+		try {
+			String line;
+			while ((line = reader.readLine()) != null){
+				result.append(line.trim() + "\n");
+			}
+			
+			return result.toString();
+		} catch (IOException e) {
+			LOGGER.warn("Unable to remove formatting while saving UI XML string",e);
+		}finally{
+			try {
+				reader.close();
+			} catch (IOException e) {
+				LOGGER.warn("Unable to close xml string reader",e);
+			}
+		}
+		return input;
+	}
+	
 	/**
 	 * Creates the job file based for the container object.
 	 * 
@@ -322,6 +349,7 @@ public class UiConverterUtil {
 			XStream xs = new XStream();
 			xs.autodetectAnnotations(true);
 			jobXmlData = xs.toXML(container);
+			jobXmlData=unformatXMLString(jobXmlData);
 			storeParameterData(parameterFile, jobXmlData);
 			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()), true, null);
 
@@ -365,10 +393,14 @@ public class UiConverterUtil {
 		Graph graph = null;
 		parseXML(inputFile);
 		String inputFileAsString = replaceParametersWithDefaultValues(inputFile);
-		
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+		builderFactory.setExpandEntityReferences(false);
+		builderFactory.setNamespaceAware(true);
+		DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+		Document document = documentBuilder.parse(new ByteArrayInputStream(inputFileAsString.getBytes()));
 		jaxbContext = JAXBContext.newInstance(Graph.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		graph = (Graph) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(inputFileAsString.getBytes()));
+		graph = (Graph) jaxbUnmarshaller.unmarshal(document);
 		if (graph != null){
 			componentRepo.genrateComponentRepo(graph);
 		}

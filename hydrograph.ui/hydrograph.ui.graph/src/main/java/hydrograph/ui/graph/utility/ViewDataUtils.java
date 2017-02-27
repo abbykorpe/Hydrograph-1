@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -46,6 +47,10 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.controller.ContainerEditPart;
+import hydrograph.ui.graph.model.components.SubjobComponent;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 /**
  * View Data Utils
@@ -58,7 +63,6 @@ public class ViewDataUtils {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataUtils.class);
 	/** The jobUniqueId map. */
 	
-	private static final String DATAVIEWER_PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private Map<String, List<JobDetails>> viewDataJobDetails;
 	
 	private static ViewDataUtils INSTANCE = new ViewDataUtils();
@@ -255,8 +259,7 @@ public class ViewDataUtils {
 	 * @return host name
 	 */
 	private String getHostFromPreference(){
-		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, 
-				PreferenceConstants.REMOTE_HOST, PreferenceConstants.DEFAULT_HOST, null);
+		String jobTrackingLogDirectory = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
 		return jobTrackingLogDirectory;
 	}
 	
@@ -265,8 +268,7 @@ public class ViewDataUtils {
 	 * @return
 	 */
 	private boolean isOverrideRemoteHost(){
-		boolean isRemoteHost = Platform.getPreferencesService().getBoolean(DATAVIEWER_PLUGIN_ID, 
-				PreferenceConstants.USE_REMOTE_CONFIGURATION, false, null);
+		boolean isRemoteHost = PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.USE_REMOTE_CONFIGURATION);
 		return isRemoteHost;
 	}
 	
@@ -275,8 +277,11 @@ public class ViewDataUtils {
 	 * @return viewData service port no
 	 */
 	private String getViewDataLocalPort(){
-		String localPortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
-				PreferenceConstants.DEFAULT_PORT_NO, null);
+		
+		String localPortNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.LOCAL_PORT_NO);
+		if(StringUtils.isBlank(localPortNo)){
+			localPortNo = PreferenceConstants.DEFAULT_PORT_NO;
+		}		
 		return localPortNo;
 	}
 	
@@ -285,9 +290,10 @@ public class ViewDataUtils {
 	 * @return
 	 */
 	private String getViewDataRemotePort(){
-		String remotePortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
-				PreferenceConstants.DEFAULT_PORT_NO, null);
-		
+		String remotePortNo =  PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+		if(StringUtils.isBlank(remotePortNo)){
+			remotePortNo = PreferenceConstants.DEFAULT_PORT_NO;
+		}
 		return remotePortNo;
 	}
 	
@@ -296,5 +302,30 @@ public class ViewDataUtils {
 	 */
 	public Map<String, List<JobDetails>> getViewDataJobDetails(){
 		return viewDataJobDetails;
+	}
+	public String getComponentId() {
+		Container mainContainer = ((ELTGraphicalEditor) getComponentCanvas()).getContainer();
+		ComponentEditPart componentEditPart = (ComponentEditPart) mainContainer.getSubjobComponentEditPart();
+		ContainerEditPart containerEditPart = null;
+		Container subContainer = null;
+		String componentId = "";
+		while (componentEditPart != null) {
+			containerEditPart = (ContainerEditPart) componentEditPart.getParent();
+			subContainer = (Container) containerEditPart.getModel();
+			SubjobComponent subjobComponent = (SubjobComponent) componentEditPart.getModel();
+			componentId = componentId + subjobComponent.getComponentId() + ".";
+			componentEditPart = (ComponentEditPart) subContainer.getSubjobComponentEditPart();
+}
+		return componentId;
+	}
+	public void clearRemoteFilterConditions(DebugDataViewer window) {
+		window.getConditions().setRemoteCondition("");
+		window.getConditions().getRemoteConditions().clear();
+		window.getConditions().getRemoteGroupSelectionMap().clear();
+	}
+	public void clearLocalFilterConditions(DebugDataViewer window) {
+		window.getConditions().setLocalCondition("");
+		window.getConditions().getLocalConditions().clear();
+		window.getConditions().getLocalGroupSelectionMap().clear();
 	}
 }

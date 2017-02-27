@@ -25,6 +25,7 @@ public enum ComponentXpathConstants {
 	COMPONENT_JOIN_TYPE_XPATH("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId'] [not(@joinType)]"),
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName"),
 	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords"),
+	COMPONENT_NO_OF_RECORDS_COUNT("/graph/*[@id='$id']/recordCount"),
 	
 	OPERATION_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='operation_1']/inputFields"),
 	

@@ -143,8 +143,10 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
@@ -167,6 +169,7 @@ import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobTrackingAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
+import hydrograph.ui.graph.canvas.search.ComponentSearchUtility;
 import hydrograph.ui.graph.command.CommentBoxSetConstraintCommand;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.CommentBoxEditPart;
@@ -225,7 +228,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private String uniqueJobId;
 
-	private static final Color palatteTextColor=new Color(null,51,51,51);
+	private static final Color palatteTextColor=CustomColorRegistry.INSTANCE.getColorFromRegistry(51,51,51);
 	
 	private CustomPaletteEditPartFactory paletteEditPartFactory;
 	public Point location;
@@ -372,12 +375,21 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))){
 					
 					moveComponentWithArrowKey(event);
-				}
-				else{
+				} else {
 					setCustomToolUndoRedoStatus();
 					hideToolTip();
+					if (event.stateMask == 0) {
+						
+						if (Character.isLetterOrDigit(event.character)) {
+							new ComponentSearchUtility().showComponentCreationOnCanvas(event, viewer, paletteRoot);
+							setDirty(true);
+						} else if (((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0 && (event.keyCode == SWT.SHIFT
+								|| event.keyCode == SWT.ALT || event.keyCode == SWT.BS))) {
+							return;
+						}
+					}
+
 				}
-				
 			}
 		});
 
@@ -1846,7 +1858,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void applyPaletteTheme(){
 		paletteEditPartFactory.getPaletteTextFigure().setBackgroundColor(getCanvasControl().getBackground());
 		Color canvasBackColor = getCanvasControl().getBackground();
-		Color contrastColor = new Color(null, 255-canvasBackColor.getRed(), 255-canvasBackColor.getGreen(), 255-canvasBackColor.getBlue());
+		Color contrastColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( 255-canvasBackColor.getRed(), 255-canvasBackColor.getGreen(), 255-canvasBackColor.getBlue());
 		for(DrawerFigure drawerFigure:paletteEditPartFactory.getDrawerFigures()){
 			drawerFigure.getContentPane().setBackgroundColor(getCanvasControl().getBackground());
 			drawerFigure.getContentPane().setForegroundColor(contrastColor);
@@ -1882,7 +1894,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	@Override
-	public List<ParameterFile> getParamterFileSequence() {		
+	public List<ParameterFile> getParamterFileSequence() {
+		for(ParameterFile parameterFile:container.getParamterFileSequence()){
+			if(StringUtils.equals(ParamterFileTypes.JOB_SPECIFIC.name(),parameterFile.getFileType().name())){
+				parameterFile.setFileName(getJobName());
+				break;
+			}
+			}
 		return container.getParamterFileSequence();
 	}
 	

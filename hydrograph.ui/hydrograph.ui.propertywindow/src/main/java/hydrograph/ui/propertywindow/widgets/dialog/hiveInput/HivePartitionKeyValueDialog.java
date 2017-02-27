@@ -52,14 +52,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -69,9 +66,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
 import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
@@ -598,7 +595,7 @@ public class HivePartitionKeyValueDialog extends Dialog {
 			
 		lblPropertyError = new Label(container, SWT.NONE);
 		lblPropertyError.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
-		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		lblPropertyError.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 		lblPropertyError.setText(Messages.HIVE_FIELD_DIALOG_ERROR);
 		lblPropertyError.setVisible(false);
 		lblPropertyError.setData("Error", lblPropertyError);

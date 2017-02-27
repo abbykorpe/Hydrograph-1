@@ -37,6 +37,10 @@
             file="xml/Introduction/GlossaryTerminology.xml">
       </toc>
       <toc
+            file="xml/Hydrograph Features/hydrographfeatures.xml"
+            primary="true">
+      </toc>
+      <toc
             file="xml/Installation and Configuration/installation.xml"
             primary="true">
       </toc>
@@ -72,15 +76,21 @@
             file="xml/Components/components.xml"
             primary="true">
       </toc>
+       <toc
+            file="xml/Components/input/Input.xml">
+      </toc>
+        <toc
+            file="xml/Components/input/InputXml.xml">
+      </toc>
       <toc
             file="xml/Components/transform.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileDelimited.xml">
-      </toc>
-      <toc
             file="xml/Components/components.xml"
             primary="true">
+      </toc>
+      <toc
+            file="xml/Components/commentBox.xml">
       </toc>
       <toc
             file="xml/Components/aggregate.xml">
@@ -107,6 +117,15 @@
             file="xml/Components/inputHiveTextFile.xml">
       </toc>
       <toc
+            file="xml/Components/inputOracle.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputTeradata.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/inputXml.xml">
+      </toc>
+      <toc
             file="xml/Components/join.xml">
       </toc>
       <toc
@@ -126,6 +145,12 @@
       </toc>
       <toc
             file="xml/Components/outputHiveTextFile.xml">
+      </toc>
+       <toc
+            file="xml/Components/outputOracle.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputTeradata.xml">
       </toc>
       <toc
             file="xml/Components/removeDups.xml">
@@ -178,9 +203,6 @@
             file="xml/How To Steps/howToPassHadoopPropertiesToComponent.xml">
       </toc>
       <toc
-            file="xml/How To Steps/howToPassParametersToOperationClass.xml">
-      </toc>
-      <toc
             file="xml/How To Steps/howToRunAJobLocally.xml">
       </toc>
       <toc
@@ -198,9 +220,6 @@
       </toc>
       <toc
             file="xml/References/jobExamples.xml">
-      </toc>
-      <toc
-            file="xml/References/operationExamples.xml">
       </toc>
       <toc
             file="xml/References/referenceURLs.xml">
@@ -287,6 +306,31 @@
       </toc>
       <toc
             file="xml/Components/cumulate.xml">
+      </toc>
+      <toc
+            file="xml/Components/inpuMysql.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputRedshift.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputMysql.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputRedshift.xml">
+      </toc>
+      <toc
+            file="xml/Components/runProgram.xml">
+      </toc>
+      <toc
+            file="xml/Components/runSql.xml">
+      </toc>
+      <toc
+         	file="xml/Components/outputDBUpdate.xml"
+	  		primary="false">
+	  </toc>
+      <toc
+            file="xml/Components/partitionByExpression.xml">
       </toc>
    </extension>
    <extension

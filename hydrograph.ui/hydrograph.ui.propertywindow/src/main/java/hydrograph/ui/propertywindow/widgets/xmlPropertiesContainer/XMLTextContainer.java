@@ -14,11 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.xmlPropertiesContainer;
 
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,6 +23,10 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 
 /**
@@ -57,7 +57,7 @@ public class XMLTextContainer {
 			shell.setSize(439, 432);
 			text = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 			text.setEditable(false);
-			text.setBackground(new Color(shell.getDisplay(), 250, 250, 250));
+			text.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 250, 250, 250));
 			if (this.xmlText != null) {
 				xmlText = xmlText.substring(xmlText.indexOf('\n') + 1);
 				xmlText = xmlText.substring(xmlText.indexOf('\n') + 1, xmlText.lastIndexOf('\n') - 13);

@@ -75,7 +75,7 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		try {
 			BigInteger bigInteger = redshift.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : redshift.getPort().getValue());
+					redshift.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}

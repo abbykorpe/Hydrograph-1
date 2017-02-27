@@ -75,6 +75,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 					filedialog.setFilterExtensions(filterFileExtensions);
 					filedialog.setFileName(((Text) widgets[1]).getText());
 						path = filedialog.open();
+						if(path!=null){
 						file = new File(path);
 						if (StringUtils.isNotEmpty(path)) {
 							((Text) widgets[1]).setText(file.getAbsolutePath());
@@ -82,6 +83,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 							txtDecorator.hide();
 						}
 					}
+				}
 			}
 		};
 		return listener;

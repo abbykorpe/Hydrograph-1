@@ -14,6 +14,7 @@
 package hydrograph.ui.dataviewer.preferencepage;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ConvertHexValues;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.dataviewer.Activator;
@@ -37,8 +38,6 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -61,14 +60,11 @@ import org.eclipse.ui.PlatformUI;
  *
  */
 public class ViewDataPreference extends PreferencePage implements IWorkbenchPreferencePage{
-	private static final String DEFAULT_LOCAL_PORT = "8004";
-	private static final String DEFAULT_REMOTE_PORT = "8004";
 	private static final String DEFAULT_QUOTE_CHARACTOR = "\"";
 	private static final String DEFAULT_DELIMITER = ",";
 	private static final String DEFAULT_VIEW_DATA_FILE_SIZE = "100";
 	private static final String DEFAULT_VIEW_DATA_PAGE_SIZE = "100";
 	private static final boolean DEFAULT_PURGE_DATA_FILES_CHECK = true;
-	private static final boolean DEFAULT_USE_REMOTE_CONFIGURATION_CHECK = false;
 	private static final boolean DEFAULT_INCLUDE_HEADER_CHECK = true;
 	private static final String DEFAULTPATH_VALUE = "";
 	
@@ -76,17 +72,11 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	private IntegerFieldEditor pageSizeEditor;
 	private StringFieldEditor delimiterEditor;
 	private IntegerFieldEditor memoryFieldEditor;
-	private IntegerFieldEditor localPortNo;
 	private StringFieldEditor quoteEditor;
 	private DirectoryFieldEditor tempPathFieldEditor;
 	private DirectoryFieldEditor defaultPathFieldEditor;
 	private BooleanFieldEditor purgeEditor;
 	private List<FieldEditor> editorList;
-	private StringFieldEditor remoteHostFieldEditor;
-	private IntegerFieldEditor remotePortNo;
-	private BooleanFieldEditor useRemoteConfigBooleanFieldEditor;
-	private Composite grpServiceDetailsCmposite;
-	private Button useRemoteConfigbutton;
 	
 	public ViewDataPreference() {
 		super();
@@ -355,98 +345,20 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		labelMsg.setBounds(42, 4, 500, 16);
 		labelMsg.setText(Messages.WARNING_MESSAGE);
 		
-		/*Service detail section*/
-		HydroGroup grpServiceDetails = new HydroGroup(parentComposite, SWT.NONE);
-		grpServiceDetails.setHydroGroupText("Service Details");
-		GridLayout gl_grpServiceDetails = new GridLayout(1, false);
-		GridData gd_grpServiceDetailsData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		grpServiceDetails.setLayout(new GridLayout(1,false));
-		grpServiceDetails.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpServiceDetails.getHydroGroupClientArea().setLayout(gl_grpServiceDetails);
-		grpServiceDetails.getHydroGroupClientArea().setLayoutData(gd_grpServiceDetailsData);
-		
-		grpServiceDetailsCmposite = new Composite(grpServiceDetails.getHydroGroupClientArea(), SWT.NONE);
-		GridData serviceGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		grpServiceDetailsCmposite.setLayout(new GridLayout(1,false));
-		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
-
-		localPortNo = new IntegerFieldEditor(PreferenceConstants.LOCAL_PORT_NO, Messages.LOCAL_PORT_NO_LABEL, grpServiceDetailsCmposite, 4);
-
-		remotePortNo = new IntegerFieldEditor(PreferenceConstants.REMOTE_PORT_NO, Messages.REMOTE_PORT_NO_LABEL, grpServiceDetailsCmposite, 4);
-		remotePortNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent event) {
-				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
-			}
-		});
-		remotePortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) { }
-			@Override
-			public void focusGained(FocusEvent event) {
-				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
-			}
-		});
-		remotePortNo.setPreferenceStore(getPreferenceStore());
-		remotePortNo.load();
-		
-		new Label(grpServiceDetailsCmposite, SWT.None).setText(Messages.OVERRIDE_REMOTE_HOST_LABEL);
-		Composite headerRemoteComposite = new Composite(grpServiceDetailsCmposite, SWT.None);
 		headerComposite.setBounds(0, 0, 20, 16);
 		
-		useRemoteConfigBooleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.USE_REMOTE_CONFIGURATION, "", SWT.DEFAULT, headerRemoteComposite);
-		useRemoteConfigbutton = (Button) useRemoteConfigBooleanFieldEditor.getDescriptionControl(headerRemoteComposite);
-		getPreferenceStore().setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, false);
-		useRemoteConfigBooleanFieldEditor.setPreferenceStore(getPreferenceStore());
-		useRemoteConfigBooleanFieldEditor.load();
-		
-		remoteHostFieldEditor = new StringFieldEditor(PreferenceConstants.REMOTE_HOST, Messages.REMOTE_HOST_NAME_LABEL, grpServiceDetailsCmposite);
-		remoteHostFieldEditor.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validateRemoteHost();
-			}
-		});
-		remoteHostFieldEditor.setPreferenceStore(getPreferenceStore());
-		remoteHostFieldEditor.load();
-		remoteHostFieldEditor.setErrorMessage(null);
-		localPortNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent event) {
-				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
-			}
-		});
-		localPortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) { }
-			@Override
-			public void focusGained(FocusEvent event) {
-				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
-			}
-		});
-		localPortNo.setPreferenceStore(getPreferenceStore());
-		localPortNo.load();
-		addListenerToRemoteConfigBooleanEditor(headerRemoteComposite);
-		 
 		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, "", SWT.DEFAULT, headerComposite);
 		getPreferenceStore().setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.load();
 		
-		Button unusedButton4 = new Button(parentComposite, SWT.None);
-		unusedButton4.setText("unused");
-		unusedButton4.setVisible(false);
+		Composite parent_comp= new Composite(parentComposite, SWT.NONE);
+		parent_comp.setLayout(new GridLayout(3, false));
+		new Label(parent_comp, SWT.NONE).setText("Purge View Data Files ");
 		
-		new Label(parentComposite, SWT.None).setText("   Purge View Data Files ");
-		Composite purgeComposite = new Composite(parentComposite, SWT.None);
-		GridData purgeCompositeData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		purgeCompositeData.heightHint = 18;
-		purgeComposite.setLayoutData(purgeCompositeData);
+		Composite purgeComposite = new Composite(parent_comp, SWT.NONE);
+		purgeComposite.setLayout(new GridLayout(1, false));
 		 
 		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, "", purgeComposite);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
@@ -457,21 +369,10 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		addFields(delimiterEditor);
 		addFields(pageSizeEditor);
 		addFields(quoteEditor);
-		addFields(localPortNo);
-		addFields(remotePortNo);
-		addFields(remoteHostFieldEditor);
 		
 		return null;
 	}
 
-	private void addListenerToRemoteConfigBooleanEditor(Composite headerRemoteComposite) {
-		useRemoteConfigbutton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				validateRemoteHost();
-			}
-		});
-	}
 
 
 	private void addFields(FieldEditor editor){
@@ -535,6 +436,19 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		}
 	}
 	
+	private void validatePortField(String value, IntegerFieldEditor editor, String message){
+		if(StringUtils.isBlank(value) || !value.matches(Constants.PORT_VALIDATION_REGEX)){
+			showErrorMessage(editor, message,false);
+		}else{
+			showErrorMessage(editor, null,true);
+			checkState();
+		}
+	}
+	private void showErrorMessage(IntegerFieldEditor editor, String message,boolean validState) {
+		setErrorMessage(message);
+		editor.setErrorMessage(message);
+		setValid(validState);
+	}
 
 	@Override
 	public void init(IWorkbench workbench) {
@@ -548,9 +462,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		preferenceStore.setDefault(PreferenceConstants.QUOTE_CHARACTOR, DEFAULT_QUOTE_CHARACTOR);
 		preferenceStore.setDefault(PreferenceConstants.INCLUDE_HEADER, DEFAULT_INCLUDE_HEADER_CHECK);
 		preferenceStore.setDefault(PreferenceConstants.PURGE_DATA_FILES, DEFAULT_PURGE_DATA_FILES_CHECK);
-		preferenceStore.setDefault(PreferenceConstants.LOCAL_PORT_NO, DEFAULT_LOCAL_PORT);
-		preferenceStore.setDefault(PreferenceConstants.REMOTE_PORT_NO, DEFAULT_REMOTE_PORT);
-		preferenceStore.setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, DEFAULT_USE_REMOTE_CONFIGURATION_CHECK);
 		setPreferenceStore(preferenceStore);
 	}
 	
@@ -564,9 +475,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_FILE_SIZE));
 		delimiterEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
 		quoteEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.QUOTE_CHARACTOR));
-		localPortNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.LOCAL_PORT_NO));
-		remotePortNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.REMOTE_PORT_NO));
-		useRemoteConfigBooleanFieldEditor.loadDefault();
 		booleanFieldEditor.loadDefault();
 		purgeEditor.loadDefault();
 		loadDefaultToRemoteHostEditor();
@@ -574,7 +482,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	
 	private void loadDefaultToRemoteHostEditor() {
 		setErrorMessage(null);
-		remoteHostFieldEditor.setErrorMessage("");
 		setValid(true);
 		checkState();;
 	}
@@ -589,10 +496,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
 		pageSizeEditor.store();
-		localPortNo.store();
-		remotePortNo.store();
-		useRemoteConfigBooleanFieldEditor.store();
-		remoteHostFieldEditor.store();
 	}
 	
 	@Override
@@ -605,22 +508,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
 		purgeEditor.store();
-		localPortNo.store();
-		remotePortNo.store();
-		remoteHostFieldEditor.store();
-		useRemoteConfigBooleanFieldEditor.store();
 		return super.performOk();
 	}
 
-	private void validateRemoteHost() {
-		if(useRemoteConfigbutton.getSelection() && StringUtils.isEmpty(remoteHostFieldEditor.getStringValue())){
-			remoteHostFieldEditor.setErrorMessage(Messages.BLANK_REMOTE_HOST_NAME_ERROR);
-			checkState();
-		}else{
-			setErrorMessage(null);
-			remoteHostFieldEditor.setErrorMessage("");
-			setValid(true);
-			checkState();;
-		}
-	}
 }

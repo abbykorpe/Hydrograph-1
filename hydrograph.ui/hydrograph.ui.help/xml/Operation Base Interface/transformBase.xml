@@ -16,7 +16,6 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Transform Operation Class" link_to="xml/Operation Base Interface/operationBaseInterface.xml#TransformBase" topic="html/Operation Base Interface/Transform/TransformBase.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Transform Operation Class">
-   </topic> 
-	
+  <topic href="html/Operation Base Interface/Transform/RegexSplitTransform.html" label="RegexSplitTransform">
+   </topic>
 </toc>

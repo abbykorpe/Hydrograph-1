@@ -24,7 +24,7 @@ public class Constants {
 	
 	public static final String ERROR = "ERROR";
 	public static final String BATCH = "Batch";
-	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
+	public static final String PARAM_NO_OF_RECORDS = "recordCount";
 	
 	public static final String INPUT_PORT_COUNT_PROPERTY="inPortCount";
  	public static final String OUTPUT_PORT_COUNT_PROPERTY="outPortCount";
@@ -63,6 +63,8 @@ public class Constants {
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX ="^[\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1}";
 
+	// Used for validating AlphaNumeric or Parameter E.g Aplha_123
+	public static final String REGEX_ALPHA_NUMERIC = "[\\w]*";
 	public static final String MATCH_PROPERTY_WIDGET = "match_value";
 	public static final String MATCH = "Match";
 	public static final String FIRST = "First";
@@ -124,6 +126,7 @@ public class Constants {
 	public static final String NONE_SORT_ORDER="From Param";
 	
 	public static final String SUBJOB_TOOLTIP_INFO = "Subjob Info";
+	public static final String ALREADY_EXISTS = " already exists.";
 
 
 	/*
@@ -189,6 +192,7 @@ public class Constants {
 	public static final String SUBJOB_CREATE = "Create";
 	public static final String SUBJOB_OPEN = "Open"; 	
 	public static final String SUBJOB_TRACKING = "Track Subjob"; 
+	public static final String VIEW_TRACKING_OR_WATCH_POINT_DATA = "View Tracking / Watch Point Data";
 	public static final String SUBJOB_ACTION = "SubJob";
 	public static final String SUBJOB_ACTION_ToolTip = "Path operations";
 	public static final String SUBJOB_CONTAINER = "Container";
@@ -351,5 +355,12 @@ public class Constants {
 	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
 	public static final String JAVA_EXTENSION = ".java";
 	public static final String ProjectSupport_SRC = "src/main/java";
+	public static final String COMMENT_BOX_IMAGE_PATH="/icons/comment-box-icon.png";
+	public static final String PORT_VALIDATION_REGEX="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
+	public static final String CONTAINER="Container";
+  	public static final String DOT_SEPERATOR=".";
+  	public static final String UNDERSCORE_SEPERATOR="_";
+	public static final String XPATH_GRID_ROW = "XPath";
 
 }
+

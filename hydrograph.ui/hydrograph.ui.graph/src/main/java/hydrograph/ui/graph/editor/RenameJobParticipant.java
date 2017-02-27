@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-
  
 package hydrograph.ui.graph.editor;
 
@@ -40,8 +39,14 @@ import hydrograph.ui.graph.utility.ResourceChangeUtil;
 import hydrograph.ui.project.structure.CustomMessages;
 
 
+/**The Class Rename Job Participant
+ * @author Bitwise
+ *
+ */
 public class RenameJobParticipant extends RenameParticipant {
+	private static final String DEBUG = "_debug";
 	private IFile modifiedResource;
+	
 	
 	@Override
 	protected boolean initialize(Object element) {
@@ -106,6 +111,7 @@ public class RenameJobParticipant extends RenameParticipant {
 			OperationCanceledException {
 		final HashMap<IFile,RenameResourceChange> changes= new HashMap<IFile,RenameResourceChange>();
 		final String newName = ResourceChangeUtil.removeExtension(getArguments().getNewName());
+		
 		if (modifiedResource.getParent() != null) {
 			if (!StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),CustomMessages.ProjectSupport_JOBS)) {
 				List<IResource> memberList = new ArrayList<IResource>(modifiedResource.getProject()
@@ -156,10 +162,16 @@ public class RenameJobParticipant extends RenameParticipant {
 		return result;
 	}
 
-	private void getRenameChanges(final HashMap<IFile, RenameResourceChange> changes, final String newName,
+	
+	private void getRenameChanges(final HashMap<IFile, RenameResourceChange> changes, String newName,
 			IResource resource) {
 		RenameResourceChange change = (RenameResourceChange) changes.get((IFile) resource);
+		
 		if (change == null) {
+			String fileName = ResourceChangeUtil.removeExtension(resource.getName());
+			if(fileName.endsWith(DEBUG)){
+				newName = newName.concat(DEBUG);
+			}
 			change = new RenameResourceChange(resource.getFullPath(),
 					newName + "." + resource.getFileExtension());
 			changes.put((IFile) resource, change);

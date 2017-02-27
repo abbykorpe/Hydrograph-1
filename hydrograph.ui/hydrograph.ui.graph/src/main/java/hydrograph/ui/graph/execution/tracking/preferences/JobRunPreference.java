@@ -1,4 +1,4 @@
-/*******************************************************************************
+/********************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,7 +9,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.ui.graph.execution.tracking.preferences;
 
@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import hydrograph.ui.graph.execution.tracking.preferences.JobRunPreferenceComposite;
+
 import hydrograph.ui.graph.Activator;
 
 /**
@@ -36,7 +36,9 @@ import hydrograph.ui.graph.Activator;
  */
 public class JobRunPreference extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	public static final String DEFUALT_LOG_LEVEL = "Info";
 	public static final String SAVE_JOB_BEFORE_RUN_PREFRENCE = "save_job__before_run_prefrence";
+	public static final String LOG_LEVEL_PREFERENCE="log_level_preference";
 	private JobRunPreferenceComposite jobRunPreferenceComposite;
 
 	public JobRunPreference() {
@@ -53,12 +55,22 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	@Override
 	public void init(IWorkbench workbench) {
 		getPreferenceStore().setDefault(SAVE_JOB_BEFORE_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
+		getPreferenceStore().setDefault(LOG_LEVEL_PREFERENCE,DEFUALT_LOG_LEVEL);
 		String value = Activator.getDefault().getPreferenceStore()
 				.getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE);
 		if (StringUtils.equals(MessageDialogWithToggle.ALWAYS, value)) {
 			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, value);
 		} else {
 			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
+		}
+		
+		
+		String log_level_value= Activator.getDefault().getPreferenceStore().getString(JobRunPreference.LOG_LEVEL_PREFERENCE);
+		
+		if (StringUtils.isNotBlank(log_level_value)) {
+			getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE, log_level_value);
+		} else {
+			getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE, DEFUALT_LOG_LEVEL);
 		}
 	}
 
@@ -73,9 +85,10 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	protected Control createContents(Composite parent) {
 		getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE);
 		jobRunPreferenceComposite = new JobRunPreferenceComposite(parent, SWT.NONE,
-				getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE));
+				getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE),getPreferenceStore().getString(LOG_LEVEL_PREFERENCE));
 		jobRunPreferenceComposite.setLayout(new GridLayout(1, false));
 		jobRunPreferenceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
 		return null;
 	}
 
@@ -92,6 +105,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 			selection = MessageDialogWithToggle.ALWAYS;
 		}
 		Activator.getDefault().getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, selection);
+		Activator.getDefault().getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE,jobRunPreferenceComposite.getLoglevel());
 		return returnCode;
 	}
 

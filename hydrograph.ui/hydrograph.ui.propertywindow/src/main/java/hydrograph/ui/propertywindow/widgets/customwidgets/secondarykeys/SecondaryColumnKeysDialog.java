@@ -49,8 +49,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -67,9 +65,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
@@ -450,7 +448,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 		lblPropertyError = new Label(composite_3, SWT.NONE);
 		lblPropertyError.setVisible(false);
-		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		lblPropertyError.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 	}
 
 	/**

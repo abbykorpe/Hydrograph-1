@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,6 +29,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +66,6 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	private static final String DBTYPE = "hive";
 	private static final String ERROR = "ERR";
 	private static final String INFO = "INF";
-	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private static final String HIVE_TEXT_FILE = "Hive Text File";
 	private static final String PARQUET = "parquet";
 	private static final String TEXTDELIMITED = "textdelimited";
@@ -120,9 +119,13 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String host = Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_HOST, "", null);
-				String port_no =Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
-
+				String host = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
+				
+				
+				String port_no =PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+				if(StringUtils.isBlank(port_no)){
+					port_no = PreferenceConstants.DEFAULT_PORT_NO;
+				}
 				if(null!=host&& StringUtils.isNotBlank(host)){
 					
 					

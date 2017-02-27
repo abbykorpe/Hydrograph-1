@@ -26,7 +26,7 @@ public class DebugServicePostParameters {
 	public static final String SOCKET_ID = "socketId";
 	public static final String BASE_PATH = "basePath";
 	public static final String USER_ID = "userId";
-	public static final String PASSWORD = "password";
+	public static final String DEBUG_SERVICE_PWD = "password";
 	public static final String FILE_SIZE = "file_size";
 	public static final String HOST_NAME = "host_name";
 	public static final String FILTER_JSON_OBJECT="json_object";

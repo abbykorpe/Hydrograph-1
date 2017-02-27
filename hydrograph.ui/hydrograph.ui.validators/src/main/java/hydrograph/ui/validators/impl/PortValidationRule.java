@@ -20,7 +20,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.validators.Messages;
 
 /***
  * This class validates port_no for all DB Components.
@@ -44,12 +46,12 @@ public class PortValidationRule implements IValidator{
 			boolean isJobFileImported) {
 		String value = (String)object;
 		if(StringUtils.isNotBlank(value)){
-			Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(value);
-			if(!matchs.matches()){
-				errorMessage = propertyName + Constants.PORT_WIDGET_ERROR;
-				return false;
-			}else{
+			Matcher matchs=Pattern.compile(Constants.PORT_VALIDATION_REGEX).matcher(value);
+			if(matchs.matches()||ParameterUtil.isParameter(value)){
 				return true;
+			}else{
+				errorMessage = propertyName +" "+ Messages.PORT_VALIDATION_ERROR;
+				return false;
 			}
 		}
 		errorMessage = propertyName + " can not be blank";

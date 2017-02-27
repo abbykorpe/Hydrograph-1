@@ -13,6 +13,7 @@
 
 package hydrograph.ui.engine.ui.util;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +22,17 @@ import org.apache.commons.lang.StringUtils;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 /**
  * @author Bitwise
@@ -80,7 +85,22 @@ public class ImportedSchemaPropagation {
 		}
 		
 	}
-
+    
+	private List<FilterProperties> convertSchemaToFilterProperty(Component component){
+		List<FilterProperties> outputFileds = new ArrayList<>();
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		    if(schema==null)
+		    {	
+			 return outputFileds;  
+		    }
+			 for (GridRow gridRow : schema.getGridRow()) {
+				FilterProperties filterProperty = new FilterProperties();
+				filterProperty.setPropertyname(gridRow.getFieldName());
+				outputFileds.add(filterProperty);
+			}
+		return outputFileds;
+	}
+	
 	// Validates properties of all components present in graph
 	private void validateAllComponents(Container container) {
 
@@ -98,6 +118,21 @@ public class ImportedSchemaPropagation {
 					}
 				} else {
 					component.validateComponentProperties(true);
+					if (StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName())
+							|| StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName())
+							|| StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName())
+							|| StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())) {
+						if ((TransformMapping) component.getProperties().get(Constants.OPERATION) != null) {
+							TransformMapping transformMapping = (TransformMapping) component.getProperties()
+									.get(Constants.OPERATION);
+							List<FilterProperties> sortedList = SchemaSyncUtility.INSTANCE
+									.sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(component),
+											transformMapping);
+							transformMapping.getOutputFieldList().clear();
+							transformMapping.getOutputFieldList().addAll(sortedList);
+						}
+					}
+					
 				}
 			}
 		}

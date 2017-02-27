@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import javax.xml.XMLConstants;
@@ -71,7 +72,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -99,6 +99,7 @@ import org.xml.sax.SAXException;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
@@ -178,6 +179,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
 	public static final String SCHEMA_TAB ="Schema";
 	public static final String OPERATION ="operation";
+	public static final String NO_SCHEMA_NAME = "The file name of schema is not given";
+	public static final String SCHEMA_FILE_EXTENSION = ".schema";
+	public static final String XML_FILE_EXTENSION = ".xml";
 	private static final int tableHeight=340;
 	private static final int tableWidth=360;
 	private Integer windowButtonWidth = 35;
@@ -861,6 +865,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	 private void schemaFromConnectedLinks() {
 		 Schema schema=null;
+		 Map<String,Schema> oldSchemaMap=new TreeMap<>();
 		 if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 			 for (Link link : getComponent().getTargetConnections()) {
 				 if(SchemaPropagation.INSTANCE.checkUnusedSocketAsSourceTerminal(link)){
@@ -888,8 +893,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 } else {
 					 this.properties = getPropagatedSchema(fixedWidthGridRows);
 				 }
+					 oldSchemaMap.put(link.getTargetTerminal(),schema );	
 				 }
 			 }
+		 getComponent().getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA, oldSchemaMap);
 	 }
 
 	 private boolean isAnyUpdateAvailableOnPropagatedSchema(Schema schema) {
@@ -1002,7 +1009,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 public void focusLost(FocusEvent e) {
 				 if (extSchemaPathText.getText().isEmpty()) {
 					 decorator.show();
-					 extSchemaPathText.setBackground(new Color(Display.getDefault(), 250, 250, 250));
+					 extSchemaPathText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 250, 250, 250));
 				 } else {
 					 decorator.hide();
 				 }
@@ -1011,7 +1018,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 @Override
 			 public void focusGained(FocusEvent e) {
 				 decorator.hide();
-				 extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				 extSchemaPathText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			 }
 		 });
 
@@ -1024,7 +1031,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 @Override
 			 public void widgetSelected(SelectionEvent e) {
 				 decorator.hide();
-				 extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				 extSchemaPathText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 
 			 }
 
@@ -1080,11 +1087,31 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 							paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
 					    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 				    		}
-					  schemaPath = finalParamPath;
+						
+						if(finalParamPath.endsWith("/")){
+							WidgetUtility.createMessageBox(NO_SCHEMA_NAME,"Error",SWT.ICON_ERROR|SWT.OK);
+							 logger.error(NO_SCHEMA_NAME);
+							 return null;
+						}
+						else {
+							if(!(finalParamPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(finalParamPath.endsWith(XML_FILE_EXTENSION))){
+							schemaPath = finalParamPath.concat(SCHEMA_FILE_EXTENSION);
+						 }else{
+							schemaPath = finalParamPath;
+						 }
+						}
+					  
 				 }
-				 else{
-					  schemaPath = extSchemaPathText.getText();
-				 }
+			else {
+				if (extSchemaPathText.getText().endsWith("/")) {
+					WidgetUtility.createMessageBox(NO_SCHEMA_NAME, "Error",
+							SWT.ICON_ERROR | SWT.OK);
+					logger.error(NO_SCHEMA_NAME);
+					return null;
+				}else{
+					schemaPath = extSchemaPathText.getText();
+				}
+			}
 				 if(!StringUtils.isEmpty(schemaPath) && !ParameterUtil.containsParameter(schemaPath, Path.SEPARATOR) &&!new File(schemaPath).isAbsolute()){
 					 IWorkspace workspace = ResourcesPlugin.getWorkspace();
 					 IPath relativePath=null;
@@ -1097,14 +1124,29 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						 logger.error(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,e);
 						 return null;
 					 }	
-					 if(relativePath!=null)
-						 schemaFile = new File(relativePath.toOSString());
-					 else
-						 schemaFile = new File(schemaPath);
+					 if(relativePath!=null){
+						 if(!(relativePath.toOSString().endsWith(SCHEMA_FILE_EXTENSION)) && !(relativePath.toOSString().endsWith(XML_FILE_EXTENSION))){
+							 schemaFile = new File(relativePath.toOSString().concat(SCHEMA_FILE_EXTENSION));
+						 }
+						 else{
+							 schemaFile = new File(relativePath.toOSString());
+						 }
+					 }
+					 else{
+						 if(!(schemaPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(schemaPath.endsWith(XML_FILE_EXTENSION))){
+							 schemaFile = new File(schemaPath.concat(SCHEMA_FILE_EXTENSION));
+						 }else{
+							 schemaFile = new File(schemaPath);
+						 }
+					 }
 				 }
 				 else
-				 {
-					 schemaFile = new File(schemaPath);
+				 {	
+					 if(!(schemaPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(schemaPath.endsWith(XML_FILE_EXTENSION))){
+						 schemaFile = new File(schemaPath.concat(SCHEMA_FILE_EXTENSION));
+					 }else{
+						 schemaFile = new File(schemaPath);
+					 }
 				 }
 			 }
 			 else{
@@ -1127,7 +1169,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 return schemaFile;
 				 }
 				 else {
-					 schemaFile = new File(schemaPath);				
+					 if(!(schemaPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(schemaPath.endsWith(XML_FILE_EXTENSION))){
+						 schemaFile = new File(schemaPath.concat(SCHEMA_FILE_EXTENSION));
+					 }else{
+						 schemaFile = new File(schemaPath);
+					 }
 				 }
 			 }
 			 return schemaFile;
@@ -1158,7 +1204,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				 tableViewer.setInput(schemaGridRowListToImport);
 				 tableViewer.refresh();
-
+				 
+				
 				 GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
 
 				 schemaGridRowListToImport = gridRowLoader.importGridRowsFromXML(helper);

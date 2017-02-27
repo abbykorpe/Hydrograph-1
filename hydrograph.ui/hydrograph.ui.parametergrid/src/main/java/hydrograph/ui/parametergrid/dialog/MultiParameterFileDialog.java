@@ -82,7 +82,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -105,9 +104,9 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.common.util.XMLUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
@@ -131,7 +130,7 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
  * 
  */
 public class MultiParameterFileDialog extends Dialog {
-	private static final String FILE_NAME_VALIDATION_EXPRESSION = "^[a-zA-Z0-9]*$";
+	private static final String FILE_NAME_VALIDATION_EXPRESSION = "[\\w]*";
 
 	private static final int PROPERTY_VALUE_COLUMN_INDEX = 1;
 
@@ -200,7 +199,7 @@ public class MultiParameterFileDialog extends Dialog {
 
 		this.activeProjectLocation = activeProjectLocation;
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
-				| SWT.RESIZE | SWT.MAX |SWT.MIN );
+				| SWT.RESIZE);
 		
 		jobLevelParamterFiles = new ArrayList<>();
 	}
@@ -655,21 +654,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		btnDown.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 
-		Button btnSave = new Button(composite_8, SWT.NONE);
-		btnSave.setToolTipText(Messages.PARAMETER_GRID_SAVE_TOOLTIP);
-		btnSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
-				1, 1));
-		btnSave.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				saveParameters();
-				applyButton.setEnabled(true);
-			}
-		});
-		btnSave.setImage(ImagePathConstant.SAVE_BUTTON.getImageFromRegistry());
-		
-
-		Composite composite_1 = new Composite(composite_4, SWT.NONE);
+        Composite composite_1 = new Composite(composite_4, SWT.NONE);
 		composite_1.setLayout(new GridLayout(1, false));
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
@@ -699,7 +684,7 @@ public class MultiParameterFileDialog extends Dialog {
 				.setText(MultiParameterFileDialogConstants.PARAMETER_NAME);
 		tableViewerColumn_3.setEditingSupport(new ParameterEditingSupport(
 				parameterTableViewer,
-				MultiParameterFileDialogConstants.PARAMETER_NAME));
+				MultiParameterFileDialogConstants.PARAMETER_NAME,this));
 		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
 			
 			@Override
@@ -725,7 +710,7 @@ public class MultiParameterFileDialog extends Dialog {
 			public Color getBackground(Object element) {
 				Parameter p = (Parameter) element;
 				if(StringUtils.isEmpty(p.getParameterName())){
-					return new Color(Display.getCurrent(),0xFF, 0xDD, 0xDD);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0xFF, 0xDD, 0xDD);
 				}
 				return super.getBackground(element);
 			}
@@ -740,7 +725,7 @@ public class MultiParameterFileDialog extends Dialog {
 				.setText(MultiParameterFileDialogConstants.PARAMETER_VALUE);
 		tableViewerColumn_5.setEditingSupport(new ParameterEditingSupport(
 				parameterTableViewer,
-				MultiParameterFileDialogConstants.PARAMETER_VALUE));
+				MultiParameterFileDialogConstants.PARAMETER_VALUE,this));
 		tableViewerColumn_5.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -875,6 +860,10 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 	}
 	
+	public Button getApplyButton() {
+		return applyButton;
+	}
+
 	private void addNewRow(TableViewer parameterTableViewer){
 	Parameter parameter = new Parameter(
 			MultiParameterFileDialogConstants.DefaultParameter,
@@ -1302,7 +1291,7 @@ public class MultiParameterFileDialog extends Dialog {
 			public Color getForeground(Object element) {
 				ParameterFile parameterFile = (ParameterFile) element;
 				if (parameterFile.getFileType().equals(ParamterFileTypes.JOB_SPECIFIC))
-					return new Color(Display.getDefault(), 0, 0, 255);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255);
 				return super.getForeground(element);
 			}
 
@@ -1438,12 +1427,12 @@ public class MultiParameterFileDialog extends Dialog {
 	    	@Override
 	        public String isValid(final String string) {
 	            if (StringUtils.isEmpty(string) || !string.matches(FILE_NAME_VALIDATION_EXPRESSION)) {
-	                return "Invalid file name. Name should contain only alphanumberics";
+	                return Messages.PARAMETER_FIELD_VALIDATION;
 	            }
 	            
 	            ParameterFile parameterFile = new ParameterFile(string + ".properties", paramterFileTypes);
 				if(parameterFiles.contains(parameterFile)){
-					return "File already exist";
+					return Messages.PARAMETER_FILE_EXISTS;
 				}
 	            
 	            return null;

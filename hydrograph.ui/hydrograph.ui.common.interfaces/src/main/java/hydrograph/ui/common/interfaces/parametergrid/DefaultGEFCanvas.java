@@ -14,9 +14,9 @@
  
 package hydrograph.ui.common.interfaces.parametergrid;
 
-import hydrograph.ui.datastructures.parametergrid.ParameterFile;
-
 import java.util.List;
+
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 
 /**
  * The Interface DefaultGEFCanvas.
@@ -132,4 +132,5 @@ public interface DefaultGEFCanvas {
 	public void saveParamterFileSequence(List<ParameterFile> parameterFiles);
 	
 	public List<ParameterFile> getParamterFileSequence();
+	
 }

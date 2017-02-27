@@ -14,15 +14,15 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
-import hydrograph.ui.datastructure.property.OperationField;
-
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.datastructure.property.OperationField;
 
 
 /**
@@ -107,11 +107,11 @@ public class OperationLabelProvider implements ITableLabelProvider , ITableColor
   @Override
 	public Color getBackground(Object element, int columnIndex) {
 
-		return new Color(Display.getDefault(), new RGB(255, 255, 230));
+		return CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 230);
 	}
 
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
-		return new Color(Display.getDefault(), new RGB(100, 0, 0));
+		return CustomColorRegistry.INSTANCE.getColorFromRegistry(100, 0, 0);
 	} 
 }

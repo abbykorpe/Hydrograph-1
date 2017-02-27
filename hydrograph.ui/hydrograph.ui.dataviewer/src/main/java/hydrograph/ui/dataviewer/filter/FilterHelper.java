@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
-import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
-import hydrograph.ui.dataviewer.constants.AdapterConstants;
-import hydrograph.ui.dataviewer.constants.Messages;
-import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
-import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -66,6 +56,17 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
+
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.AdapterConstants;
+import hydrograph.ui.dataviewer.constants.Messages;
+import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class FilterHelper.
@@ -834,10 +835,10 @@ public class FilterHelper {
 
 	private boolean validateCombo(CCombo combo){
 		if((Arrays.asList(combo.getItems())).contains(combo.getText())){
-			combo.setBackground(new Color(null, 255, 255, 255));
+			combo.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			return true;
 		}else {
-			combo.setBackground(new Color(null, 255, 244, 113));
+			combo.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 244, 113));
 			return false;
 		}
 	}
@@ -846,10 +847,10 @@ public class FilterHelper {
 		String type = FilterValidator.INSTANCE.getType(fieldName, fieldsAndTypes);
 		if((StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText(), conditionalOperator,debugDataViewer,fieldName)) ||
 				FilterValidator.INSTANCE.validateField(fieldsAndTypes,text.getText(),fieldName)){
-			text.setBackground(new Color(null, 255, 255, 255));
+			text.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			return true;
 		}else {
-			text.setBackground(new Color(null, 255, 244, 113));
+			text.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 244, 113));
 			return false;
 		}
 	}
@@ -1245,12 +1246,12 @@ public class FilterHelper {
 	 */
 	public Color getColor(int colorIndex){
 		Map<Integer,Color> colorMap = new HashMap<>();
-		colorMap.put(0, new Color(null,255,196,196)); // Light yellow
-		colorMap.put(1, new Color(null,176,255,176)); //Light green
-		colorMap.put(2, new Color(null,149,255,255)); //Light blue
-		colorMap.put(3, new Color(null,254,194,224)); //Light Pink
-		colorMap.put(4, new Color(null,147,194,147)); 
-		colorMap.put(5, new Color(null,255,81,168)); 
+		colorMap.put(0, CustomColorRegistry.INSTANCE.getColorFromRegistry(255,196,196)); // Light yellow
+		colorMap.put(1, CustomColorRegistry.INSTANCE.getColorFromRegistry(176,255,176)); //Light green
+		colorMap.put(2, CustomColorRegistry.INSTANCE.getColorFromRegistry(149,255,255)); //Light blue
+		colorMap.put(3, CustomColorRegistry.INSTANCE.getColorFromRegistry(254,194,224)); //Light Pink
+		colorMap.put(4, CustomColorRegistry.INSTANCE.getColorFromRegistry(147,194,147)); 
+		colorMap.put(5, CustomColorRegistry.INSTANCE.getColorFromRegistry(255,81,168)); 
 	
 	   return colorMap.get(colorIndex);
 	}

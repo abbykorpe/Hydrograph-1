@@ -76,6 +76,7 @@ public class Messages extends NLS {
 	public static String FIELDBATCH;
 	public static String FIELDCHARACTER;
 	public static String CHARACTERSET;
+	public static String CHARACTERSET_XPATH_QUERY;
 	public static String SCALE;
 	public static String SCALEERROR;
 	public static String RuntimePropertAlreadyExists;
@@ -395,6 +396,12 @@ public class Messages extends NLS {
 	public static String PPK_EXT;
 	public static String PEM_EXT;
 	
+	public static String RUN_SQL_MESSAGE;
+	public static String PORT_VALIDATION_ERROR;
+	
+	public static String PARAMETER_FIELD_VALIDATION;
+	public static String PARAMETER_FILE_EXISTS;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
@@ -402,5 +409,4 @@ public class Messages extends NLS {
 
 	private Messages() {
 	}
-
 }
