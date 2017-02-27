@@ -32,6 +32,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+import scala.util.matching.Regex
 
 /**
   * Created by gurdits on 10/17/2016.
@@ -83,6 +84,8 @@ class HydrographRuntime extends HydrographRuntimeService {
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
 
     val sparkSession: SparkSession = enableHiveSupport(sparkSessionBuilder, traversal, properties).getOrCreate()
+
+    getAndSetHadoopProperties(sparkSession,hydrographJob,properties)
 
     val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob,
       flowManipulationContext.getSchemaFieldHandler, sparkSession)
@@ -197,16 +200,84 @@ class HydrographRuntime extends HydrographRuntimeService {
     val configProperties = new SparkConf()
     val sparkProperties = properties.entrySet().asScala
     for (property <- sparkProperties) {
-      configProperties.set(property.getKey.toString, property.getValue.toString)
+      if(property.getKey.toString.startsWith("spark.") || property.getKey.toString.startsWith("hydrograph.")){
+        configProperties.set(property.getKey.toString.trim, property.getValue.toString.trim)
+      }
     }
     val runttimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties
     if (runttimeProperties != null) {
       for (runtimeProperty <- runttimeProperties.getProperty.asScala) {
-        configProperties.set(runtimeProperty.getName, runtimeProperty.getValue)
+        if(runtimeProperty.getName.startsWith("spark.") || runtimeProperty.getName.startsWith("hydrograph.")){
+          configProperties.set(runtimeProperty.getName.trim, runtimeProperty.getValue.trim)
+        }
       }
     }
 
     configProperties
+  }
+
+  def getAndSetHadoopProperties(sparkSession: SparkSession, hydrographJob: HydrographJob, properties: Properties): Unit = {
+
+    val configProperties = sparkSession.sparkContext.hadoopConfiguration
+    val sparkProperties = properties.entrySet().asScala
+    for (property <- sparkProperties) {
+
+      property.getKey.toString match {
+        case a if(!a.startsWith("spark.")) => {
+          val pattern: Regex = "(.*)\\((.*)\\)".r
+          val matchIterator = pattern.findAllIn(property.getValue.toString)
+          if (matchIterator.hasNext) {
+          while (matchIterator.hasNext) {
+            matchIterator.group(1) match {
+              case x if (x.endsWith("OrElse")) => {
+                val arrayOfParams: Array[String] = matchIterator.group(2).split(",")
+                configProperties.set(property.getKey.toString.trim, sys.env.getOrElse(arrayOfParams(0).trim.replaceAll("\"", ""), arrayOfParams(1).trim.replaceAll("\"", "")).trim)
+              }
+              case y if (y.endsWith("get")) => {
+                configProperties.set(property.getKey.toString.trim, sys.env.get(matchIterator.group(2).replaceAll("\"", "")).get.trim)
+              }
+            }
+            matchIterator.next()
+          }
+        }
+          else{
+            configProperties.set(property.getKey.toString.trim, property.getValue.toString.trim)
+          }
+        }
+        case _ =>
+      }
+
+    }
+    val runttimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties
+    if (runttimeProperties != null) {
+      for (runtimeProperty <- runttimeProperties.getProperty.asScala) {
+        runtimeProperty.getName match {
+          case a if(!a.startsWith("spark.")) => {
+            val pattern: Regex = "(.*)\\((.*)\\)".r
+            val matchIterator = pattern.findAllIn(runtimeProperty.getValue)
+            if (matchIterator.hasNext) {
+              while (matchIterator.hasNext) {
+                matchIterator.group(1) match {
+                  case x if (x.endsWith("OrElse")) => {
+                    val arrayOfParams: Array[String] = matchIterator.group(2).split(",")
+                    configProperties.set(runtimeProperty.getName.trim, sys.env.getOrElse(arrayOfParams(0).replaceAll("\"", ""), arrayOfParams(1).replaceAll("\"", "")).trim)
+                  }
+                  case y if (y.endsWith("get")) => {
+                    configProperties.set(runtimeProperty.getName.trim, sys.env.get(matchIterator.group(2).replaceAll("\"", "")).get.trim)
+
+                  }
+                }
+                matchIterator.next()
+              }
+            }
+            else{
+              configProperties.set(runtimeProperty.getName.trim, runtimeProperty.getValue.trim)
+            }
+          }
+          case _ =>
+        }
+      }
+    }
   }
 
 
