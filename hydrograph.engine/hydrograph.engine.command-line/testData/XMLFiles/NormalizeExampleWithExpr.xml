@@ -35,7 +35,7 @@
 
 	<operations id="normalize" xsi:type="op:normalize">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<expression expr="(_index >= (Transactions.split(&quot;,&quot;)).length)?&quot;zzz&quot;:(Transactions.split(&quot;,&quot;))[_index]"
+		<expression expr="(_index >= (Transactions.split(&quot;,&quot;)).length)?&quot;zzz&quot;:(Transactions.split(&quot;,&quot;))[_index.intValue()]"
 					id="e1" >
 			<inputFields>
 				<field name="Transactions" inSocketId="in0" />
@@ -45,7 +45,7 @@
 				<field name="Transaction" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<expression expr="(Rewards.split(&quot;,&quot;))[_index]"
+		<expression expr="(Rewards.split(&quot;,&quot;))[_index.intValue()]"
 					id="e2" >
 			<inputFields>
 				<field name="Rewards" inSocketId="in0" />
@@ -54,7 +54,7 @@
 				<field name="Reward" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<expression expr="((Rewards.split(&quot;,&quot;))[_index].equals(&quot;xxx&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
+		<expression expr="((Rewards.split(&quot;,&quot;))[_index.intValue()].equals(&quot;xxx&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
 					id="e3" >
 			<inputFields>
 				<field name="Rewards" inSocketId="in0" />

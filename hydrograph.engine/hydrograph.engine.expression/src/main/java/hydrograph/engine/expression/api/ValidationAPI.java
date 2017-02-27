@@ -49,6 +49,7 @@ public class ValidationAPI implements Serializable {
 	private List<String> listOfPackage;
 	private  ExpressionEvaluator expressionEvaluator;
 	private ValidationAPIWrapper apiWrapper;
+	private List<ValidationAPIWrapper> apiWrapperList;
 
 
 	public ValidationAPI(String expression, String propertiesFilePath) {
