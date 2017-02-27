@@ -67,7 +67,7 @@ public class ExecutionTrackingLogger {
 		Logger logger = Logger.getLogger(jobID);
 		logger.setLevel(Level.DEBUG);
 		logger.addAppender(fileAppender);
-		
+		logger.getRootLogger().setAdditivity(false);
 		executionTrackingLoggers.put(jobID, logger);
 		
         return logger;

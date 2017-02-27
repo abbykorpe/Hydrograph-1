@@ -27,5 +27,6 @@ public class Constants {
 	public static final String GET="get";
 	public static final String KILL="kill";
 	public static final long DELAY_TIME=7000;
-	public static final String TRACKING_CLIENT_SOCKET_PORT="-trackingclientsocketport";	
+	public static final String TRACKING_CLIENT_SOCKET_PORT="-trackingclientsocketport";
+	public static Object JOB_LOG_LEVEL="-loglevel";	
 }

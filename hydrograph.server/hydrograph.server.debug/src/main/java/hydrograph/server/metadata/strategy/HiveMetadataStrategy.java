@@ -59,8 +59,8 @@ public class HiveMetadataStrategy extends MetadataStrategyTemplate{
     public void setConnection(Map connectionProperties) {
         String userId = connectionProperties.getOrDefault(Constants.USERNAME, new ParamsCannotBeNullOrEmpty(
                 Constants.USERNAME + " not found in request parameter")).toString();
-        String password = connectionProperties.getOrDefault(Constants.PASSWORD, new ParamsCannotBeNullOrEmpty(
-                Constants.PASSWORD + " not found in request parameter")).toString();
+        String service_pwd = connectionProperties.getOrDefault(Constants.SERVICE_PWD, new ParamsCannotBeNullOrEmpty(
+                Constants.SERVICE_PWD + " not found in request parameter")).toString();
         String databaseName = connectionProperties.getOrDefault(Constants.DATABASE_NAME, new ParamsCannotBeNullOrEmpty(
                 Constants.DATABASE_NAME + " name not found in request parameter")).toString();
         String tableName = connectionProperties.getOrDefault(Constants.TABLENAME, new ParamsCannotBeNullOrEmpty(
@@ -80,7 +80,7 @@ public class HiveMetadataStrategy extends MetadataStrategyTemplate{
         conf.addResource(new Path(coreSiteConfigPath));
 
         try {
-            kerberosUtilities.applyKerberosToken(userId, password, conf);
+            kerberosUtilities.applyKerberosToken(userId, service_pwd, conf);
         } catch (LoginException e1) {
             throw new RuntimeException("Unable to login " + e1.getMessage());
         } catch (IOException e1) {

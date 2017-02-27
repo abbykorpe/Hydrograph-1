@@ -65,15 +65,15 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
                 .getOrDefault(Constants.USERNAME,
                         new ParamsCannotBeNullOrEmpty(Constants.USERNAME + " not found in request parameter"))
                 .toString();
-        String password = connectionProperties
-                .getOrDefault(Constants.PASSWORD,
-                        new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
+        String service_pwd = connectionProperties
+                .getOrDefault(Constants.SERVICE_PWD,
+                        new ParamsCannotBeNullOrEmpty(Constants.SERVICE_PWD + " not found in request parameter"))
                 .toString();
         String jdbcUrl = "jdbc:oracle:" + driverType + "://@" + host + ":" + port + ":" + sid;
         Class.forName(Constants.ORACLE_JDBC_CLASSNAME);
         LOG.info("Connection url for oracle = '" + jdbcUrl + "'");
         LOG.info("Connecting with '" + userId + "' user id.");
-        connection = DriverManager.getConnection(jdbcUrl, userId, password);
+        connection = DriverManager.getConnection(jdbcUrl, userId, service_pwd);
     }
 
     /**

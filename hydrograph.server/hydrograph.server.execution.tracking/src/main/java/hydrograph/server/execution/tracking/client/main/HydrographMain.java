@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
@@ -28,6 +29,7 @@ import javax.websocket.CloseReason;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.glassfish.tyrus.client.ClientManager;
 
@@ -71,6 +73,15 @@ public class HydrographMain {
 		List<String> argumentList = new ArrayList<String>( Arrays.asList(args));
 		final String jobId = hydrographMain.getJobId(argumentList);
 		
+		getLogLevel(argumentList).ifPresent(x-> 
+		{
+			if(!x.equalsIgnoreCase(String.valueOf(logger.getLevel()))){
+				setLoglevel(x);
+			}else{
+				Optional.empty();
+			}
+			
+		});
 		
 		logger.info("Argument List: " + argumentList.toString());
 		
@@ -115,6 +126,8 @@ public class HydrographMain {
 			hydrographMain.sendExecutionTrackingStatus(latch, session, jobId, timer, execution,socket);
 		}
 	}
+
+
 
 	private void executeGraph(final CountDownLatch latch, final String jobId, final String[] argsFinalList,
 			final Timer timer, final HydrographService execution, final boolean isExecutionTracking) {
@@ -262,5 +275,51 @@ public class HydrographMain {
 		
 		return argList;
 		
+	}
+	/**
+	 * 
+	 * @param argumentList
+	 * @return
+	 */
+	private static Optional<String> getLogLevel(List<String> argumentList){
+		
+		if (argumentList.contains(Constants.JOB_LOG_LEVEL)) {
+			return Optional.of(argumentList.get(argumentList.indexOf(Constants.JOB_LOG_LEVEL) + 1));
+		}
+		return Optional.empty();
+		
+		
+	} 
+	/**
+	 * 
+	 * @param loglevel
+	 */
+	private static void setLoglevel(String loglevel) {
+        
+		switch (loglevel) {
+		case "Fatal":
+			logger.setLevel(Level.FATAL);
+			break;
+		case "Error":
+			logger.setLevel(Level.ERROR);
+			break;
+		case "Warn":
+			logger.setLevel(Level.WARN);
+			break;
+		case "Info":
+			logger.setLevel(Level.INFO);
+			break;
+		case "Debug":
+			logger.setLevel(Level.DEBUG);
+			break;
+		case "Trace":
+			logger.setLevel(Level.TRACE);
+			break;
+		default:
+			logger.setLevel(Level.ALL);
+			break;
+
+		}
+
 	}
 }

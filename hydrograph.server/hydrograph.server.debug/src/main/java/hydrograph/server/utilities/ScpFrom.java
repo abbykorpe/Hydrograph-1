@@ -28,7 +28,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
 /**
- * @author bhaveshs
+ * @author Bitwise
  *
  */
 public class ScpFrom {
@@ -38,7 +38,7 @@ public class ScpFrom {
 	 * @param password
 	 * @param remoteFile
 	 */
-	public void deleteFile(String host, String user, String password,
+	public void deleteFile(String host, String user, String pwd,
 			String remoteFile) {
 		try {
 			JSch ssh = new JSch();
@@ -47,7 +47,7 @@ public class ScpFrom {
 			java.util.Properties config = new java.util.Properties();
 			config.put("StrictHostKeyChecking", "no");
 			session.setConfig(config);
-			session.setPassword(password);
+			session.setPassword(pwd);
 
 			session.connect();
 			Channel channel = session.openChannel("exec");
@@ -74,7 +74,7 @@ public class ScpFrom {
 	 * @return
 	 */
 	public String scpFileFromRemoteServer(String host, String user,
-			String password, String remoteFile, String localFile) {
+			String pwd, String remoteFile, String localFile) {
 		FileOutputStream fos = null;
 		try {
 
@@ -87,7 +87,7 @@ public class ScpFrom {
 			Session session = jsch.getSession(user, host, 22);
 
 			// username and password will be given via UserInfo interface.
-			UserInfo userInfo = new MyUserInfo(password);
+			UserInfo userInfo = new MyUserInfo(pwd);
 			session.setUserInfo(userInfo);
 			session.connect();
 
@@ -252,20 +252,20 @@ public class ScpFrom {
 	 */
 	public static class MyUserInfo implements UserInfo {
 
-		String password;
+		String pwd;
 
-		public MyUserInfo(String password) {
-			this.password = password;
+		public MyUserInfo(String pwd) {
+			this.pwd = pwd;
 		}
 
 		@Override
 		public String getPassphrase() {
-			return password;
+			return pwd;
 		}
 
 		@Override
 		public String getPassword() {
-			return this.password;
+			return this.pwd;
 		}
 
 		@Override

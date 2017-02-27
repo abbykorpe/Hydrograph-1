@@ -23,7 +23,7 @@ public class JobDetails {
 	private String host;
 	private String port;
 	private String username;
-	private String password;
+	private String service_pwd;
 	private String basepath;
 
 	private String uniqueJobID;
@@ -32,12 +32,12 @@ public class JobDetails {
 
 	private boolean isRemote;
 
-	public JobDetails(String host, String port, String username, String password, String basepath, String uniqueJobID,
+	public JobDetails(String host, String port, String username, String service_pwd, String basepath, String uniqueJobID,
 			String componentID, String componentSocketID, boolean isRemote) {
 		this.host = host;
 		this.port = port;
 		this.username = username;
-		this.password = password;
+		this.service_pwd = service_pwd;
 		this.basepath = basepath;
 		this.uniqueJobID = uniqueJobID;
 		this.componentID = componentID;
@@ -57,9 +57,7 @@ public class JobDetails {
 		return username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
+	public String getService_pwd() { return service_pwd;	}
 
 	public String getBasepath() {
 		return basepath;
