@@ -667,7 +667,7 @@ public class HydrographService {
                 String socketId = remoteFilterJson.getJobDetails().getComponentSocketID();
                 String basePath = remoteFilterJson.getJobDetails().getBasepath();
                 String username = remoteFilterJson.getJobDetails().getUsername();
-                String password = remoteFilterJson.getJobDetails().getPassword();
+                String password = remoteFilterJson.getJobDetails().getService_pwd();
                 double outputFileSizeInMB = remoteFilterJson.getFileSize();
                 double sizeOfDataInByte = outputFileSizeInMB * 1024 * 1024;
 
