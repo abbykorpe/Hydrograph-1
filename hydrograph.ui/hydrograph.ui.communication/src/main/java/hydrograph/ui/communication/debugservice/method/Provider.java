@@ -113,7 +113,7 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, jobDetails.getComponentSocketID());
 		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, jobDetails.getBasepath());
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, jobDetails.getUsername());
-		postMethod.addParameter(DebugServicePostParameters.PASSWORD, jobDetails.getPassword());
+		postMethod.addParameter(DebugServicePostParameters.DEBUG_SERVICE_PWD, jobDetails.getPassword());
 		postMethod.addParameter(DebugServicePostParameters.FILE_SIZE, fileSize);
 		postMethod.addParameter(DebugServicePostParameters.HOST_NAME, getHost(jobDetails));
 		
@@ -158,7 +158,7 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.JOB_ID, uniqJobID);
 		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, basePath);
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, user);
-		postMethod.addParameter(DebugServicePostParameters.PASSWORD, password);
+		postMethod.addParameter(DebugServicePostParameters.DEBUG_SERVICE_PWD, password);
 		
 		LOGGER.debug("Calling debug service to delete basepath debug files through url :: "+url);
 		
