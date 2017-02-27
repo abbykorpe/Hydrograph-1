@@ -18,4 +18,5 @@ Export-Package: hydrograph.ui.communication.debugservice,
  hydrograph.ui.communication.messages,
  hydrograph.ui.communication.utilities
 Import-Package: com.jcraft.jsch,
- hydrograph.ui.common.util
+ hydrograph.ui.common.util,
+ org.apache.commons.io

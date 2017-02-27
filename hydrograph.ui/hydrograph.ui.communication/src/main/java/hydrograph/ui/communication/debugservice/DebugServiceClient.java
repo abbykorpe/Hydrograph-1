@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.io.IOUtils;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.communication.debugservice.method.Provider;
@@ -80,10 +81,8 @@ public class DebugServiceClient {
 	private String getFilePathFromPostResponse(PostMethod postMethod) throws IOException {
 		String path = null;
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
-		byte[] buffer = new byte[1024];
-		while ((inputStream.read(buffer)) > 0) {
-			path = new String(buffer);
-		}
+		byte[] buffer = IOUtils.toByteArray(inputStream);
+		path = new String(buffer);
 		return path;
 	}
 	
