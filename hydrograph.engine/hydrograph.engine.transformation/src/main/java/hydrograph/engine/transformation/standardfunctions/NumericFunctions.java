@@ -15,6 +15,7 @@ package hydrograph.engine.transformation.standardfunctions;
 import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -216,4 +217,334 @@ public class NumericFunctions {
 		return Double.parseDouble(convertComparableObjectToString(inputValue));
 	}
 
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function rounds the number depending on the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue     the double value to be rounded
+	 * @param numberOfDigits the number of digits to round the {@code inputValue}
+	 * @return rounded {@code inputValue} value
+	 */
+	public static Float round(Float inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, RoundingMode.HALF_UP);
+		return bigDecimal.floatValue();
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function rounds the number depending on the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the double value to be rounded
+	 * @param numberOfDigits the number of digits to round the {@code inputValue}
+	 * @return rounded {@code inputValue} value
+	 */
+	public static Double round(Double inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, RoundingMode.HALF_UP);
+		return bigDecimal.doubleValue();
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function rounds the number depending on the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the double value to be rounded
+	 * @param numberOfDigits the number of digits to round the {@code inputValue}
+	 * @return rounded {@code inputValue} value
+	 */
+	public static BigDecimal round(BigDecimal inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = inputValue.setScale(numberOfDigits, RoundingMode.HALF_UP);
+		return bigDecimal;
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function always rounds up the number irrespective of the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the float value to be rounded up
+	 * @param numberOfDigits the number of digits to round up the {@code inputValue}
+	 * @return rounded up {@code inputValue} value
+	 */
+	public static Float roundUp(Float inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, BigDecimal.ROUND_UP);
+		return bigDecimal.floatValue();
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function always rounds up the number irrespective of the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the double value to be rounded up
+	 * @param numberOfDigits the number of digits to round up the {@code inputValue}
+	 * @return rounded up {@code inputValue} value
+	 */
+	public static Double roundUp(Double inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, BigDecimal.ROUND_UP);
+		return bigDecimal.doubleValue();
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function always rounds up the number irrespective of the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the BigDecimal value to be rounded up
+	 * @param numberOfDigits the number of digits to round up the {@code inputValue}
+	 * @return rounded up {@code inputValue} value
+	 */
+	public static BigDecimal roundUp(BigDecimal inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal roundedWithScale = inputValue.setScale(numberOfDigits, BigDecimal.ROUND_UP);
+		return roundedWithScale;
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function always rounds down the number irrespective of the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the float value to be rounded down
+	 * @param numberOfDigits the number of digits to round down the {@code inputValue}
+	 * @return rounded down {@code inputValue} value
+	 */
+	public static Float roundDown(Float inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, BigDecimal.ROUND_DOWN);
+		return bigDecimal.floatValue();
+	}
+
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function always rounds down the number irrespective of the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the double value to be rounded down
+	 * @param numberOfDigits the number of digits to round down the {@code inputValue}
+	 * @return rounded down {@code inputValue} value
+	 */
+	public static Double roundDown(Double inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, BigDecimal.ROUND_DOWN);
+		return bigDecimal.doubleValue();
+	}
+	/**
+	 * Rounds the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * This function always rounds down the number irrespective of the "{@code numberOfDigits} + 1" digit.
+	 *
+	 * @param inputValue          the BigDecimal value to be rounded down
+	 * @param numberOfDigits the number of digits to round down the {@code inputValue}
+	 * @return rounded down {@code inputValue} value
+	 */
+	public static BigDecimal roundDown(BigDecimal inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal roundedWithScale = inputValue.setScale(numberOfDigits, BigDecimal.ROUND_DOWN);
+		return roundedWithScale;
+	}
+
+	/**
+	 * Truncates the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * If {@code numberOfDigits} is greater than the number of digits to the right of {@code input} then the
+	 * function returns {@code input} value. It does not add trailing zeros.
+	 *
+	 * @param inputValue          the float value to be truncated
+	 * @param numberOfDigits the number of digits to truncate to the right of the decimal point
+	 * @return truncated {@code input} value
+	 */
+	public static Float truncate(Float inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		BigDecimal roundedWithScale = bigDecimal.setScale(numberOfDigits, RoundingMode.DOWN).stripTrailingZeros();
+		return roundedWithScale.floatValue();
+	}
+	/**
+	 * Truncates the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * If {@code numberOfDigits} is greater than the number of digits to the right of {@code input} then the
+	 * function returns {@code input} value. It does not add trailing zeros.
+	 *
+	 * @param inputValue          the double value to be truncated
+	 * @param numberOfDigits the number of digits to truncate to the right of the decimal point
+	 * @return truncated {@code input} value
+	 */
+	public static Double truncate(Double inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal bigDecimal = new BigDecimal(inputValue);
+		bigDecimal = bigDecimal.setScale(numberOfDigits, RoundingMode.DOWN).stripTrailingZeros();
+		return bigDecimal.doubleValue();
+	}
+
+	/**
+	 * Truncates the {@code inputValue} to specified number of digits to the right of the decimal point.
+	 * If {@code numberOfDigits} is greater than the number of digits to the right of {@code input} then the
+	 * function returns {@code input} value. It does not add trailing zeros.
+	 *
+	 * @param inputValue          the BigDecimal value to be truncated
+	 * @param numberOfDigits the number of digits to truncate to the right of the decimal point
+	 * @return truncated {@code input} value
+	 */
+	public static BigDecimal truncate(BigDecimal inputValue, int numberOfDigits) {
+		if (inputValue == null)
+			return null;
+		BigDecimal roundedWithScale = inputValue.setScale(numberOfDigits, RoundingMode.DOWN).stripTrailingZeros();
+		return roundedWithScale;
+	}
+
+	/**
+	 * Returns the smallest integer value greater than or equal to {@code inputValue}
+	 *
+	 * @param inputValue the value whose ceiling is to be retrieved
+	 * @return the smallest integer value greater than or equal to {@code inputValue}
+	 */
+	public static Float ceil(Float inputValue) {
+		if (inputValue == null)
+			return null;
+		Double value = Math.ceil(inputValue);
+		return value.floatValue();
+	}
+
+	/**
+	 * Returns the smallest integer value greater than or equal to {@code inputValue}
+	 *
+	 * @param inputValue the value whose ceiling is to be retrieved
+	 * @return the smallest integer value greater than or equal to {@code inputValue}
+	 */
+	public static Double ceil(Double inputValue) {
+		if (inputValue == null)
+			return null;
+		Double value = Math.ceil(inputValue);
+		return value;
+	}
+
+	/**
+	 * Returns the smallest integer value greater than or equal to {@code inputValue}
+	 *
+	 * @param inputValue the value whose ceiling is to be retrieved
+	 * @return the smallest integer value greater than or equal to {@code inputValue}
+	 */
+	public static BigDecimal ceil(BigDecimal inputValue) {
+		if (inputValue == null)
+			return null;
+		Double value = Math.ceil(inputValue.doubleValue());
+		return new BigDecimal(value);
+	}
+
+	/**
+	 * Returns the largest integer value that is less than or equal to {@code inputValue}
+	 *
+	 * @param number the value whose floor value is to be retrieved
+	 * @return the largest integer value that is less than or equal to {@code inputValue}
+	 */
+	public static Float floor(Float number) {
+		if (number == null)
+			return null;
+		Double value = Math.floor(number);
+		return value.floatValue();
+	}
+
+	/**
+	 * Returns the largest integer value that is less than or equal to {@code inputValue}
+	 *
+	 * @param number the value whose floor value is to be retrieved
+	 * @return the largest integer value that is less than or equal to {@code inputValue}
+	 */
+	public static Double floor(Double number) {
+		if (number == null)
+			return null;
+		Double value = Math.floor(number);
+		return value;
+	}
+
+	/**
+	 * Returns the largest integer value that is less than or equal to {@code inputValue}
+	 *
+	 * @param number the value whose floor value is to be retrieved
+	 * @return the largest integer value that is less than or equal to {@code inputValue}
+	 */
+	public static BigDecimal floor(BigDecimal number) {
+		if (number == null)
+			return null;
+		Double value = Math.floor(number.doubleValue());
+		return new BigDecimal(value);
+	}
+
+	/**
+	 * Returns the length of {@code inputValue}
+	 *
+	 * @param inputValue the value whose length is to be retrieved
+	 * @return length of {@code inputValue}
+	 */
+	public static Integer length(Integer inputValue) {
+		if (inputValue == null)
+			return null;
+		return String.valueOf(inputValue).length();
+	}
+
+	/**
+	 * Returns the length of {@code inputValue}
+	 *
+	 * @param inputValue the value whose length is to be retrieved
+	 * @return length of {@code inputValue}
+	 */
+	public static Integer length(Long inputValue) {
+		if (inputValue == null)
+			return null;
+		Integer length = String.valueOf(inputValue).length();
+		return length;
+	}
+
+	/**
+	 * Returns the length of {@code inputValue}
+	 *
+	 * @param inputValue the value whose length is to be retrieved
+	 * @return length of {@code inputValue}
+	 */
+	public static Integer length(Float inputValue) {
+		if (inputValue == null)
+			return null;
+		Integer length = String.valueOf(inputValue).length();
+		return length;
+	}
+
+	/**
+	 * Returns the length of {@code inputValue}
+	 *
+	 * @param inputValue the value whose length is to be retrieved
+	 * @return length of {@code inputValue}
+	 */
+	public static Integer length(Double inputValue) {
+		if (inputValue == null)
+			return null;
+		Integer length = String.valueOf(inputValue).length();
+		return length;
+	}
+
+	/**
+	 * Returns the length of {@code inputValue}
+	 *
+	 * @param inputValue the value whose length is to be retrieved
+	 * @return length of {@code inputValue}
+	 */
+	public static Integer length(Short inputValue) {
+		if (inputValue == null)
+			return null;
+		Integer length = String.valueOf(inputValue).length();
+		return length;
+	}
 }
