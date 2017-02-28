@@ -24,7 +24,7 @@ public class RunSqlEntity extends OperationEntityBase {
     private String portNumber;
     private String databaseName;
     private String dbUserName;
-    private String dbPassword;
+    private String db_pwd;
     private String queryCommand;
 
     public String getDatabaseConnectionName() {
@@ -67,12 +67,12 @@ public class RunSqlEntity extends OperationEntityBase {
         this.dbUserName = dbUserName;
     }
 
-    public String getDbPassword() {
-        return dbPassword;
+    public String getDbPwd() {
+        return db_pwd;
     }
 
-    public void setDbPassword(String dbPassword) {
-        this.dbPassword = dbPassword;
+    public void setDbPwd(String db_pwd) {
+        this.db_pwd = db_pwd;
     }
 
     public String getQueryCommand() {
