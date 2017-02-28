@@ -102,6 +102,9 @@
             file="xml/Components/filter.xml">
       </toc>
       <toc
+            file="xml/Components/input/inputFileDelimited.xml">
+      </toc>
+      <toc
             file="xml/Components/input/inputFileFixedWidth.xml">
       </toc>
       <toc
