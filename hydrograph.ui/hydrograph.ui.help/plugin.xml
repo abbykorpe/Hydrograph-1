@@ -79,9 +79,6 @@
        <toc
             file="xml/Components/input/Input.xml">
       </toc>
-        <toc
-            file="xml/Components/input/InputXml.xml">
-      </toc>
       <toc
             file="xml/Components/transform.xml">
       </toc>
@@ -121,9 +118,6 @@
       </toc>
       <toc
             file="xml/Components/input/inputTeradata.xml">
-      </toc>
-      <toc
-            file="xml/Components/input/inputXml.xml">
       </toc>
       <toc
             file="xml/Components/join.xml">
@@ -331,6 +325,9 @@
 	  </toc>
       <toc
             file="xml/Components/partitionByExpression.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/InputXml.xml">
       </toc>
    </extension>
    <extension

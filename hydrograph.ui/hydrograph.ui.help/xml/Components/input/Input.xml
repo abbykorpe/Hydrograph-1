@@ -15,10 +15,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="Input" link_to="xml/Components.xml#Input"> 
-   <topic label="InputXml" href="html/Components/input/Input_Xml.html">
-      <anchor id="InputXml"/>
-      <link toc="xml/Components/input/InputXml.xml"/>
-   </topic>
+  
 
    <topic label="Input File Delimited" href="html/Components/input/Input_File_Delimited.html">
       <anchor id="Input File Delimited"/>
@@ -64,6 +61,10 @@
      <topic label="Input Teradata" href="html/Components/input/Input_Teradata.html">
       <anchor id="Input Teradata"/>
       <link toc="xml/Components/input/inputTeradata.xml"/>
+   </topic>
+   <topic href="html/Components/input/Input_Xml.html" label="Input Xml">
+      <anchor id="Input Xml"/>
+      <link toc="xml/Components/input/InputXml.xml"/>
    </topic>
    
    <topic label="Generate Records" href="html/Components/input/Generate_Records.html">
