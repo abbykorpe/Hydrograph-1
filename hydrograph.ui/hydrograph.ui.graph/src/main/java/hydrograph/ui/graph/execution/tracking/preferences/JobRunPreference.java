@@ -75,11 +75,11 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 			getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE, DEFUALT_LOG_LEVEL);
 		}
 		
-		String consoleBufferValue = Activator.getDefault().getPreferenceStore().getString(Constants.CONSOLE_BUFFER_SIZE);
+		String consoleBufferValue = Activator.getDefault().getPreferenceStore().getString(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME);
 		if(StringUtils.isNotBlank(consoleBufferValue)){
-			getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE, consoleBufferValue);
+			getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME, consoleBufferValue);
 		}else{
-			getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE, Constants.DEFUALT_CONSOLE_BUFFER_SIZE);
+			getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME, Constants.DEFUALT_CONSOLE_BUFFER_SIZE);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 		jobRunPreferenceComposite = new JobRunPreferenceComposite(parent, SWT.NONE,
 				getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE),
 				getPreferenceStore().getString(LOG_LEVEL_PREFERENCE),
-				getPreferenceStore().getString(Constants.CONSOLE_BUFFER_SIZE),this);
+				getPreferenceStore().getString(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME),this);
 		jobRunPreferenceComposite.setLayout(new GridLayout(1, false));
 		jobRunPreferenceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
@@ -117,7 +117,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 		}
 		Activator.getDefault().getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, selection);
 		Activator.getDefault().getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE,jobRunPreferenceComposite.getLoglevel());
-		Activator.getDefault().getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE, jobRunPreferenceComposite.getConsoleBufferSize());
+		Activator.getDefault().getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME, jobRunPreferenceComposite.getConsoleBufferSize());
 		return returnCode;
 	}
 
