@@ -361,9 +361,12 @@ public class Constants {
   	public static final String DOT_SEPERATOR=".";
   	public static final String UNDERSCORE_SEPERATOR="_";
 	public static final String XPATH_GRID_ROW = "XPath";
+	
+	public static final String GRAPH_PLUGIN_QUALIFIRE = "hydrograph.ui.graph";
+	public static final String CONSOLE_BUFFER_SIZE="console_buffer_size";
+	public static final String DEFUALT_CONSOLE_BUFFER_SIZE = "10000";
+	
 	public static final String PROPERTIES_EXTENSION=".properties";
 	public static final String PARAM="/param/";
 	public static final String SEPERATOR="\\.";
-
 }
-
