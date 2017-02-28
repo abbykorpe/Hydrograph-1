@@ -35,7 +35,7 @@ public enum ClassToDataTypeConversion {
 	Float {
 		@Override
 		public String getValue(String fieldName) {
-			return "float " + fieldName + "=1.0;";
+			return "float " + fieldName + "=1.0f;";
 		}
 
 	},
