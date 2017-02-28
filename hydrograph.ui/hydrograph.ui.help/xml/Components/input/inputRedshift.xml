@@ -13,7 +13,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input Redshift" link_to="xml/input/Input.xml#Input_Redshift"> 
+<toc label="Input Redshift" link_to="xml\Components\input\Input.xml#Input_Redshift"> 
 	<topic label="Properties"  href="html/Components/input/Input_Redshift_Properties.html"> 
 	<topic href="html/Components/input/Input_Redshift_Properties.html#general_properties" label="General Properties">
     </topic>

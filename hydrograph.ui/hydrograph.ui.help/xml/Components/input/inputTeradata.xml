@@ -13,7 +13,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input Teradata" link_to="xml/input/Input.xml#inputTeradata" topic="html/Components/Input_Teradata.html"> 
+<toc label="Input Teradata" link_to="xml\Components\input\Input.xml#inputTeradata" topic="html/Components/Input_Teradata.html"> 
 	<topic label="Properties"  href="html/Components/input/Input_Teradata_Properties.html"> 
 		<topic href="html/Components/input/Input_Teradata_Properties.html#general_properties" label="General Properties">
 	    </topic>

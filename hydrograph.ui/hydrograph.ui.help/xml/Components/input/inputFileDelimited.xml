@@ -15,7 +15,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input File Delimited" link_to="xml/input/Input.xml#InputFileDelimited"> 
+<toc label="Input File Delimited" link_to="xml\Components\input\Input.xml#InputFileDelimited"> 
 	<topic label="Properties"  href="html/Components/input/Input_File_Delimited_Properties.html"> 
 	</topic>
 </toc>

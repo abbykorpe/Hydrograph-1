@@ -15,7 +15,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input File Fixed Width" link_to="xml/input/Input.xml#InputFileFixedWidth"> 
+<toc label="Input File Fixed Width" link_to="xml\Components\input\Input.xml#InputFileFixedWidth"> 
 	<topic label="Properties"  href="html/Components/input/Input_File_Fixed_Width_Properties.html">
     <topic href="html/Components/input/Input_File_Fixed_Width_Properties.html#general_properties" label="General Properties">
     </topic>
