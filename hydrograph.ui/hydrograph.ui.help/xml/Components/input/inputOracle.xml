@@ -13,7 +13,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input Oracle" link_to="xml\Components\input\components.xml#inputOracle" topic="html/Components/Input_Oracle.html"> 
+<toc label="Input Oracle" link_to="xml/input/Input.xml#inputOracle" topic="html/Components/input/Input_Oracle.html"> 
 	<topic label="Properties"  href="html/Components/input/Input_Oracle_Properties.html"> 
 		<topic href="html/Components/input/Input_Oracle_Properties.html#general_properties" label="General Properties">
 	    </topic>

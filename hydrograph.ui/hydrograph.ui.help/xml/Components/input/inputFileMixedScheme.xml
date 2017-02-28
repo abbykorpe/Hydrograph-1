@@ -15,7 +15,7 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input File Fixed Width" link_to="xml\Components\input\components.xml#InputFileMixedScheme"> 
+<toc label="Input File Fixed Width" link_to="xml/input/Input.xml#InputFileMixedScheme"> 
 	<topic label="Properties"  href="html/Components/input/Input_File_Mixed_Scheme_Properties.html"> 
 	</topic>
 </toc>
