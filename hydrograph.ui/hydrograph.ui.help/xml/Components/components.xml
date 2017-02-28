@@ -50,39 +50,6 @@
    <topic href="html/Components/Filter.html" label="Filter">
       <anchor id="Filter"/>
    </topic>
-   <topic href="html/Components/Generate_Records.html" label="Generate Records">
-      <anchor id="GenerateRecords"/>
-   </topic>
-   <topic href="html/Components/Input_File_Delimited.html" label="Input File Delimited">
-      <anchor id="InputFileDelimited"/>
-   </topic>
-   <topic href="html/Components/Input_File_Fixed_Width.html" label="Input File Fixed Width">
-      <anchor id="InputFileFixedWidth"/>
-   </topic>
-   <topic href="html/Components/Input_File_Mixed_Scheme.html" label="Input File Mixed Scheme">
-      <anchor id="InputFileMixedScheme"/>
-   </topic>
-   <topic href="html/Components/Input_File_Parquet.html" label="Input File Parquet">
-      <anchor id="Input_File_Parquet"/>
-   </topic>
-   <topic href="html/Components/Input_Hive_Parquet.html" label="Input Hive Parquet">
-      <anchor id="inputHiveParquet"/>
-   </topic>
-   <topic href="html/Components/Input_Hive_Text.html" label="Input Hive Text File">
-      <anchor id="inputHiveTextFile"/>
-   </topic>
-   <topic href="html/Components/Input_Mysql.html" label="Input Mysql">
-      <anchor id="Input_Mysql"/>
-   </topic>
-   <topic href="html/Components/Input_Redshift.html" label="Input Redshift">
-      <anchor id="Input_Redshift"/>
-   </topic>
-   <topic href="html/Components/Input_Oracle.html" label="Input Oracle">
-      <anchor id="inputOracle"/>
-    </topic>
-    <topic href="html/Components/Input_Teradata.html" label="Input Teradata">
-      <anchor id="inputTeradata"/>
-   </topic>
    <topic href="html/Components/Output_File_Delimited.html" label="Output File Delimited">
       <anchor id="OutputFileDelimited"/>
    </topic>

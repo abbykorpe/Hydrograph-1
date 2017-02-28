@@ -14,15 +14,8 @@
  
  
 <?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="InputXml" link_to="xml\Components\input\Input.xml#InputXml"> 
-   <topic href="html/Components/input/Input_Xml_Properties.html" label="Properties">
-	   <topic href="html/Components/input/Input_Xml_Properties.html#general_properties" label="General Properties">
-	   </topic>
-	   <topic href="html/Components/input/Input_Xml_Properties.html#details" label="details">
-	    </topic>
-	   <topic href="html/Components/input/Input_Xml_Properties.html#configuration" label="Configuration">
-	    </topic>
-	   <topic href="html/Components/input/Input_Xml_Properties.html#schema_tab" label="Schema tab">
-	    </topic>
-   </topic>
+
+<toc label="Input File Fixed Width" link_to="xml\Components\input\Input.xml#InputFileMixedScheme"> 
+	<topic label="Properties"  href="html/Components/input/Input_File_Mixed_Scheme_Properties.html"> 
+	</topic>
 </toc>

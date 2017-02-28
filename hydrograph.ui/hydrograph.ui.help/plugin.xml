@@ -79,9 +79,6 @@
        <toc
             file="xml/Components/input/Input.xml">
       </toc>
-        <toc
-            file="xml/Components/input/InputXml.xml">
-      </toc>
       <toc
             file="xml/Components/transform.xml">
       </toc>
@@ -102,28 +99,25 @@
             file="xml/Components/filter.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileDelimited.xml">
+            file="xml/Components/input/inputFileDelimited.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileFixedWidth.xml">
+            file="xml/Components/input/inputFileFixedWidth.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileFixedWidth.xml">
+            file="xml/Components/input/inputFileFixedWidth.xml">
       </toc>
       <toc
-            file="xml/Components/inputHiveParquet.xml">
+            file="xml/Components/input/inputHiveParquet.xml">
       </toc>
       <toc
-            file="xml/Components/inputHiveTextFile.xml">
+            file="xml/Components/input/inputHiveTextFile.xml">
       </toc>
       <toc
-            file="xml/Components/inputOracle.xml">
+            file="xml/Components/input/inputOracle.xml">
       </toc>
       <toc
-            file="xml/Components/inputTeradata.xml">
-      </toc>
-      <toc
-            file="xml/Components/input/inputXml.xml">
+            file="xml/Components/input/inputTeradata.xml">
       </toc>
       <toc
             file="xml/Components/join.xml">
@@ -234,7 +228,7 @@
             file="xml/User Interface/parameterGrid.xml">
       </toc>
       <toc
-            file="xml/Components/generateRecords.xml">
+            file="xml/Components/input/generateRecords.xml">
       </toc>
       <toc
             file="xml/Components/limit.xml">
@@ -291,10 +285,10 @@
             file="xml/Components/output_File_Parquet.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileParquet.xml">
+            file="xml/Components/input/inputFileParquet.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileMixedScheme.xml">
+            file="xml/Components/input/inputFileMixedScheme.xml">
       </toc>
        <toc
             file="xml/Components/cumulate.xml"
@@ -308,10 +302,10 @@
             file="xml/Components/cumulate.xml">
       </toc>
       <toc
-            file="xml/Components/inpuMysql.xml">
+            file="xml/Components/input/inpuMysql.xml">
       </toc>
       <toc
-            file="xml/Components/inputRedshift.xml">
+            file="xml/Components/input/inputRedshift.xml">
       </toc>
       <toc
             file="xml/Components/outputMysql.xml">
@@ -331,6 +325,9 @@
 	  </toc>
       <toc
             file="xml/Components/partitionByExpression.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/InputXml.xml">
       </toc>
    </extension>
    <extension

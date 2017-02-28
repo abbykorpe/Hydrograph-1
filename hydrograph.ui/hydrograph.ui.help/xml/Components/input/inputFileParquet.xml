@@ -14,15 +14,14 @@
  
  
 <?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="InputXml" link_to="xml\Components\input\Input.xml#InputXml"> 
-   <topic href="html/Components/input/Input_Xml_Properties.html" label="Properties">
-	   <topic href="html/Components/input/Input_Xml_Properties.html#general_properties" label="General Properties">
-	   </topic>
-	   <topic href="html/Components/input/Input_Xml_Properties.html#details" label="details">
-	    </topic>
-	   <topic href="html/Components/input/Input_Xml_Properties.html#configuration" label="Configuration">
-	    </topic>
-	   <topic href="html/Components/input/Input_Xml_Properties.html#schema_tab" label="Schema tab">
-	    </topic>
-   </topic>
+
+<toc label="Input File Parquet" link_to="xml\Components\input\Input.xml#Input_File_Parquet"> 
+	<topic label="Properties"  href="html/Components/input/Input_File_Parquet_Properties.html">
+    <topic href="html/Components/input/Input_File_Parquet_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/input/Input_File_Parquet_Properties.html#schema" label="Schema">
+    </topic>
+    <topic href="html/Components/input/Input_File_Parquet_Properties.html#validations" label="Validations">
+    </topic> 
+	</topic>
 </toc>
