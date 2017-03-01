@@ -81,7 +81,7 @@
 		
 		<tns:property dataType="string" name="temporaryDirectory" value="" renderer="TEMPORARY_DIR_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Difines path of temporary directory on S3">
+			usage="REQUIRED" propertyHelpText="Define path of temporary directory on S3">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
