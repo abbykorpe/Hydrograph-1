@@ -159,6 +159,10 @@ public class Messages extends NLS {
 	public static String COMBO_LOG_LEVELS;
 	public static String OPEN_SUBJOB_THROUGH_TRACK_SUBJOB;
   	public static String RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB;
+
+
+	public static String FILE_NAME_ERROR;
+	public static String PROPERTY_FILE_ERROR;
 	
 	static {
 		// initialize resource bundle

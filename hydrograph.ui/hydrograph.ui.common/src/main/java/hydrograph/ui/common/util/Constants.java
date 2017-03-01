@@ -361,6 +361,9 @@ public class Constants {
   	public static final String DOT_SEPERATOR=".";
   	public static final String UNDERSCORE_SEPERATOR="_";
 	public static final String XPATH_GRID_ROW = "XPath";
+	public static final String PROPERTIES_EXTENSION=".properties";
+	public static final String PARAM="/param/";
+	public static final String SEPERATOR="\\.";
 
 }
 

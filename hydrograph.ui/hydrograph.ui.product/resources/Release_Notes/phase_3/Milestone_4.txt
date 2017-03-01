@@ -79,3 +79,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 62.#698 - [shashank karnik]- Tool logs folder is missing from config/logger/tool_logs folder if tool gets launched through toolbar on windows.
 63.#739 - [shashank karnik]- Import job: Unique sequence component: Schema propagation issue.
 64.#714 - [Sonia Raheja] - On import of job tool show error symbol.
+65.#700 - [Sonia Raheja] - Error Message is getting displayed while deleting the job.
