@@ -80,3 +80,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 63.#739 - [shashank karnik]- Import job: Unique sequence component: Schema propagation issue.
 64.#714 - [Sonia Raheja] - On import of job tool show error symbol.
 65.#700 - [Sonia Raheja] - Error Message is getting displayed while deleting the job.
+66.#744 - [Vibhor Tyagi] - Need to add logger if user kill job successfully on MAC
