@@ -30,11 +30,7 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author gurdits
@@ -297,7 +293,7 @@ public class ValidationAPI implements Serializable {
 			return Float.class;
 		else if(className.equalsIgnoreCase("Double"))
 			return Double.class;
-		else if(className.equalsIgnoreCase("Date"))
+		else if(className.equalsIgnoreCase("Date") || className.equalsIgnoreCase("timestamp"))
 			return Date.class;
 		else if(className.equalsIgnoreCase("Object"))
 			return Object.class;
@@ -362,7 +358,6 @@ public class ValidationAPI implements Serializable {
 			throw new RuntimeException(e);
 		}
 	}
-
 	
 	/**
 	 * @param validExpression
