@@ -56,8 +56,8 @@ import hydrograph.ui.project.structure.CustomMessages;
 public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
 	private boolean flag;
-	private IFile jobFileName = null;
-	private IFile xmlFileName = null;
+	private IFile jobIFile = null;
+	private IFile xmlIFile = null;
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(JobDeleteParticipant.class);
 	
 	@Override
@@ -89,14 +89,14 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
 
 			if (jobsFolder != null) {
-				jobFileName=jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH));
+				jobIFile=jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH));
 			}
 			if (propertiesFolder != null) {
 				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
 						.addFileExtension(Constants.PROPERTIES).toFile().getName());
 			}
-			String message = getErrorMessageIfUserDeleteXmlRelatedFiles(jobFileName, propertyFileName);
-			showErrorMessage(jobFileName, propertyFileName, Messages.bind(message, modifiedResource.getName()));
+			String message = getErrorMessageIfUserDeleteXmlRelatedFiles(jobIFile, propertyFileName);
+			showErrorMessage(jobIFile, propertyFileName, Messages.bind(message, modifiedResource.getName()));
 		} else {
 			flag = true;
 		}
@@ -110,14 +110,14 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			IFolder jobsFolder = iProject.getFolder(CustomMessages.ProjectSupport_JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
 			if (jobsFolder != null) {
-				xmlFileName=jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH));
+				xmlIFile=jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH));
 			}
 			if (propertiesFolder != null) {
 				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
 						.addFileExtension(Constants.PROPERTIES).toFile().getName());
 			}
-			String message = getErrorMessageIfUserDeleteJobRelatedFiles(propertyFileName, xmlFileName);
-			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(message, modifiedResource.getName()));
+			String message = getErrorMessageIfUserDeleteJobRelatedFiles(propertyFileName, xmlIFile);
+			showErrorMessage(xmlIFile, propertyFileName, Messages.bind(message, modifiedResource.getName()));
 		} else {
 			flag = true;
 		}
@@ -130,8 +130,8 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			if (jobsFolder != null) {
 				setJobFileAndXmlFile(jobsFolder);
 			}
-			String message = getErrorMessageIfUserDeletePropertyRelatedFiles(jobFileName, xmlFileName);
-			showErrorMessage(jobFileName, xmlFileName, Messages.bind(message, modifiedResource.getName()));
+			String message = getErrorMessageIfUserDeletePropertyRelatedFiles(jobIFile, xmlIFile);
+			showErrorMessage(jobIFile, xmlIFile, Messages.bind(message, modifiedResource.getName()));
 		}
 		return flag;
 	}
@@ -145,13 +145,13 @@ public class JobDeleteParticipant extends DeleteParticipant{
 						setJobFileAndXmlFile((IFolder) jobFolderMember);
 					} else if ((IFile.class).isAssignableFrom(jobFolderMember.getClass())) {
 						String file = jobFolderMember.getFullPath().lastSegment();
-						if (StringUtils.equals(modifiedResource.getName().replace(Constants.PROPERTIES_EXTENSION,
+						if (StringUtils.equalsIgnoreCase(modifiedResource.getName().replace(Constants.PROPERTIES_EXTENSION,
 								Constants.JOB_EXTENSION), file)) {
-							jobFileName = jobsFolder.getFile(modifiedResource.getName()
+							jobIFile = jobsFolder.getFile(modifiedResource.getName()
 									.replace(Constants.PROPERTIES_EXTENSION, Constants.JOB_EXTENSION));
-						} else if (StringUtils.equals(modifiedResource.getName().replace(Constants.PROPERTIES_EXTENSION,
+						} else if (StringUtils.equalsIgnoreCase(modifiedResource.getName().replace(Constants.PROPERTIES_EXTENSION,
 								Constants.XML_EXTENSION), file)) {
-							xmlFileName = jobsFolder.getFile(modifiedResource.getName()
+							xmlIFile = jobsFolder.getFile(modifiedResource.getName()
 									.replace(Constants.PROPERTIES_EXTENSION, Constants.XML_EXTENSION));
 						}
 					}
