@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.adapter.base
 
-import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow}
+import hydrograph.engine.spark.components.base.CommandComponentSparkFlow
 /**
   * The trait RunProgramAdapterBase .
   *

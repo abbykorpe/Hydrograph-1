@@ -17,18 +17,18 @@ package hydrograph.engine.spark.datasource.xml.parsers
 
 import java.io.ByteArrayInputStream
 import java.sql.{Date, Timestamp}
-import javax.xml.stream.events.{Attribute, XMLEvent}
-import javax.xml.stream.events._
 import javax.xml.stream._
+import javax.xml.stream.events.{Attribute, XMLEvent, _}
 
-import scala.collection.mutable.ArrayBuffer
-import scala.collection.JavaConversions._
-import org.slf4j.LoggerFactory
+import hydrograph.engine.spark.datasource.xml.XmlOptions
+import hydrograph.engine.spark.datasource.xml.util.TypeCast._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
-import hydrograph.engine.spark.datasource.xml.util.TypeCast._
-import hydrograph.engine.spark.datasource.xml.XmlOptions
+import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * The Object StaxXmlParser.

@@ -19,9 +19,8 @@ import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.EncoderHelper
 import hydrograph.engine.transformation.userfunctions.base.FilterBase
-import org.apache.spark.sql
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.{DataFrame, Row, functions}
+import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._

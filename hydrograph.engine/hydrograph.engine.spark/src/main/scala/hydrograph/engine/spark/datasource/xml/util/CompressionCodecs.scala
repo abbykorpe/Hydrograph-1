@@ -15,9 +15,9 @@
  */
 package hydrograph.engine.spark.datasource.xml.util
 
-import scala.util.control.Exception._
-
 import org.apache.hadoop.io.compress._
+
+import scala.util.control.Exception._
 
 /**
   * The Object CompressionCodecs.

@@ -12,9 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
-import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase
-import org.apache.spark.sql.types.{DataType, StructField, StructType}
+import org.apache.spark.sql.types.{DataType, StructField}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**

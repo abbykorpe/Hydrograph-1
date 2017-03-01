@@ -14,8 +14,6 @@ package hydrograph.engine.spark.executiontracking.plugin
 
 import hydrograph.engine.spark.components.base.SparkFlow
 
-import scala.collection.mutable
-
 /**
   * The Class HydrographCommandListener.
   *

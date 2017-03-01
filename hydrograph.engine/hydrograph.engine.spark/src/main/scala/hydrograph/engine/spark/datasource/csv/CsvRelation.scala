@@ -14,19 +14,17 @@
  */
 package hydrograph.engine.spark.datasource.csv
 
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-import hydrograph.engine.spark.datasource.utils.{ TextFile, TypeCast }
+import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.commons.csv._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
-import org.apache.spark.sql.sources.{ BaseRelation, TableScan }
+import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types._
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConversions._
-import scala.util.control.NonFatal
 
 /**
   * The Class CsvRelation.

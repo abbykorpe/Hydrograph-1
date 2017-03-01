@@ -12,18 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components
 
-import java.util
-
 import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity
-import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{AnalysisException, Column, SaveMode}
+import org.apache.spark.sql.{AnalysisException, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
 /**

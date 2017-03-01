@@ -8,7 +8,7 @@ import hydrograph.engine.spark.core.reusablerow.{InputReusableRow, OutputReusabl
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
-import scala.collection.JavaConverters._
+
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.reflect.ClassTag
 /**

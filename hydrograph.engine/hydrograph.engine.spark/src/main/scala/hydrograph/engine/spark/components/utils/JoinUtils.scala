@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
-import hydrograph.engine.core.component.entity.{JoinEntity, LookupEntity}
 import hydrograph.engine.core.component.entity.base.OperationEntityBase
 import hydrograph.engine.core.component.entity.elements.PassThroughField
+import hydrograph.engine.core.component.entity.{JoinEntity, LookupEntity}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.DataFrame
 

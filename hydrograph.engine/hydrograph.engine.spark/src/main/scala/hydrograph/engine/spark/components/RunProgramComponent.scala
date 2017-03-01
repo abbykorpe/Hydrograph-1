@@ -16,7 +16,7 @@ import java.io.{BufferedReader, IOException, InputStreamReader}
 
 import hydrograph.engine.core.component.entity.RunProgramEntity
 import hydrograph.engine.core.component.entity.base.AssemblyEntityBase
-import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow}
+import hydrograph.engine.spark.components.base.CommandComponentSparkFlow
 import org.slf4j.{Logger, LoggerFactory}
 
 /**

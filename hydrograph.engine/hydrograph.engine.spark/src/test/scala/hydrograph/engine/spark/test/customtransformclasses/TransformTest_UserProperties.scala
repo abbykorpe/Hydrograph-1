@@ -14,8 +14,6 @@ package hydrograph.engine.spark.test.customtransformclasses
 
 import java.util
 import java.util.Properties
-import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
 
 import hydrograph.engine.transformation.userfunctions.base.{ReusableRow, TransformBase}
 

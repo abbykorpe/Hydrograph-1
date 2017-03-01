@@ -18,14 +18,12 @@ import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.core.constants.Keep
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.EncoderHelper
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters.asScalaBufferConverter
-import scala.collection.mutable.ListBuffer
 
 /**
   * The Class RemoveDupsComponent.

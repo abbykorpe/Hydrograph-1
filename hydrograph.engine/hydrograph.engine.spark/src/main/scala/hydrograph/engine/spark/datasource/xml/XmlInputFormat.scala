@@ -15,15 +15,15 @@
  */
 package hydrograph.engine.spark.datasource.xml
 
-import java.io.{InputStream, IOException}
+import java.io.{IOException, InputStream}
 import java.nio.charset.Charset
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Seekable
 import org.apache.hadoop.io.compress._
 import org.apache.hadoop.io.{DataOutputBuffer, LongWritable, Text}
-import org.apache.hadoop.mapreduce.{InputSplit, RecordReader, TaskAttemptContext}
 import org.apache.hadoop.mapreduce.lib.input.{FileSplit, TextInputFormat}
+import org.apache.hadoop.mapreduce.{InputSplit, RecordReader, TaskAttemptContext}
 
 /**
   * The Class XmlInputFormat.

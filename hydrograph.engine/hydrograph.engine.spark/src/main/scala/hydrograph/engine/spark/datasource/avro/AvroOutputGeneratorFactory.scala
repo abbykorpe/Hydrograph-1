@@ -13,8 +13,6 @@
 package hydrograph.engine.spark.datasource.avro
 
 import org.apache.hadoop.mapreduce.TaskAttemptContext
-
-import org.apache.spark.sql.execution.datasources.text.TextOutputWriter
 import org.apache.spark.sql.execution.datasources.{OutputWriter, OutputWriterFactory}
 import org.apache.spark.sql.types.StructType
 /**

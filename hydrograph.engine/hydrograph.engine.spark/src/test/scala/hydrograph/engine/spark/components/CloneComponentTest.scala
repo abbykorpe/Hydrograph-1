@@ -15,8 +15,8 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.CloneEntity
 import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
-import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import hydrograph.engine.testing.wrapper.{DataBuilder, Fields}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.junit.{Assert, Test}
 
 import scala.collection.JavaConverters._

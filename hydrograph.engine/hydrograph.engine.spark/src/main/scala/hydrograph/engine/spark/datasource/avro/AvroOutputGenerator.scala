@@ -12,38 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.spark.datasource.avro
 
-import java.io.IOException
-import java.io.OutputStream
+import java.io.{IOException, OutputStream}
+import java.math.BigDecimal
 import java.nio.ByteBuffer
-import java.util.ArrayList
-import java.sql.Timestamp
-import java.util.HashMap
-import org.apache.spark.sql.catalyst.util.DateTimeUtils.SQLDate
-import scala.collection.immutable.Map
-import java.lang.Object
+import java.util.Date
+
 import org.apache.avro.Schema
-import org.apache.avro.Schema.Type
-import org.apache.avro.Schema.Type.RECORD
 import org.apache.avro.generic.GenericData.Record
 import org.apache.avro.generic.GenericRecord
 import org.apache.avro.mapred.AvroKey
 import org.apache.avro.mapreduce.AvroKeyOutputFormat
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.io.NullWritable
-import org.apache.hadoop.mapreduce.RecordWriter
-import org.apache.hadoop.mapreduce.TaskAttemptContext
-import org.apache.hadoop.mapreduce.TaskAttemptID
+import org.apache.hadoop.mapreduce.{RecordWriter, TaskAttemptContext, TaskAttemptID}
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.execution.datasources.OutputWriter
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.catalyst.InternalRow
-import org.apache.spark.sql.catalyst.CatalystTypeConverters.CatalystTypeConverter
-import java.util.Date
-import java.math.BigDecimal
-import javax.validation.constraints.Null
-import org.spark_project.guava.primitives.Bytes
-import org.apache.hadoop.io.BytesWritable
-import java.util.Arrays
 /**
   * The Class AvroOutputGenerator.
   *

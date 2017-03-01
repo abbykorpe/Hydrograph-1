@@ -16,7 +16,7 @@ import hydrograph.engine.core.component.generator.RunSqlGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.spark.components.RunSQLComponent
 import hydrograph.engine.spark.components.adapter.base.RunProgramAdapterBase
-import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow, SparkFlow}
+import hydrograph.engine.spark.components.base.CommandComponentSparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**

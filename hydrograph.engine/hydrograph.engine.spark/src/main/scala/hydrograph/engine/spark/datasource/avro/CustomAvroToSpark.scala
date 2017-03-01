@@ -11,23 +11,18 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.spark.datasource.avro
+import java.math.{BigDecimal, BigInteger}
 import java.nio.ByteBuffer
+import java.sql.{Date, Timestamp}
 
-import scala.collection.JavaConverters._
-import java.nio.ByteBuffer;
+import org.apache.avro.Schema
+import org.apache.avro.Schema.Type._
 import org.apache.avro.generic.GenericData.Fixed
 import org.apache.avro.generic.{GenericData, GenericRecord}
-import org.apache.avro.{Schema, SchemaBuilder}
-import org.apache.avro.SchemaBuilder._
-import org.apache.avro.Schema.Type._
-import java.sql.Date
-
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.apache.spark.sql.types._
-import java.math.BigInteger
-import java.math.BigDecimal
-import java.lang.Short
-import java.sql.Timestamp
+
+import scala.collection.JavaConverters._
 
 /**
   * The Object CustomAvroToSpark.

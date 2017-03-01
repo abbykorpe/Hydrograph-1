@@ -17,8 +17,8 @@ package hydrograph.engine.spark.datasource.xml
 
 import java.text.SimpleDateFormat
 
-import org.slf4j.LoggerFactory
 import hydrograph.engine.spark.datasource.xml.util.ParseModes
+import org.slf4j.LoggerFactory
 
 /**
   * The Class XmlOptions.

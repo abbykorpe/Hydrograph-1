@@ -27,6 +27,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 
 /**

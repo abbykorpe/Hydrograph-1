@@ -16,7 +16,6 @@ import hydrograph.engine.execution.tracking
 import hydrograph.engine.execution.tracking.ComponentInfo
 import hydrograph.engine.spark.executiontracking.plugin.Component
 import org.apache.spark.scheduler._
-import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
 import scala.collection.immutable.HashMap

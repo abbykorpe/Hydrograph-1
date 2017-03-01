@@ -20,11 +20,11 @@ import java.sql.{Date, Timestamp}
 import java.text.NumberFormat
 import java.util.Locale
 
+import hydrograph.engine.spark.datasource.xml.XmlOptions
+import org.apache.spark.sql.types._
+
 import scala.util.Try
 import scala.util.control.Exception._
-
-import org.apache.spark.sql.types._
-import hydrograph.engine.spark.datasource.xml.XmlOptions
 
 /**
   * The Object TypeCast.

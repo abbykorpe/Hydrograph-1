@@ -15,10 +15,6 @@ package hydrograph.engine.spark.executiontracking.plugin
 import hydrograph.engine.execution.tracking.ComponentInfo
 import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.scheduler.SparkListener
-import org.apache.spark.sql.SparkSession
-
-import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 /**
   * The Class ExecutionTrackingListener.

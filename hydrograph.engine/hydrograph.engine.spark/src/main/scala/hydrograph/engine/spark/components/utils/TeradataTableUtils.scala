@@ -20,6 +20,7 @@ import hydrograph.engine.core.component.entity.elements.SchemaField
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD
 import org.apache.spark.sql.types.StructType
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 
 /**

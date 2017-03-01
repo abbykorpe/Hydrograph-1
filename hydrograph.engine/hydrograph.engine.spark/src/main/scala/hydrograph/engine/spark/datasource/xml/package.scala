@@ -15,12 +15,11 @@
  */
 package hydrograph.engine.spark.datasource
 
-import scala.collection.Map
-
-import org.apache.hadoop.io.compress.CompressionCodec
-
-import org.apache.spark.sql.{DataFrame, SQLContext}
 import hydrograph.engine.spark.datasource.xml.util.XmlFile
+import org.apache.hadoop.io.compress.CompressionCodec
+import org.apache.spark.sql.{DataFrame, SQLContext}
+
+import scala.collection.Map
 
 /**
   * The Package Object xml.

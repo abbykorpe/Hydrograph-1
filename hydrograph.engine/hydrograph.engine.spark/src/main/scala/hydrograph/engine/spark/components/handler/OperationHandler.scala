@@ -12,26 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.handler
 
-import java.util.ArrayList
-import java.util.Properties
-import com.amazon.redshift.dataengine.ExpectedResult
+import java.util.{ArrayList, Properties}
+
+import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
+import hydrograph.engine.expression.api.ValidationAPI
+import hydrograph.engine.expression.userfunctions.{AggregateForExpression, CumulateForExpression, NormalizeForExpression, TransformForExpression}
+import hydrograph.engine.expression.utils.ExpressionWrapper
+import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
+import hydrograph.engine.transformation.userfunctions.base._
+
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.mutable.ListBuffer
-import hydrograph.engine.core.component.entity.elements.KeyField
-import hydrograph.engine.core.component.entity.elements.Operation
-import hydrograph.engine.expression.api.ValidationAPI
-import hydrograph.engine.expression.userfunctions.AggregateForExpression
-import hydrograph.engine.expression.userfunctions.CumulateForExpression
-import hydrograph.engine.expression.userfunctions.NormalizeForExpression
-import hydrograph.engine.expression.userfunctions.TransformForExpression
-import hydrograph.engine.expression.utils.ExpressionWrapper
-import hydrograph.engine.spark.components.utils.FieldManupulating
-import hydrograph.engine.spark.components.utils.ReusableRowHelper
-import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase
-import hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase
-import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow
-import hydrograph.engine.transformation.userfunctions.base.TransformBase
 
 /**
   * The Class CustomClassLoader.

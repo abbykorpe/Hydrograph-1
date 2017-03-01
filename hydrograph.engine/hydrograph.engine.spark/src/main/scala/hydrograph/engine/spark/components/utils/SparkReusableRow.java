@@ -15,7 +15,6 @@ package hydrograph.engine.spark.components.utils;
 import hydrograph.engine.transformation.userfunctions.base.ListBasedReusableRow;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
 /**

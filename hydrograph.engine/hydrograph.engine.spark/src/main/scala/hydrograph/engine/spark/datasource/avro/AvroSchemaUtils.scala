@@ -12,11 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.spark.datasource.avro
 
-import scala.beans.BeanProperty
-import scala.collection.JavaConversions._
-
-
 import org.apache.avro.Schema
+
+import scala.beans.BeanProperty
 /**
   * The Object AvroSchemaUtils .
   *

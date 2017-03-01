@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
-import java.util
-
 import hydrograph.engine.core.component.entity.InputFileXMLEntity
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
@@ -23,9 +21,8 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
-import collection.mutable.HashMap
-import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 /**

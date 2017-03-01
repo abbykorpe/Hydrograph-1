@@ -15,14 +15,14 @@ package hydrograph.engine.spark.components
 import java.util
 import java.util.Properties
 
-import collection.JavaConverters._
 import hydrograph.engine.core.component.entity.TransformEntity
 import hydrograph.engine.core.component.entity.elements.{OperationField, _}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{FieldManupulating, OperationSchemaCreator}
 import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
-import org.junit.{Assert, Ignore, Test}
+import org.junit.{Assert, Test}
+
+import scala.collection.JavaConverters._
 
 /**
   * The Class TransformComponentTest.

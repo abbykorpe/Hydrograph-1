@@ -19,12 +19,10 @@ import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{SchemaUtils, SchemaCreator}
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{AnalysisException, Column, SaveMode}
+import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils}
+import org.apache.spark.sql.{AnalysisException, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
 /**

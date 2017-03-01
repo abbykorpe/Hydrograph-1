@@ -17,7 +17,7 @@ import hydrograph.engine.core.utilities.SocketUtilities
 import hydrograph.engine.execution.tracking.ComponentInfo
 import hydrograph.engine.jaxb.commontypes._
 import hydrograph.engine.jaxb.operationstypes.Executiontracking
-import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow, SparkFlow}
+import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.execution.tracking.{ComponentMapping, JobInfo}
 import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.scheduler._
