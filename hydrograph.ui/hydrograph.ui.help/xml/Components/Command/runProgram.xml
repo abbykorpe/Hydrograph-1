@@ -13,10 +13,11 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Output Oracle" link_to="xml\Components\output\Output.xml#outputOracle" topic="html/Components/Output_Oracle.html"> 
-	<topic label="Properties"  href="html/Components/output/Output_Oracle_Properties.html"> 
-		<topic href="html/Components/output/Output_Oracle_Properties.html#general_properties" label="General Properties"/>
-	    <topic href="html/Components/output/Output_Oracle_Properties.html#schema_tab" label="Schema"/>
-	    <topic href="html/Components/output/Output_Oracle_Properties.html#validations" label="Validations"/>
-	</topic>
+<toc label="Run Program" link_to="xml\Components\command\Command.xml#Run_Program"> 
+	<topic label="Properties"  href="html/Components/command/Run_Program_Properties.html"> 
+		<topic href="html/Components/command/Run_Program_Properties.html#general_properties" label="General Properties"/>
+	    <topic href="html/Components/command/Run_Program_Properties.html#details" label="Details"/>
+	    <topic href="html/Components/command/Run_Program_Properties.html#configuration" label="Configuration"/>
+	    <topic href="html/Components/command/Run_Program_Properties.html#validations" label="Validations"/>
+    </topic>
 </toc>

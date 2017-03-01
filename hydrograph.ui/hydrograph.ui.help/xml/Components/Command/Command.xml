@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -10,17 +11,19 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>hydrograph</groupId>
-  <artifactId>hydrograph.ui.common</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
-
-  <parent>
-  	<groupId>hydrograph</groupId>
-  	<artifactId>hydrograph.ui.parent</artifactId>
-  	<version>1.0.0-SNAPSHOT</version>
-  	<relativePath>..</relativePath>
-  </parent>
-</project>
+ 
+ 
+<?NLS TYPE="org.eclipse.help.toc"?>
+<toc label="Input" link_to="xml/Components.xml#Command"> 
+		<topic href="html/Components/command/Run_Program.html" label="Run Program">
+	      <anchor id="Run_Program"/>
+	      <link toc="xml/Components/command/runProgram.xml"/>
+	   </topic>
+	   <topic href="html/Components/command/Run_Sql.html" label="Run Sql">
+	      <anchor id="Run_Sql"/>
+	      <link toc="xml/Components/command/runSql.xml"/>
+	   </topic>
+  </toc>
+   
+   
+   
