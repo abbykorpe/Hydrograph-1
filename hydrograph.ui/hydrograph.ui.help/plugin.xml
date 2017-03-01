@@ -80,6 +80,9 @@
             file="xml/Components/input/Input.xml">
       </toc>
       <toc
+            file="xml/Components/output/Output.xml">
+      </toc>
+      <toc
             file="xml/Components/transform.xml">
       </toc>
       <toc
@@ -120,6 +123,21 @@
             file="xml/Components/input/inputTeradata.xml">
       </toc>
       <toc
+            file="xml/Components/input/inputFileParquet.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/inputFileMixedScheme.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/InputXml.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/inpuMysql.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/inputRedshift.xml">
+      </toc>
+      <toc
             file="xml/Components/join.xml">
       </toc>
       <toc
@@ -129,22 +147,40 @@
             file="xml/Components/normalize.xml">
       </toc>
       <toc
-            file="xml/Components/outputFileDelimited.xml">
+            file="xml/Components/Output/outputFileDelimited.xml">
       </toc>
       <toc
-            file="xml/Components/outputFileFixedWidth.xml">
+            file="xml/Components/Output/outputFileFixedWidth.xml">
       </toc>
       <toc
-            file="xml/Components/outputHiveParquet.xml">
+            file="xml/Components/Output/outputHiveParquet.xml">
       </toc>
       <toc
-            file="xml/Components/outputHiveTextFile.xml">
+            file="xml/Components/Output/outputHiveTextFile.xml">
       </toc>
        <toc
-            file="xml/Components/outputOracle.xml">
+            file="xml/Components/Output/outputOracle.xml">
       </toc>
       <toc
-            file="xml/Components/outputTeradata.xml">
+            file="xml/Components/Output/outputTeradata.xml">
+      </toc>
+       <toc
+            file="xml/Components/Output/outputFileMixedScheme.xml">
+      </toc>
+      <toc
+            file="xml/Components/Output/output_File_Parquet.xml">
+      </toc>
+      <toc
+            file="xml/Components/Output/outputMysql.xml">
+      </toc>
+      <toc
+            file="xml/Components/Output/outputRedshift.xml">
+      </toc>
+      <toc
+         	file="xml/Components/Output/outputDBUpdate.xml">
+	  </toc>
+	        <toc
+            file="xml/Components/input/generateRecords.xml">
       </toc>
       <toc
             file="xml/Components/removeDups.xml">
@@ -228,9 +264,6 @@
             file="xml/User Interface/parameterGrid.xml">
       </toc>
       <toc
-            file="xml/Components/input/generateRecords.xml">
-      </toc>
-      <toc
             file="xml/Components/limit.xml">
       </toc>
       <toc
@@ -278,18 +311,7 @@
       <toc
             file="xml/Components/discard.xml">
       </toc>
-      <toc
-            file="xml/Components/outputFileMixedScheme.xml">
-      </toc>
-      <toc
-            file="xml/Components/output_File_Parquet.xml">
-      </toc>
-      <toc
-            file="xml/Components/input/inputFileParquet.xml">
-      </toc>
-      <toc
-            file="xml/Components/input/inputFileMixedScheme.xml">
-      </toc>
+      
        <toc
             file="xml/Components/cumulate.xml"
             primary="false">
@@ -302,32 +324,13 @@
             file="xml/Components/cumulate.xml">
       </toc>
       <toc
-            file="xml/Components/input/inpuMysql.xml">
-      </toc>
-      <toc
-            file="xml/Components/input/inputRedshift.xml">
-      </toc>
-      <toc
-            file="xml/Components/outputMysql.xml">
-      </toc>
-      <toc
-            file="xml/Components/outputRedshift.xml">
-      </toc>
-      <toc
             file="xml/Components/runProgram.xml">
       </toc>
       <toc
             file="xml/Components/runSql.xml">
       </toc>
       <toc
-         	file="xml/Components/outputDBUpdate.xml"
-	  		primary="false">
-	  </toc>
-      <toc
             file="xml/Components/partitionByExpression.xml">
-      </toc>
-      <toc
-            file="xml/Components/input/InputXml.xml">
       </toc>
    </extension>
    <extension
