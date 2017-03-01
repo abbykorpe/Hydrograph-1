@@ -17,9 +17,11 @@
 <toc label="Input" link_to="xml/Components.xml#Command"> 
 		<topic href="html/Components/command/Run_Program.html" label="Run Program">
 	      <anchor id="Run_Program"/>
+	      <link toc="xml/Components/command/runProgram.xml"/>
 	   </topic>
 	   <topic href="html/Components/command/Run_Sql.html" label="Run Sql">
 	      <anchor id="Run_Sql"/>
+	      <link toc="xml/Components/command/runSql.xml"/>
 	   </topic>
   </toc>
    
