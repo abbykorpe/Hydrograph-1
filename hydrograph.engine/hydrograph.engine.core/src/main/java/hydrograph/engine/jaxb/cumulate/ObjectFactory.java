@@ -42,6 +42,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeSecondaryKeyFields }
+     * 
+     */
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
+    }
+
+    /**
      * Create an instance of {@link TypeOperation }
      * 
      */
@@ -58,35 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CumulateBase }
-     * 
-     */
-    public CumulateBase createCumulateBase() {
-        return new CumulateBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
-     * 
-     */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
-    }
-
-    /**
      * Create an instance of {@link TypeOperationInputFields }
      * 
      */
     public TypeOperationInputFields createTypeOperationInputFields() {
         return new TypeOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformExpression }
-     * 
-     */
-    public TypeTransformExpression createTypeTransformExpression() {
-        return new TypeTransformExpression();
     }
 
     /**
@@ -98,11 +82,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
+     * Create an instance of {@link TypeTransformExpression }
      * 
      */
-    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
-        return new TypeSecondayKeyFieldsAttributes();
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
     }
 
     /**
@@ -114,11 +98,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
+     * 
+     */
+    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
+        return new TypeSecondayKeyFieldsAttributes();
+    }
+
+    /**
      * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
     public TypePrimaryKeyFields createTypePrimaryKeyFields() {
         return new TypePrimaryKeyFields();
+    }
+
+    /**
+     * Create an instance of {@link CumulateBase }
+     * 
+     */
+    public CumulateBase createCumulateBase() {
+        return new CumulateBase();
     }
 
 }

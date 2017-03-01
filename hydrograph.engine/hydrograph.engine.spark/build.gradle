@@ -99,4 +99,11 @@ dependencies {
     compileOnly name: 'oracle-ojdbc6-11.2.0.4'
     compile group: 'com.ibatis', name: 'ibatis2-common', version: '2.1.7.597'
     compile group: 'com.amazon.redshift', name: 'redshift-jdbc42', version: '1.2.1.1001'
+
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.11.18'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.18'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.9.3'
+   // compile(group: 'redshift', name: 'redshiftJDBC42', version: '1.2.1.1001')
+
+    compile group: 'com.databricks', name: 'spark-redshift_2.10', version: '2.0.1'
 }

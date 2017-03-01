@@ -69,10 +69,10 @@ public class Graph {
 
     protected TypeProperties runtimeProperties;
     @XmlElements({
-        @XmlElement(name = "outputs", type = TypeOutputComponent.class),
-        @XmlElement(name = "operations", type = TypeOperationsComponent.class),
         @XmlElement(name = "inputs", type = TypeInputComponent.class),
+        @XmlElement(name = "outputs", type = TypeOutputComponent.class),
         @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
+        @XmlElement(name = "operations", type = TypeOperationsComponent.class),
         @XmlElement(name = "commands", type = TypeCommandComponent.class)
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
@@ -123,10 +123,10 @@ public class Graph {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TypeOutputComponent }
-     * {@link TypeOperationsComponent }
      * {@link TypeInputComponent }
+     * {@link TypeOutputComponent }
      * {@link TypeStraightPullComponent }
+     * {@link TypeOperationsComponent }
      * {@link TypeCommandComponent }
      * 
      * 

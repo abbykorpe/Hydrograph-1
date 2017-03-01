@@ -50,6 +50,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeMixedRecord }
+     * 
+     */
+    public TypeMixedRecord createTypeMixedRecord() {
+        return new TypeMixedRecord();
+    }
+
+    /**
      * Create an instance of {@link TypeMixedField }
      * 
      */
@@ -63,14 +71,6 @@ public class ObjectFactory {
      */
     public TypeInputMixedOutSocket createTypeInputMixedOutSocket() {
         return new TypeInputMixedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeMixedRecord }
-     * 
-     */
-    public TypeMixedRecord createTypeMixedRecord() {
-        return new TypeMixedRecord();
     }
 
 }

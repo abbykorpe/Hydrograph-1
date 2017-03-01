@@ -42,30 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeUpdateKeys }
-     * 
-     */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputJdbcupdateBase }
-     * 
-     */
-    public TypeOutputJdbcupdateBase createTypeOutputJdbcupdateBase() {
-        return new TypeOutputJdbcupdateBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeJdbcupdateRecord }
-     * 
-     */
-    public TypeJdbcupdateRecord createTypeJdbcupdateRecord() {
-        return new TypeJdbcupdateRecord();
-    }
-
-    /**
      * Create an instance of {@link TypeJdbcupdateField }
      * 
      */
@@ -79,6 +55,30 @@ public class ObjectFactory {
      */
     public TypeOutputJdbcupdateOutSocket createTypeOutputJdbcupdateOutSocket() {
         return new TypeOutputJdbcupdateOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeJdbcupdateRecord }
+     * 
+     */
+    public TypeJdbcupdateRecord createTypeJdbcupdateRecord() {
+        return new TypeJdbcupdateRecord();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputJdbcupdateBase }
+     * 
+     */
+    public TypeOutputJdbcupdateBase createTypeOutputJdbcupdateBase() {
+        return new TypeOutputJdbcupdateBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeUpdateKeys }
+     * 
+     */
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
     }
 
 }

@@ -50,6 +50,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeExcelRecord }
+     * 
+     */
+    public TypeExcelRecord createTypeExcelRecord() {
+        return new TypeExcelRecord();
+    }
+
+    /**
      * Create an instance of {@link TypeExcelOutSocket }
      * 
      */
@@ -63,14 +71,6 @@ public class ObjectFactory {
      */
     public TypeFileExcelBase createTypeFileExcelBase() {
         return new TypeFileExcelBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeExcelRecord }
-     * 
-     */
-    public TypeExcelRecord createTypeExcelRecord() {
-        return new TypeExcelRecord();
     }
 
 }

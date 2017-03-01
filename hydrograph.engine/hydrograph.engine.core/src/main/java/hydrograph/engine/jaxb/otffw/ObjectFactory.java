@@ -50,14 +50,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFixedwidthRecord }
-     * 
-     */
-    public TypeFixedwidthRecord createTypeFixedwidthRecord() {
-        return new TypeFixedwidthRecord();
-    }
-
-    /**
      * Create an instance of {@link TypeFixedWidthBase }
      * 
      */
@@ -71,6 +63,14 @@ public class ObjectFactory {
      */
     public TypeFixedwidthField createTypeFixedwidthField() {
         return new TypeFixedwidthField();
+    }
+
+    /**
+     * Create an instance of {@link TypeFixedwidthRecord }
+     * 
+     */
+    public TypeFixedwidthRecord createTypeFixedwidthRecord() {
+        return new TypeFixedwidthRecord();
     }
 
 }

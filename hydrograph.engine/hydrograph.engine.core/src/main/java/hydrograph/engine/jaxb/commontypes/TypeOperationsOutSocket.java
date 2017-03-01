@@ -77,10 +77,10 @@ public class TypeOperationsOutSocket
 
     protected TypeOutSocketAsInSocket copyOfInsocket;
     @XmlElements({
-        @XmlElement(name = "mapField", type = TypeMapField.class),
+        @XmlElement(name = "passThroughField", type = TypeInputField.class),
         @XmlElement(name = "operationField", type = TypeOperationField.class),
         @XmlElement(name = "expressionField", type = TypeExpressionField.class),
-        @XmlElement(name = "passThroughField", type = TypeInputField.class)
+        @XmlElement(name = "mapField", type = TypeMapField.class)
     })
     protected List<Object> passThroughFieldOrOperationFieldOrExpressionField;
 
@@ -126,10 +126,10 @@ public class TypeOperationsOutSocket
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TypeMapField }
+     * {@link TypeInputField }
      * {@link TypeOperationField }
      * {@link TypeExpressionField }
-     * {@link TypeInputField }
+     * {@link TypeMapField }
      * 
      * 
      */

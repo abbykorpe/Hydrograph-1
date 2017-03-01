@@ -16,6 +16,7 @@
            xmlns:ifsubjob="hydrograph/engine/jaxb/ifsubjob"
            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:imysql="hydrograph/engine/jaxb/imysql"
            xmlns:iredshift="hydrograph/engine/jaxb/iredshift"
+           xmlns:isparkredshift="hydrograph/engine/jaxb/isparkredshift"
            xmlns:ioracle="hydrograph/engine/jaxb/ioracle"
            xmlns:iteradata="hydrograph/engine/jaxb/iteradata"
            xmlns:ifxml="hydrograph/engine/jaxb/ifxml"
@@ -46,6 +47,9 @@
                namespace="hydrograph/engine/jaxb/imysql"/>
     <xs:import schemaLocation="./redshift-type/input-redshift-types.xsd"
                namespace="hydrograph/engine/jaxb/iredshift"/>
+
+    <xs:import schemaLocation="./sparkredshift-type/input-sparkredshift-types.xsd"
+               namespace="hydrograph/engine/jaxb/isparkredshift"/>
     <xs:import schemaLocation="./oracle-type/input-oracle-types.xsd"
                namespace="hydrograph/engine/jaxb/ioracle"/>
     <xs:import schemaLocation="./teradata-type/input-teradata-types.xsd"
@@ -370,6 +374,41 @@
                                         minOccurs="0" maxOccurs="1"/>
                         </xs:sequence>
                     </xs:choice>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="sparkredshift">
+        <xs:complexContent>
+            <xs:extension base="isparkredshift:type-input-sparkredshift-base">
+                <xs:sequence>
+                    <xs:element name="databaseName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="hostName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="port" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="userName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="password" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="schemaName" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="temps3dir" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:choice>
+                        <xs:element name="tableName" type="cmn:element-value-string-type"
+                                    minOccurs="0" maxOccurs="1"/>
+                        <xs:sequence minOccurs="1" maxOccurs="1">
+                            <xs:element name="selectQuery" type="cmn:element-value-string-type"
+                                        minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="countQuery" type="cmn:element-value-string-type"
+                                        minOccurs="0" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:choice>
+                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
