@@ -366,7 +366,7 @@ public class Constants {
 	public static final String PARAM="/param/";
 	public static final String SEPERATOR="\\.";
 	
-	public static final String GRAPH_PLUGIN_QUALIFIRE = "hydrograph.ui.graph";
+	public static final String GRAPH_PLUGIN_QUALIFIER = "hydrograph.ui.graph";
 	public static final String CONSOLE_BUFFER_SIZE_PREFERANCE_NAME="console_buffer_size";
 	public static final String DEFUALT_CONSOLE_BUFFER_SIZE = "10000";
 }

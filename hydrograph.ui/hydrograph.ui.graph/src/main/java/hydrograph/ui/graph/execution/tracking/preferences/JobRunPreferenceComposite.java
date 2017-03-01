@@ -48,7 +48,6 @@ public class JobRunPreferenceComposite extends Composite {
     private CCombo ccLogLevels;
     private Text textWidget;
     private JobRunPreference jobRunPreference;
-    public static final String DEFUALT_CONSOLE_BUFFER_SIZE = "10000";
     
 	JobRunPreferenceComposite(Composite parent, int none, String selection,String logLevel, String bufferSize, JobRunPreference jobRunPreference) {
 		super(parent, none);
@@ -186,7 +185,7 @@ public class JobRunPreferenceComposite extends Composite {
 	}
 	
 	protected boolean isValidConsoleBufferSize(int value) {
-		if(value<1000 || value>100000){
+		if(value<1000 || value>40000){
 			return false;
 		}else{
 			return true;

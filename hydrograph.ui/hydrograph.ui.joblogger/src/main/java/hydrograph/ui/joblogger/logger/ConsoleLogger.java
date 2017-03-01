@@ -128,7 +128,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 
 	private int getConsoleBufferSize(){
 		String bufferSize = Platform.getPreferencesService().getString(
-				Constants.GRAPH_PLUGIN_QUALIFIRE,
+				Constants.GRAPH_PLUGIN_QUALIFIER,
 				Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME,
 				Constants.DEFUALT_CONSOLE_BUFFER_SIZE, null);
 
