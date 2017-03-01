@@ -83,6 +83,9 @@
             file="xml/Components/output/Output.xml">
       </toc>
       <toc
+            file="xml/Components/command/Command.xml">
+      </toc>
+      <toc
             file="xml/Components/transform.xml">
       </toc>
       <toc
@@ -324,10 +327,10 @@
             file="xml/Components/cumulate.xml">
       </toc>
       <toc
-            file="xml/Components/runProgram.xml">
+            file="xml/Components/Command/runProgram.xml">
       </toc>
       <toc
-            file="xml/Components/runSql.xml">
+            file="xml/Components/Command/runSql.xml">
       </toc>
       <toc
             file="xml/Components/partitionByExpression.xml">

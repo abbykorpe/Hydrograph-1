@@ -68,12 +68,6 @@
    <topic href="html/Components/Remove_Dups.html" label="Remove Dups">
       <anchor id="RemoveDups"/>
    </topic>
-   <topic href="html/Components/Run_Program.html" label="Run Program">
-      <anchor id="Run_Program"/>
-   </topic>
-   <topic href="html/Components/Run_Sql.html" label="Run Sql">
-      <anchor id="Run_Sql"/>
-   </topic>
    <topic href="html/Components/Sort.html" label="Sort">
       <anchor id="Sort"/>
    </topic>

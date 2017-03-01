@@ -15,13 +15,9 @@
 
 <toc label="Run Program" link_to="xml\Components\components.xml#Run_Program"> 
 	<topic label="Properties"  href="html/Components/Run_Program_Properties.html"> 
-	<topic href="html/Components/Run_Program_Properties.html#general_properties" label="General Properties">
-    </topic>
-    <topic href="html/Components/Run_Program_Properties.html#details" label="Details">
-    </topic>
-    <topic href="html/Components/Run_Program_Properties.html#configuration" label="Configuration">
-    </topic>
-    <topic href="html/Components/Run_Program_Properties.html#validations" label="Validations">
-    </topic> 
+		<topic href="html/Components/Run_Program_Properties.html#general_properties" label="General Properties"/>
+	    <topic href="html/Components/Run_Program_Properties.html#details" label="Details"/>
+	    <topic href="html/Components/Run_Program_Properties.html#configuration" label="Configuration"/>
+	    <topic href="html/Components/Run_Program_Properties.html#validations" label="Validations"/>
     </topic>
 </toc>
