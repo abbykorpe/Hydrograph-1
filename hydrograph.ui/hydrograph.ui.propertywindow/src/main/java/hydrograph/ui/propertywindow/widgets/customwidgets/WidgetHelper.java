@@ -235,6 +235,17 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+	/**
+	 * Configuration to customize text box as Host Name property 
+	 */
+	public WidgetConfig getTemporaryWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.TEMPORARY_DIR_WIDGET_LABEL);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
 
 	public WidgetConfig getDBUrlWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();

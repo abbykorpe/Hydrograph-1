@@ -77,6 +77,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputMysqlUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputRedshiftUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputSparkRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputTeradataUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.PartitionByExpressionUiConverter;
@@ -264,6 +265,9 @@ public class UiConverterFactory {
 		
 		if((hydrograph.engine.jaxb.outputtypes.JdbcUpdate.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputDBUpdateUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.outputtypes.Sparkredshift.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputSparkRedshiftUiConverter(typeBaseComponent, container);
 		}
 		return new UnknownUiConverter(typeBaseComponent,container);
 	}
