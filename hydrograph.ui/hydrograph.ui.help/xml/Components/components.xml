@@ -50,72 +50,6 @@
    <topic href="html/Components/Filter.html" label="Filter">
       <anchor id="Filter"/>
    </topic>
-   <topic href="html/Components/Generate_Records.html" label="Generate Records">
-      <anchor id="GenerateRecords"/>
-   </topic>
-   <topic href="html/Components/Input_File_Delimited.html" label="Input File Delimited">
-      <anchor id="InputFileDelimited"/>
-   </topic>
-   <topic href="html/Components/Input_File_Fixed_Width.html" label="Input File Fixed Width">
-      <anchor id="InputFileFixedWidth"/>
-   </topic>
-   <topic href="html/Components/Input_File_Mixed_Scheme.html" label="Input File Mixed Scheme">
-      <anchor id="InputFileMixedScheme"/>
-   </topic>
-   <topic href="html/Components/Input_File_Parquet.html" label="Input File Parquet">
-      <anchor id="Input_File_Parquet"/>
-   </topic>
-   <topic href="html/Components/Input_Hive_Parquet.html" label="Input Hive Parquet">
-      <anchor id="inputHiveParquet"/>
-   </topic>
-   <topic href="html/Components/Input_Hive_Text.html" label="Input Hive Text File">
-      <anchor id="inputHiveTextFile"/>
-   </topic>
-   <topic href="html/Components/Input_Mysql.html" label="Input Mysql">
-      <anchor id="Input_Mysql"/>
-   </topic>
-   <topic href="html/Components/Input_Redshift.html" label="Input Redshift">
-      <anchor id="Input_Redshift"/>
-   </topic>
-   <topic href="html/Components/Input_Oracle.html" label="Input Oracle">
-      <anchor id="inputOracle"/>
-    </topic>
-    <topic href="html/Components/Input_Teradata.html" label="Input Teradata">
-      <anchor id="inputTeradata"/>
-   </topic>
-   <topic href="html/Components/Output_File_Delimited.html" label="Output File Delimited">
-      <anchor id="OutputFileDelimited"/>
-   </topic>
-   <topic href="html/Components/Output_File_Fixed_Width.html" label="Output File Fixed Width">
-      <anchor id="OutputFileFixedWidth"/>
-   </topic>
-   <topic href="html/Components/Output_File_Mixed_Scheme.html" label="Output File Mixed Scheme">
-      <anchor id="OutputFileMixedScheme"/>
-   </topic>
-   <topic href="html/Components/Output_File_Parquet.html" label="Output File Parquet">
-      <anchor id="OutputFileParquet"/>
-   </topic>
-   <topic href="html/Components/Output_Hive_Parquet.html" label="Output Hive Parquet">
-      <anchor id="outputHiveParquet"/>
-   </topic>
-   <topic href="html/Components/Output_Hive_Text.html" label="Output Hive Text File">
-      <anchor id="outputHiveTextFile"/>
-   </topic>
-   <topic href="html/Components/Output_Mysql.html" label="Output Mysql">
-      <anchor id="Output_Mysql"/>
-   </topic>
-   <topic href="html/Components/Output_Redshift.html" label="Output Redshift">
-      <anchor id="Output_Redshift"/>
-   </topic>
-   <topic href="html/Components/DBUpdate.html" label="Output DB Update">
-      <anchor id="outputDBUpdate"/>
-    </topic>
-    <topic href="html/Components/Output_Oracle.html" label="Output Oracle">
-      <anchor id="outputOracle"/>
-   </topic>
-    <topic href="html/Components/Output_Teradata.html" label="Output Teradata">
-      <anchor id="outputTeradata"/>
-   </topic>
    <topic href="html/Components/Join.html" label="Join">
       <anchor id="Join"/>
    </topic>
@@ -133,12 +67,6 @@
    </topic>
    <topic href="html/Components/Remove_Dups.html" label="Remove Dups">
       <anchor id="RemoveDups"/>
-   </topic>
-   <topic href="html/Components/Run_Program.html" label="Run Program">
-      <anchor id="Run_Program"/>
-   </topic>
-   <topic href="html/Components/Run_Sql.html" label="Run Sql">
-      <anchor id="Run_Sql"/>
    </topic>
    <topic href="html/Components/Sort.html" label="Sort">
       <anchor id="Sort"/>

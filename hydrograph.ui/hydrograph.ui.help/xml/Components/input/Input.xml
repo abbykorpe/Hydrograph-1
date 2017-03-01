@@ -15,8 +15,69 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="Input" link_to="xml/Components.xml#Input"> 
-   <topic label="InputXml" href="html/Components/input/Input_Xml.html">
-      <anchor id="InputXml"/>
+  
+
+   <topic label="Input File Delimited" href="html/Components/input/Input_File_Delimited.html">
+      <anchor id="Input File Delimited"/>
+      <link toc="xml/Components/input/inputFileDelimited.xml"/>
+   </topic>
+    
+   <topic label="Input File Fixed Width" href="html/Components/input/Input_File_Fixed_Width.html">
+      <anchor id="Input File Fixed Width"/>
+      <link toc="xml/Components/input/inputFileFixedWidth.xml"/>
+   </topic>
+   
+   <topic label="Input File Mixed Scheme" href="html/Components/input/Input_File_Mixed_Scheme.html">
+      <anchor id="Input File Mixed Scheme"/>
+      <link toc="xml/Components/input/inputFileMixedScheme.xml"/>
+   </topic>
+  
+  
+    <topic label="Input File Parquet" href="html/Components/input/Input_File_Parquet.html">
+      <anchor id="Input File Parquet"/>
+      <link toc="xml/Components/input/inputFileParquet.xml"/>
+   </topic>
+   
+     <topic label="Input Hive Parquet" href="html/Components/input/Input_Hive_Parquet.html">
+      <anchor id="Input Hive Parquet"/>
+      <link toc="xml/Components/input/inputHiveParquet.xml"/>
+   </topic>
+   
+     <topic label="Input Hive TextFile" href="html/Components/input/Input_Hive_Text.html">
+      <anchor id="Input Hive TextFile"/>
+      <link toc="xml/Components/input/inputHiveTextFile.xml"/>
+   </topic>
+   
+     <topic label="Input Oracle" href="html/Components/input/Input_Oracle.html">
+      <anchor id="Input Oracle"/>
+      <link toc="xml/Components/input/inputOracle.xml"/>
+   </topic>
+   
+     <topic label="Input Redshift" href="html/Components/input/Input_Redshift.html">
+      <anchor id="Input Redshift"/>
+      <link toc="xml/Components/input/inputRedshift.xml"/>
+   </topic>
+   
+     <topic label="Input Teradata" href="html/Components/input/Input_Teradata.html">
+      <anchor id="Input Teradata"/>
+      <link toc="xml/Components/input/inputTeradata.xml"/>
+   </topic>
+   <topic href="html/Components/input/Input_Xml.html" label="Input Xml">
+      <anchor id="Input Xml"/>
       <link toc="xml/Components/input/InputXml.xml"/>
    </topic>
-</toc>
+   
+   <topic label="Generate Records" href="html/Components/input/Generate_Records.html">
+      <anchor id="Generate Records"/>
+      <link toc="xml/Components/input/generateRecords.xml"/>
+   </topic>
+   
+   <topic label="Input Mysql" href="html/Components/input/Input_Mysql.html">
+      <anchor id="Input Mysql"/>
+      <link toc="xml/Components/input/inpuMysql.xml"/>
+   </topic>
+   
+  </toc>
+   
+   
+   
