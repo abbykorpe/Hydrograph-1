@@ -16,7 +16,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
-		name="IRedshift" nameInPalette="Redshift" defaultNamePrefix="IRedshift" 
+		name="ISRedshift" nameInPalette="Redshift" defaultNamePrefix="IRedshift" 
 		description="Used to read data from Redshift tables stored in Parquet format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Redshift.html"
 		acronym="IReds">
@@ -43,12 +43,6 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="jdbcDriver" value="JDBC 4.2" renderer="JDBC_DRIVER_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Denotes the JDBC Driver selected by user">
-			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
-		</tns:property>
-		
 		<tns:property dataType="string" name="hostName" value="" renderer="HOST_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Host Name provided by the user">
@@ -77,8 +71,14 @@
 		<tns:property dataType="string" name="testConnection" renderer="TEST_CONNECTION_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the button for testing out the above given values">
-			
 		</tns:property>
+		
+		<tns:property dataType="string" name="temporaryDirectory" value="" renderer="TEMPORARY_DIR_NAME_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Difines path of temporary directory on S3">
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+			
 			
 		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"

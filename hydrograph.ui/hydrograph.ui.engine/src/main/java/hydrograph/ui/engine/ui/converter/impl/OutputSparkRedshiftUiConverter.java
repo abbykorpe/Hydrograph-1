@@ -100,10 +100,8 @@ public class OutputSparkRedshiftUiConverter extends OutputUiConverter {
 			}else if(redshift.getLoadType().getTruncateLoad() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_REPLACE_KEY,redshift.getLoadType().getTruncateLoad().toString());
 			} 
-			//TODO Currently, below widget is not use for spark support
-			/*else if(redshift.getLoadType().getUpdate() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(redshift.getLoadType().getUpdate()));
-			}*/else if(redshift.getLoadType().getNewTable() !=null){
+			
+			else if(redshift.getLoadType().getNewTable() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue(redshift.getLoadType().getNewTable()));
 			}
 				

@@ -58,6 +58,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputMysqlUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputRedshiftUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputSparkRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputTeradataUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputXmlUiConverter;
@@ -268,6 +269,9 @@ public class UiConverterFactory {
 		}
 		if((hydrograph.engine.jaxb.outputtypes.Sparkredshift.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputSparkRedshiftUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.inputtypes.Sparkredshift.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputSparkRedshiftUiConverter(typeBaseComponent, container);
 		}
 		return new UnknownUiConverter(typeBaseComponent,container);
 	}
