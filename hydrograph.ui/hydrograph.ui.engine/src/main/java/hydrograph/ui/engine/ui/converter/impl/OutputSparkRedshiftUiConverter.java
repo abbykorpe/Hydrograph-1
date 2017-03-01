@@ -46,7 +46,7 @@ import hydrograph.ui.graph.model.components.OSRedShift;
 import hydrograph.ui.logging.factory.LogFactory;
 
 /**
- *The Class OutputRedshiftUiConverter to convert jaxb Redshift object into Redshift component
+ *The Class OutputSparkRedshiftUiConverter to convert jaxb Redshift object into Redshift component
  * @author Bitwise
  *
  */
