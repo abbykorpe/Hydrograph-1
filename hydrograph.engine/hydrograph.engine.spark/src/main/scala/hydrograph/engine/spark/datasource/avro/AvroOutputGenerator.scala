@@ -44,8 +44,12 @@ import javax.validation.constraints.Null
 import org.spark_project.guava.primitives.Bytes
 import org.apache.hadoop.io.BytesWritable
 import java.util.Arrays
-
-// NOTE: This class is instantiated and used on executor side only, no need to be serializable.
+/**
+  * The Class AvroOutputGenerator.
+  *
+  * @author Bitwise
+  *
+  */
 private class AvroOutputGenerator(
     path: String,
     context: TaskAttemptContext,

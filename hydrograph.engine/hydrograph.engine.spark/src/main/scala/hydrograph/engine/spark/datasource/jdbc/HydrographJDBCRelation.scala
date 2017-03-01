@@ -18,7 +18,10 @@ import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 
 /**
-  * Created by amiyam on 14-01-2017.
+  * The Class HydrographJDBCRelation.
+  *
+  * @author Bitwise
+  *
   */
 case class HydrographJDBCRelation(sparkSession: SparkSession)
   extends BaseRelation {

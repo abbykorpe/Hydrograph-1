@@ -22,7 +22,10 @@ import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
 
 /**
-  * Created by arshadalis on 12/13/2016.
+  * The Class InputHiveComponent.
+  *
+  * @author Bitwise
+  *
   */
 class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams) extends InputComponentBase {
   val LOG = LoggerFactory.getLogger(classOf[InputHiveComponent])
@@ -39,7 +42,6 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
 
   }
 
-
   def constructQuery(entity: HiveEntityBase): String = {
     LOG.trace("In method constructQuery() which returns constructed query to execute with spark-sql")
     var query = ""
@@ -48,7 +50,6 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
 
     val fieldList = entity.getFieldsList.asScala.toList
     val partitionKeyValueMap = entity.getListOfPartitionKeyValueMap.asScala.toList
-
 
     query = query + "SELECT " + getFieldsForSelectClause(fieldList) + " FROM " + databaseName + "." + tableName
 

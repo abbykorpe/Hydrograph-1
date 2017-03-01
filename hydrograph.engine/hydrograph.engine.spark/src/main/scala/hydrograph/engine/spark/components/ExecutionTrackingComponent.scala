@@ -23,10 +23,14 @@ import org.apache.spark.TaskContext
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.util.LongAccumulator
-
 /**
-  * Created by vaijnathp on 12/12/2016.
+  * The Class ExecutionTrackingComponent.
+  *
+  * @author Bitwise
+  *
   */
+
+
 class ExecutionTrackingComponent(executionTrackingEntity: ExecutionTrackingEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with Serializable {
   override def createComponent(): Map[String, DataFrame] = {

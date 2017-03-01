@@ -15,7 +15,12 @@ package hydrograph.engine.spark.core.reusablerow
 import java.util.LinkedHashSet
 
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
-
+/**
+  * The Class OutputReusableRow.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputReusableRow(var outputRow: Array[Any], fieldsIndexMap: Map[String, Int], fieldsIndexList: Array[Int], fields: LinkedHashSet[String])
     extends ReusableRow(fields) with Serializable {
 

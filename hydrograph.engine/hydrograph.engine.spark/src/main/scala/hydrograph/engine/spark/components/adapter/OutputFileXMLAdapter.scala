@@ -18,9 +18,11 @@ import hydrograph.engine.spark.components.{OutputFileDelimitedComponent, OutputF
 import hydrograph.engine.spark.components.adapter.base.OutputAdatperBase
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
 /**
-  * Created by bitwise on 1/12/2017.
+  * The Class OutputFileXMLAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class OutputFileXMLAdapter (typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase {
 

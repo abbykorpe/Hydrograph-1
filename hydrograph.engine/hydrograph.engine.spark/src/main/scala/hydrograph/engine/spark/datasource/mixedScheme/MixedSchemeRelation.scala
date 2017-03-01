@@ -27,7 +27,12 @@ import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions._
-
+/**
+  * The Class MixedSchemeRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class MixedSchemeRelation(componentName:String,
                                 location: Option[String],
                                 charset: String,

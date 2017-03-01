@@ -24,7 +24,10 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by Aniketmo on 12/23/2016.
+  * The Object ComponentMapping.
+  *
+  * @author Bitwise
+  *
   */
 object ComponentMapping {
 

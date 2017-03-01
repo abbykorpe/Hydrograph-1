@@ -22,7 +22,12 @@ import org.apache.spark.sql.sources.{BaseRelation, CreatableRelationProvider, Re
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
-
+/**
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
 
 class DefaultSource extends RelationProvider
   with SchemaRelationProvider with CreatableRelationProvider with Serializable {

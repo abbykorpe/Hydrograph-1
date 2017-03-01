@@ -19,7 +19,12 @@ import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
-
+/**
+  * The Class InputOracleAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputOracleAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase {
 
   var inputOracleEntityGenerator: InputOracleEntityGenerator = null

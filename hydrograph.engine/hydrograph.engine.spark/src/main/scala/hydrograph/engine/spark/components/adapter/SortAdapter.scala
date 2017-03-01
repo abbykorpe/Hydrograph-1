@@ -18,7 +18,12 @@ import hydrograph.engine.spark.components.SortComponent
 import hydrograph.engine.spark.components.adapter.base.StraightPullAdatperBase
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class SortAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class SortAdapter(typeBaseComponent: TypeBaseComponent) extends StraightPullAdatperBase {
 
   private var sortGenerator: SortEntityGenerator = null

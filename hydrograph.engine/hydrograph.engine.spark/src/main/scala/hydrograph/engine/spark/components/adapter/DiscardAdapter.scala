@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by snehada on 12/16/2016.
+  * The Class DiscardAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class DiscardAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase{
 

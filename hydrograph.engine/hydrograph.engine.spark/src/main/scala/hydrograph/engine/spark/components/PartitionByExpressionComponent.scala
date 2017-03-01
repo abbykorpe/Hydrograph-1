@@ -24,7 +24,10 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by santlalg on 12/15/2016.
+  * The Class PartitionByExpressionComponent.
+  *
+  * @author Bitwise
+  *
   */
 class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExpressionEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[CustomPartitionExpression] with Serializable {

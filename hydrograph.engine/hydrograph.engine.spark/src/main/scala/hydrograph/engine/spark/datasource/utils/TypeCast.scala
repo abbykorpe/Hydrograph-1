@@ -24,8 +24,11 @@ import scala.util.Try
 
 
 /**
-  * Utility functions for type casting
- */
+  * The Object TypeCast.
+  *
+  * @author Bitwise
+  *
+  */
 
 object TypeCast {
 

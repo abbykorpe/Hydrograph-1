@@ -17,7 +17,12 @@ import scala.collection.JavaConversions._
 
 
 import org.apache.avro.Schema
-
+/**
+  * The Object AvroSchemaUtils .
+  *
+  * @author Bitwise
+  *
+  */
 object AvroSchemaUtils {
 
   object AvroTableProperties extends Enumeration {

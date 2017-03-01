@@ -36,7 +36,10 @@ import scala.collection.JavaConverters.{asScalaBufferConverter, seqAsJavaListCon
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by bitwise on 10/18/2016.
+  * The Class NormalizeComponent.
+  *
+  * @author Bitwise
+  *
   */
 class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) 
  extends OperationComponentBase with Serializable with OperationHelper[NormalizeTransformBase] {

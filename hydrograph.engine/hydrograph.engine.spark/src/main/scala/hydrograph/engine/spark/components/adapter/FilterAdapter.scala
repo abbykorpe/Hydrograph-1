@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by vaijnathp on 12/12/2016.
+  * The Class FilterAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class FilterAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase {
 

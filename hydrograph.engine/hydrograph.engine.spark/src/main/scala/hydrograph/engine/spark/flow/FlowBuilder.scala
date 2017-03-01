@@ -25,11 +25,12 @@ import org.apache.spark.util.LongAccumulator
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-
 /**
-  * Created by gurdits on 10/17/2016.
+  * The Class FlowBuilder.
+  *
+  * @author Bitwise
+  *
   */
-
 
 class FlowBuilder(runtimeContext: RuntimeContext) {
 

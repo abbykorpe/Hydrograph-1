@@ -5,7 +5,12 @@ import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.DataFrame
 import org.slf4j.LoggerFactory
-
+/**
+  * The Class LimitComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class LimitComponent(limitEntity : LimitEntity, componentsParams : BaseComponentParams) extends StraightPullComponentBase with Serializable{
 
   val LOG = LoggerFactory.getLogger(classOf[LimitComponent])

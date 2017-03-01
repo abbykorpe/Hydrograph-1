@@ -35,7 +35,10 @@ import scala.collection.mutable.ListBuffer
 import scala.util.matching.Regex
 
 /**
-  * Created by gurdits on 10/17/2016.
+  * The Class HydrographRuntime.
+  *
+  * @author Bitwise
+  *
   */
 
 class HydrographRuntime extends HydrographRuntimeService {

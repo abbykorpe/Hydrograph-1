@@ -21,7 +21,10 @@ import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by AniruddhaS on 12/30/2016.
+  * The Class OutputTeradataAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class OutputTeradataAdapter (typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase{
   private  var outputTeradataEntityGenerator:OutputTeradataEntityGenerator=null

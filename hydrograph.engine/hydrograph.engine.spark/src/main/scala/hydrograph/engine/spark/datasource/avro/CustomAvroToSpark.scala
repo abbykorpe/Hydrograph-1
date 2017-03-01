@@ -29,6 +29,12 @@ import java.math.BigDecimal
 import java.lang.Short
 import java.sql.Timestamp
 
+/**
+  * The Object CustomAvroToSpark.
+  *
+  * @author Bitwise
+  *
+  */
 object CustomAvroToSpark {
 
   class IncompatibleSchemaException(msg: String, ex: Throwable = null) extends Exception(msg, ex)

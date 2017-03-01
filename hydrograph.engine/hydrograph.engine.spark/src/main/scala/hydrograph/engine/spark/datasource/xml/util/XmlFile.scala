@@ -30,6 +30,12 @@ import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
 import hydrograph.engine.spark.datasource.xml.{XmlOptions, XmlInputFormat}
 
+/**
+  * The Object XmlFile.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object XmlFile {
   val DEFAULT_INDENT = "    "
   val DEFAULT_ROW_SEPARATOR = "\n"

@@ -19,7 +19,9 @@ import java.io.Serializable;
 import java.util.Properties;
 
 /**
- * Created by santlalg on 12/15/2016.
+ * The Class PartitionByExpressionTest.
+ *
+ * @author Bitwise
  */
 public class PartitionByExpressionTest implements CustomPartitionExpression, Serializable {
 

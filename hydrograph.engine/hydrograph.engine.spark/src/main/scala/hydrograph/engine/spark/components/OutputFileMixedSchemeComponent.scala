@@ -27,6 +27,12 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
+/**
+  * The Class OutputFileMixedSchemeComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileMixedSchemeComponent(outputFileMixedSchemeEntity: OutputFileMixedSchemeEntity, cp:
 BaseComponentParams) extends SparkFlow with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])

@@ -18,7 +18,10 @@ import org.apache.spark.sql.types.{DataType, StructField, StructType}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by santlalg on 1/2/2017.
+  * The Class SchemaUtils.
+  *
+  * @author Bitwise
+  *
   */
 case class SchemaUtils() {
 

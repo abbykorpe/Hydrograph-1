@@ -16,7 +16,12 @@ import java.util.LinkedHashSet
 
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import org.apache.spark.sql.Row
-
+/**
+  * The Class InputReusableRow.
+  *
+  * @author Bitwise
+  *
+  */
 class InputReusableRow(var inputRow: Row, fieldsIndexMap: Map[String, Int], fieldsIndexList: Array[Int], fields: LinkedHashSet[String])
     extends ReusableRow(fields) with Serializable {
 

@@ -27,6 +27,12 @@ import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.mutable.ListBuffer
 
+/**
+  * The Class RemoveDupsComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: BaseComponentParams)
   extends StraightPullComponentBase {
   val logger = LoggerFactory.getLogger(classOf[RemoveDupsComponent])

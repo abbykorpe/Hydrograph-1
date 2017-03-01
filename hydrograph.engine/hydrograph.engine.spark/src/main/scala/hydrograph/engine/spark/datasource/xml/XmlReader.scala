@@ -19,10 +19,12 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SQLContext}
 import org.apache.spark.sql.types.StructType
 import hydrograph.engine.spark.datasource.xml.util.XmlFile
-
 /**
- * A collection of static functions for working with XML files in Spark SQL
- */
+  * The Class XmlReader.
+  *
+  * @author Bitwise
+  *
+  */
 class XmlReader extends Serializable {
   private var parameters = collection.mutable.Map.empty[String, String]
   private var schema: StructType = null

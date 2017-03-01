@@ -21,7 +21,10 @@ import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by gurdits on 12/28/2016.
+  * The Class InputSequenceFileComponent.
+  *
+  * @author Bitwise
+  *
   */
 class InputSequenceFileComponent(iSequenceEntity: InputFileSequenceFormatEntity, iComponentsParams: BaseComponentParams) extends
   InputComponentBase {

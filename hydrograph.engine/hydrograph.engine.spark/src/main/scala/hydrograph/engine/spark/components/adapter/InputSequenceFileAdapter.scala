@@ -18,7 +18,12 @@ import hydrograph.engine.spark.components.InputSequenceFileComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class InputSequenceFileAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputSequenceFileAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
 
   private var inputFileDelimited:InputFileSequenceFormatEntityGenerator=null

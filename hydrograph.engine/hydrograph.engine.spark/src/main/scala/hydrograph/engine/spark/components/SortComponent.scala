@@ -22,6 +22,12 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.LoggerFactory
 
+/**
+  * The Class SortComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class SortComponent(sortEntity: SortEntity, componentsParams: BaseComponentParams)
   extends StraightPullComponentBase {
 

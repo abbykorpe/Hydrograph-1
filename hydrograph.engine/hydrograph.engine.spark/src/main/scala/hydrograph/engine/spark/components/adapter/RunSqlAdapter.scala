@@ -19,6 +19,12 @@ import hydrograph.engine.spark.components.adapter.base.RunProgramAdapterBase
 import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow, SparkFlow}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
+/**
+  * The Class RunSqlAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class RunSqlAdapter(typeBaseComponent: TypeBaseComponent) extends RunProgramAdapterBase {
 
   private var runSqlEntityGenerator: RunSqlGenerator = null

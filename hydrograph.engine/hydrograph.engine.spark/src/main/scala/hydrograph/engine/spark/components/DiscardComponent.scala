@@ -5,7 +5,12 @@ import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.slf4j.LoggerFactory
 
-
+/**
+  * The Class DiscardComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class DiscardComponent(discardEntity: DiscardEntity, componentsParams: BaseComponentParams) extends SparkFlow
 {
   val LOG = LoggerFactory.getLogger(classOf[DiscardComponent])

@@ -9,6 +9,12 @@ import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConversions._
 
+/**
+  * The Class CloneComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class CloneComponent(cloneEntity: CloneEntity, componentsParams: BaseComponentParams)
   extends
     StraightPullComponentBase {

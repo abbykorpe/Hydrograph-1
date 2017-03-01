@@ -31,8 +31,11 @@ import hydrograph.engine.spark.datasource.xml.util.TypeCast._
 import hydrograph.engine.spark.datasource.xml.XmlOptions
 
 /**
- * Wraps parser to iteration process.
- */
+  * The Object StaxXmlParser.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object StaxXmlParser {
   private val logger = LoggerFactory.getLogger(StaxXmlParser.getClass)
 

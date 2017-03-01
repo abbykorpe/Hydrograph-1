@@ -12,35 +12,33 @@
  *******************************************************************************/
 package hydrograph.engine.userfunctions;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
+import java.util.ArrayList;
+import java.util.Properties;
+
 /**
- * This class is used as custom transform class in FilterAssemblyTestWithPlunger
- * test class
- * 
- * @author Prabodh
- * @see hydrograph.engine.cascading.assembly.FilterAssemblyTest
+ * The Class CustomFilterOperation.
+ *
+ * @author Bitwise
  */
 public class CustomFilterOperation implements FilterBase {
 
-	@Override
-	public void prepare(Properties props, ArrayList<String> inputFields) {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public void prepare(Properties props, ArrayList<String> inputFields) {
+        // TODO Auto-generated method stub
+    }
 
-	@Override
-	public boolean isRemove(ReusableRow reusableRow) {
-		return reusableRow.getField("col1").equals("C1R2")
-				&& reusableRow.getField("col2").equals("C2R2");
-	}
+    @Override
+    public boolean isRemove(ReusableRow reusableRow) {
+        return reusableRow.getField("col1").equals("C1R2")
+                && reusableRow.getField("col2").equals("C2R2");
+    }
 
-	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
+    @Override
+    public void cleanup() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 }

@@ -23,7 +23,10 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by AniruddhaS on 1/6/2017.
+  * The Class TeradataTableUtils.
+  *
+  * @author Bitwise
+  *
   */
 case class TeradataTableUtils() {
   val LOG: Logger = LoggerFactory.getLogger(classOf[TeradataTableUtils])

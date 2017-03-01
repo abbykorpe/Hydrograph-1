@@ -23,6 +23,12 @@ import java.io.File
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 
+/**
+  * The Class InputFileAvroComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileAvroComponent(inputFileAvroEntity: InputFileAvroEntity, baseComponentParams: BaseComponentParams) extends InputComponentBase {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[InputFileAvroComponent])
 

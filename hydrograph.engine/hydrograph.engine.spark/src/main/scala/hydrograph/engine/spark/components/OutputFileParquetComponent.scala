@@ -24,6 +24,12 @@ import org.slf4j.{ Logger, LoggerFactory }
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
+/**
+  * The Class OutputFileParquetComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileParquetComponent(oFileParquetEntity: OutputFileParquetEntity, componentsParams: BaseComponentParams)
     extends SparkFlow {
 

@@ -15,6 +15,12 @@ package hydrograph.engine.spark.datasource
 
 import org.apache.spark.sql.{DataFrame, DataFrameReader, DataFrameWriter}
 
+/**
+  * The Package Object avro .
+  *
+  * @author Bitwise
+  *
+  */
 package object avro {
   /**
    * Adds a method, `avro`, to DataFrameWriter that allows you to write avro files using

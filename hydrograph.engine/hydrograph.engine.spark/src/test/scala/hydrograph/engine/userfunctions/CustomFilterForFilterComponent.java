@@ -18,22 +18,26 @@ import java.util.Properties;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
+/**
+ * The Class CustomFilterForFilterComponent.
+ *
+ * @author Bitwise
+ */
 public class CustomFilterForFilterComponent implements FilterBase {
 
-	
-	@Override
-	public void prepare(Properties props, ArrayList<String> inputFields) {
-	}
+    @Override
+    public void prepare(Properties props, ArrayList<String> inputFields) {
+    }
 
-	@Override
-	public boolean isRemove(ReusableRow reusableRow) {
-		String input=reusableRow.getString(0);
-		return input.equals("C1R1");
-	}
+    @Override
+    public boolean isRemove(ReusableRow reusableRow) {
+        String input = reusableRow.getString(0);
+        return input.equals("C1R1");
+    }
 
-	@Override
-	public void cleanup() {
+    @Override
+    public void cleanup() {
 
-	}
+    }
 
 }

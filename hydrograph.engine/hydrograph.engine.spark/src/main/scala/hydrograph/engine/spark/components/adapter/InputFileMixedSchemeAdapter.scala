@@ -19,6 +19,12 @@ import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
+/**
+  * The Class InputFileMixedSchemeAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileMixedSchemeAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
 
   private var inputFileMixedScheme:InputFileMixedSchemeEntityGenerator=null

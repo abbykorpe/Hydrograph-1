@@ -11,7 +11,12 @@ import org.apache.spark.sql.types.StructType
 import scala.collection.JavaConverters._
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.reflect.ClassTag
-
+/**
+  * The Class SparkOperation.
+  *
+  * @author Bitwise
+  *
+  */
 case class SparkOperation[T](baseClassInstance: T, operationEntity: Operation, inputRow: InputReusableRow, outputRow:
 OutputReusableRow, validatioinAPI: ValidationAPI, initalValue: String,operationOutFields:Array[String],fieldName:Array[String],fieldType:Array[String])
 

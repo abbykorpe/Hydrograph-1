@@ -28,6 +28,12 @@ import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 
+/**
+  * The Class SchemaCreator.
+  *
+  * @author Bitwise
+  *
+  */
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 

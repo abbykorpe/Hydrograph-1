@@ -19,6 +19,12 @@ import scala.util.control.Exception._
 
 import org.apache.hadoop.io.compress._
 
+/**
+  * The Object CompressionCodecs.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object CompressionCodecs {
   private val shortCompressionCodecNames: Map[String, String] = {
     val codecMap = collection.mutable.Map.empty[String, String]

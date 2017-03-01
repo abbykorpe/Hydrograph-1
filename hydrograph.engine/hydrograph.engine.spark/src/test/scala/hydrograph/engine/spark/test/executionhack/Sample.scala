@@ -22,7 +22,12 @@ import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.types.{LongType, StringType, StructField, StructType}
-
+/**
+  * The Object Sample.
+  *
+  * @author Bitwise
+  *
+  */
 object Sample extends App {
 
   val propertiesLoader = PropertiesLoader.getInstance();

@@ -23,9 +23,11 @@ import scala.collection.mutable.ListBuffer
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
- * Created by gurdits on 10/18/2016.
- *
- */
+  * The Class JoinComponent.
+  *
+  * @author Bitwise
+  *
+  */
 
 class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
 

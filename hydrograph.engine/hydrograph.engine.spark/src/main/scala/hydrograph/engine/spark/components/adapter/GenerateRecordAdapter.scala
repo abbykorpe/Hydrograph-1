@@ -19,6 +19,12 @@ import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
+/**
+  * The Class GenerateRecordAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class GenerateRecordAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase {
   
    private var generateRecord:GenerateRecordEntityGenerator=null

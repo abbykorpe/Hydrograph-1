@@ -23,7 +23,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.testing.wrapper.Bucket
 import hydrograph.engine.testing.wrapper.DataBuilder
 import hydrograph.engine.testing.wrapper.Fields
-
+/**
+  * The Class LimitComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class LimitComponentTest{
   
   @Test

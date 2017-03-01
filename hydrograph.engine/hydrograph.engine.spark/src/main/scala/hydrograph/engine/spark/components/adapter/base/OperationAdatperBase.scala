@@ -15,7 +15,10 @@ package hydrograph.engine.spark.components.adapter.base
 import hydrograph.engine.spark.components.base.OperationComponentBase
 
 /**
-  * Created by gurdits on 10/27/2016.
+  * The trait OperationAdatperBase .
+  *
+  * @author Bitwise
+  *
   */
 trait OperationAdatperBase extends AdapterBase{
 

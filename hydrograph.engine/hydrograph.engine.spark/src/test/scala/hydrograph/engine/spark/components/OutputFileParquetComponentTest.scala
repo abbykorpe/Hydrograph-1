@@ -22,7 +22,12 @@ import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import org.junit.{Assert, Test}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class OutputFileParquetComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileParquetComponentTest {
 
   @Test

@@ -21,9 +21,11 @@ import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
 
-
 /**
-  * Created by arshadalis on 12/9/2016.
+  * The Class OutputHiveComponent.
+  *
+  * @author Bitwise
+  *
   */
 class OutputHiveComponent(entity: HiveEntityBase, oComponentParameters: BaseComponentParams) extends SparkFlow {
 

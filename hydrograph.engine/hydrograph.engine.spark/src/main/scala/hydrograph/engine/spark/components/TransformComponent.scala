@@ -26,7 +26,12 @@ import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class TransformComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class TransformComponent(transformEntity: TransformEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with OperationHelper[TransformBase] with Serializable {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[TransformComponent])
   val outSocketEntity = transformEntity.getOutSocketList().get(0)

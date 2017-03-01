@@ -20,7 +20,12 @@ import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputFileFixedWidthComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase with Serializable {
 

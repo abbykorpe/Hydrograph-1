@@ -21,7 +21,12 @@ import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputOracleComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams: BaseComponentParams) extends
   InputComponentBase {
   val LOG: Logger = LoggerFactory.getLogger(classOf[InputOracleComponent])

@@ -24,6 +24,12 @@ import org.apache.spark.sql.{DataFrame, Row}
 
 import scala.collection.JavaConverters._
 
+/**
+  * The Class ToBeTransformComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class ToBeTransformComponent(transformEntity: TransformEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with OperationHelper[TransformBase] with Serializable {
 
   val outSocketEntity = transformEntity.getOutSocketList().get(0)
@@ -40,7 +46,6 @@ class ToBeTransformComponent(transformEntity: TransformEntity, componentsParams:
   val enc = RowEncoder(outputSchema)
   val inDf = componentsParams.getDataFrame
 
-  //-----
   val transformsList = initializeOperationList(transformEntity.getOperationsList, inputSchema, outputSchema)
 
   //transformsList.foreach { sparkOperation => sparkOperation.baseClassInstance.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation.operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields) }
@@ -52,7 +57,6 @@ class ToBeTransformComponent(transformEntity: TransformEntity, componentsParams:
   outVals(1) = "tempCity"
   outVals(2) = 25528742.asInstanceOf[Long]
 
-  //-----
   override def createComponent(): Map[String, DataFrame] = {
 
     //inDf.createOrReplaceTempView("tmp")

@@ -21,8 +21,11 @@ import org.slf4j.LoggerFactory
 import hydrograph.engine.spark.datasource.xml.util.ParseModes
 
 /**
- * Options for the XML data source.
- */
+  * The Class XmlOptions.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] class XmlOptions(
     @transient private val parameters: Map[String, String])
   extends Serializable{

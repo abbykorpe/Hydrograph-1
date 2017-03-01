@@ -21,7 +21,10 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by santlalg on 12/12/2016.
+  * The Class DbTableUtils.
+  *
+  * @author Bitwise
+  *
   */
 case class DbTableUtils() {
 

@@ -29,6 +29,12 @@ import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.datasource.avro.CustomSparkToAvro
 
+/**
+  * The Class OutputFileAvroComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileAvroComponent(outputFileAvroEntity: OutputFileAvroEntity, baseComponentParams: BaseComponentParams) extends SparkFlow{
   private val LOG: Logger = LoggerFactory.getLogger(classOf[OutputFileAvroComponent])
   

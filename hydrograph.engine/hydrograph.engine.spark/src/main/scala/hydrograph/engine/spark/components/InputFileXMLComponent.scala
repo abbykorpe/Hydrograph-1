@@ -23,10 +23,11 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.HashMap
-
-
 /**
-  * Created by bitwise on 1/12/2017.
+  * The Class InputFileXMLComponent.
+  *
+  * @author Bitwise
+  *
   */
 class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase with Serializable {

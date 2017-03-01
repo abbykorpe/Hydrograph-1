@@ -24,7 +24,10 @@ import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
 import org.apache.spark.util.LongAccumulator
 
 /**
-  * Created by gurdits on 10/17/2016.
+  * The Class BaseComponentParams.
+  *
+  * @author Bitwise
+  *
   */
 class BaseComponentParams() extends Serializable {
 

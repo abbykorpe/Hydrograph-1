@@ -28,6 +28,12 @@ import org.slf4j.LoggerFactory;
 import scala.collection.JavaConversions._
 import scala.util.control.NonFatal
 
+/**
+  * The Class CsvRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class CsvRelation(componentId:String,
   charset: String,
   path: String,

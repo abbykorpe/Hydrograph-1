@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 package hydrograph.engine.spark.components
 
 import java.sql.{Date, Timestamp}
@@ -30,7 +30,12 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import java.text.ParseException
 
-
+/**
+  * The Class GenerateRecordComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iComponentsParams: BaseComponentParams) extends InputComponentBase with Serializable {
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[GenerateRecordComponent])
@@ -56,7 +61,6 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       spark.sparkContext.defaultParallelism
     }
 
-    
 
     val recordsPerPartition: ListBuffer[Int] =
       try {
@@ -75,20 +79,18 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       val (fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]) = getFieldPropertiesList()
       val randomGenerateRecordRDD: RDD[Row] = spark.sparkContext.parallelize(Seq[Row](), noOfPartitions)
         .mapPartitionsWithIndex {
-          (index, itr) =>
-            {
-              LOG.info("Currently partition no : "
-                + index
-                + " is being processed")
+          (index, itr) => {
+            LOG.info("Currently partition no : "
+              + index
+              + " is being processed")
 
-              (1 to recordsPerPartition(index)).toStream.map { _ =>
-                {
+            (1 to recordsPerPartition(index)).toStream.map { _ => {
 
-                  Row.fromSeq(getFieldsData(fieldEntityLists, simpleDateFormats))
+              Row.fromSeq(getFieldsData(fieldEntityLists, simpleDateFormats))
 
-                }
-              }.iterator
             }
+            }.iterator
+          }
 
         }
 
@@ -114,30 +116,29 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
   val fieldsSize: Int = generateRecordEntity.getFieldsList.size()
 
   @throws(classOf[Exception])
-  def getFieldsData(fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]): ArrayBuffer[Any] =
-    {
+  def getFieldsData(fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]): ArrayBuffer[Any] = {
 
-      var fieldIndex = 0
-      var dataType: String = ""
-      var fieldName: String = ""
-      try {
+    var fieldIndex = 0
+    var dataType: String = ""
+    var fieldName: String = ""
+    try {
 
-        val rowFieldsList: ArrayBuffer[Any] = ArrayBuffer[Any]()
+      val rowFieldsList: ArrayBuffer[Any] = ArrayBuffer[Any]()
 
-        for (fieldIndex <- 0 until fieldsSize) {
-          fieldName = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldName
-          dataType = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
-          rowFieldsList += generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)
-        }
-        return rowFieldsList
-      } catch {
-
-        case aiob: RuntimeException =>
-          LOG.error("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
-          throw new RuntimeException("Error in Generate Record Component:[\""+generateRecordEntity.getComponentId +"\"] for field name:[\""+fieldName+"\"] whose field index:[\""+fieldIndex+"\"] and data type is [\""+dataType+"\"]. Cause of Error: " + aiob.getMessage)
-
+      for (fieldIndex <- 0 until fieldsSize) {
+        fieldName = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldName
+        dataType = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
+        rowFieldsList += generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)
       }
+      return rowFieldsList
+    } catch {
+
+      case aiob: RuntimeException =>
+        LOG.error("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
+        throw new RuntimeException("Error in Generate Record Component:[\"" + generateRecordEntity.getComponentId + "\"] for field name:[\"" + fieldName + "\"] whose field index:[\"" + fieldIndex + "\"] and data type is [\"" + dataType + "\"]. Cause of Error: " + aiob.getMessage)
+
     }
+  }
 
   def generateFields(dataType: String, fieldIndex: Int, fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]): Any = {
 
@@ -146,9 +147,9 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       val fieldEntity: FieldEntity = fieldEntityLists(fieldIndex)
 
       dataType match {
-        case "Integer"    => FieldTypeEnum.INTEGER(fieldEntity)
-        case "String"     => FieldTypeEnum.STRING(fieldEntity)
-        case "Long"       => FieldTypeEnum.LONG(fieldEntity)
+        case "Integer" => FieldTypeEnum.INTEGER(fieldEntity)
+        case "String" => FieldTypeEnum.STRING(fieldEntity)
+        case "Long" => FieldTypeEnum.LONG(fieldEntity)
         case "BigDecimal" => FieldTypeEnum.BIGDECIMAL(fieldEntity)
         case "Date" => {
 
@@ -162,9 +163,9 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
           }
         }
-        case "Double"  => FieldTypeEnum.DOUBLE(fieldEntity)
-        case "Float"   => FieldTypeEnum.FLOAT(fieldEntity)
-        case "Short"   => FieldTypeEnum.SHORT(fieldEntity)
+        case "Double" => FieldTypeEnum.DOUBLE(fieldEntity)
+        case "Float" => FieldTypeEnum.FLOAT(fieldEntity)
+        case "Short" => FieldTypeEnum.SHORT(fieldEntity)
         case "Boolean" => FieldTypeEnum.BOOLEAN(fieldEntity)
       }
 

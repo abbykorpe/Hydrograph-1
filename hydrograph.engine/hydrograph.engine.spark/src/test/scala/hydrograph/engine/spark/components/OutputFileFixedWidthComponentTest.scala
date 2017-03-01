@@ -21,7 +21,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.testing.wrapper.{DataBuilder, Fields}
 import org.apache.spark.sql._
 import org.junit.{Assert, Test}
-
+/**
+  * The Class OutputFileFixedWidthComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 
 class OutputFileFixedWidthComponentTest {
 

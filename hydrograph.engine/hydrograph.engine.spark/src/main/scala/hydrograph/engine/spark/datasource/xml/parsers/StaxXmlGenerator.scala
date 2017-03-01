@@ -23,7 +23,12 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import hydrograph.engine.spark.datasource.xml.XmlOptions
 
-// This class is borrowed from Spark json datasource.
+/**
+  * The Object StaxXmlGenerator.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object StaxXmlGenerator {
 
   /** Transforms a single Row to XML

@@ -23,7 +23,12 @@ import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConversions._
-
+/**
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
 class DefaultSource extends RelationProvider
   with SchemaRelationProvider with CreatableRelationProvider with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[DefaultSource])

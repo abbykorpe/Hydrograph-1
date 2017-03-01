@@ -23,7 +23,12 @@ import org.fluttercode.datafactory.impl.DataFactory
 
 import scala.util.Random
 
-
+/**
+	* The Class DataGenerator.
+	*
+	* @author Bitwise
+	*
+	*/
 object DataGenerator {
   
   val dataFactory:DataFactory  = new DataFactory()

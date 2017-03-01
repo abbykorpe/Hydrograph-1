@@ -26,9 +26,11 @@ import org.apache.spark.sql.{Column, DataFrame, Row}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by shivarajn on 1/6/2017.
+  * The Class JoinComponentTest.
+  *
+  * @author Bitwise
+  *
   */
-
   @Ignore
 class JoinComponentTest {
 

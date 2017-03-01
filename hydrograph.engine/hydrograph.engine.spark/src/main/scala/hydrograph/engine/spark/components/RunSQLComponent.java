@@ -26,7 +26,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Created by sandeepv on 1/31/2017.
+ * The Class RunSQLComponent.
+ *
+ * @author Bitwise
+ *
  */
 public class RunSQLComponent extends CommandComponentSparkFlow implements Serializable {
 

@@ -22,7 +22,10 @@ import org.junit.{Assert, Test}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by shivarajn on 1/6/2017.
+  * The Class CloneComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class CloneComponentTest {
 

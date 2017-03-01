@@ -21,10 +21,11 @@ import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
-
 /**
-  * Created by santlalg on 12/7/2016.
+  * The Class InputMysqlComponent.
+  *
+  * @author Bitwise
+  *
   */
 class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams: BaseComponentParams) extends
   InputComponentBase {

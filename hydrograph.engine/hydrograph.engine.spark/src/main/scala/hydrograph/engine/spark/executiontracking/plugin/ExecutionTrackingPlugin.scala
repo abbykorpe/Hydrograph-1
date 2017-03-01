@@ -27,7 +27,12 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-
+/**
+  * The Class Component.
+  *
+  * @author Bitwise
+  *
+  */
 class Component(val compId:String,val compName:String,val batch:String,val outSocket:String,val newComponentId:String,val inSocketsPresent:Boolean){
 
   override def equals(obj: scala.Any): Boolean = {

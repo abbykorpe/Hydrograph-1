@@ -24,7 +24,10 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by Aniketmo on 12/22/2016.
+  * The Class JobInfo.
+  *
+  * @author Bitwise
+  *
   */
 class JobInfo(listOfComponents: mutable.ListBuffer[Component]) {
 

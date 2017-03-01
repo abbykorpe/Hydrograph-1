@@ -22,8 +22,11 @@ import org.apache.spark.sql._
 import org.junit.{Assert, Test}
 
 /**
- * Created by santlalg on 12/8/2016.
- */
+  * The Class InputMysqlComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class InputMysqlComponentTest {
 
   @Test

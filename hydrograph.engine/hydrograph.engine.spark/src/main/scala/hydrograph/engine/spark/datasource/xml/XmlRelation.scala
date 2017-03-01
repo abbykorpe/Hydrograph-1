@@ -27,7 +27,12 @@ import org.apache.spark.sql._
 import org.apache.spark.sql.sources.{BaseRelation, InsertableRelation, PrunedScan, TableScan}
 import org.apache.spark.sql.types._
 
-
+/**
+  * The Class XmlRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class XmlRelation protected[spark] (
     baseRDD: () => RDD[String],
     location: Option[String],

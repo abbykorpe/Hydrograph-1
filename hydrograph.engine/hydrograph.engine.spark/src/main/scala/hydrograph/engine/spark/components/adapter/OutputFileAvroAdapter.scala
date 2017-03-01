@@ -19,7 +19,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.core.component.generator.OutputFileAvroEntityGenerator
 import hydrograph.engine.spark.components.OutputFileAvroComponent
 import hydrograph.engine.spark.components.base.SparkFlow
-
+/**
+  * The Class OutputFileAvroAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileAvroAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase{
 
   private var outputFileAvroEntityGenerator:OutputFileAvroEntityGenerator=null

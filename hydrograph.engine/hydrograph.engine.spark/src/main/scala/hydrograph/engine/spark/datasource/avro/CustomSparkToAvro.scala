@@ -40,7 +40,12 @@ import org.apache.hadoop.io.ByteWritable
 import org.apache.hadoop.hive.metastore.api.Decimal
 import scala.beans.BeanProperty
 import hydrograph.engine.core.constants.Constants
-
+/**
+  * The Object CustomSparkToAvro.
+  *
+  * @author Bitwise
+  *
+  */
 object CustomSparkToAvro {
 
   var inputFieldsNumber: Int = 0

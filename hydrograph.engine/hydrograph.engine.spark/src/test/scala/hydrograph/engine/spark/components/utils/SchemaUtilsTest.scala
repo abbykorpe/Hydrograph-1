@@ -16,7 +16,10 @@ import org.apache.spark.sql.types._
 import org.junit.{Assert, Test}
 
 /**
-  * Created by santlalg on 1/2/2017.
+  * The Class SchemaUtilsTest.
+  *
+  * @author Bitwise
+  *
   */
 class SchemaUtilsTest {
 

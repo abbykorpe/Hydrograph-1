@@ -16,7 +16,10 @@ package hydrograph.engine.spark.components.utils
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by santlal and amiya on 1/14/2017.
+  * The Class DbUpdateTableDescriptor.
+  *
+  * @author Bitwise
+  *
   */
 case class DbUpdateTableDescriptor(tableName: String, columnNames: List[String], updateKeys: List[String]) {
 

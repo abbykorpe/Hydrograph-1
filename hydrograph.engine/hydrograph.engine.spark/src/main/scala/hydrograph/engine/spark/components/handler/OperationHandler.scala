@@ -34,7 +34,10 @@ import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import hydrograph.engine.transformation.userfunctions.base.TransformBase
 
 /**
-  * Created by gurdits on 12/1/2016.
+  * The Class CustomClassLoader.
+  *
+  * @author Bitwise
+  *
   */
 
 object CustomClassLoader{

@@ -26,8 +26,11 @@ import org.apache.hadoop.mapreduce.{InputSplit, RecordReader, TaskAttemptContext
 import org.apache.hadoop.mapreduce.lib.input.{FileSplit, TextInputFormat}
 
 /**
- * Reads records that are delimited by a specific start/end tag.
- */
+  * The Class XmlInputFormat.
+  *
+  * @author Bitwise
+  *
+  */
 class XmlInputFormat extends TextInputFormat {
 
   override def createRecordReader(

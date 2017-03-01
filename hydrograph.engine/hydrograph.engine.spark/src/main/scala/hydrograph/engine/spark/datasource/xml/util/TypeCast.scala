@@ -27,8 +27,11 @@ import org.apache.spark.sql.types._
 import hydrograph.engine.spark.datasource.xml.XmlOptions
 
 /**
- * Utility functions for type casting
- */
+  * The Object TypeCast.
+  *
+  * @author Bitwise
+  *
+  */
 object TypeCast {
 
   /**

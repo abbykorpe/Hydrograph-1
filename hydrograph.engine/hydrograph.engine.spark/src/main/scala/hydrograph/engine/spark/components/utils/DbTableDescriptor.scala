@@ -15,7 +15,10 @@ package hydrograph.engine.spark.components.utils
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by santlalg on 12/12/2016.
+  * The Class DbTableDescriptor.
+  *
+  * @author Bitwise
+  *
   */
 class DbTableDescriptor(tableName: String, columnNames: List[String], columnDefs: List[String], primaryKeys: List[String], databaseType: String) extends Serializable {
 

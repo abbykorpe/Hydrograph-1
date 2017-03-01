@@ -19,7 +19,12 @@ import hydrograph.engine.core.component.generator.InputFileDelimitedEntityGenera
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.core.component.generator.InputFileAvroEntityGenerator
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
-
+/**
+  * The Class InputFileAvroAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileAvroAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
 
   private var inputFileAvroEntityGenerator:InputFileAvroEntityGenerator=null

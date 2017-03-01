@@ -22,7 +22,12 @@ import org.junit.{Assert, Test}
 
 import scala.collection.JavaConverters._
 
-
+/**
+  * The Class NormalizeComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class NormalizeComponentTest {
   /**
     * Test case for correct schema

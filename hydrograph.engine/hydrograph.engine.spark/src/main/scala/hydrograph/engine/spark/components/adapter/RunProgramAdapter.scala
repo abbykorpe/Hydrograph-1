@@ -18,7 +18,12 @@ import hydrograph.engine.spark.components.RunProgramComponent
 import hydrograph.engine.spark.components.adapter.base.RunProgramAdapterBase
 import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class RunProgramAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class RunProgramAdapter(typeBaseComponent: TypeBaseComponent) extends RunProgramAdapterBase{
 
   private  var runProgramEntityGenerator:RunProgramEntityGenerator=null

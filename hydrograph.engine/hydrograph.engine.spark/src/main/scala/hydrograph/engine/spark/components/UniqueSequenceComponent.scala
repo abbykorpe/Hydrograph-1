@@ -11,7 +11,12 @@ import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
-
+/**
+  * The Class UniqueSequenceComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class UniqueSequenceComponent(uniqueSequenceEntity: UniqueSequenceEntity, baseComponentParams: BaseComponentParams) extends OperationComponentBase with OperationHelper[TransformBase] with Serializable {
 
   val LOG = LoggerFactory.getLogger(classOf[UniqueSequenceComponent])

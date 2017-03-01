@@ -28,9 +28,11 @@ import org.junit.Test
 
 import scala.collection.JavaConverters._
 
-
 /**
-  * Created by manojp on 1/9/2017.
+  * The Class AggregateComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class AggregateComponentTest {
   @Test

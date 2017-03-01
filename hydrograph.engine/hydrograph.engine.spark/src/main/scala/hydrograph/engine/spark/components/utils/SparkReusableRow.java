@@ -18,7 +18,12 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
-
+/**
+ * The Class SparkReusableRow.
+ *
+ * @author Bitwise
+ *
+ */
 public class SparkReusableRow extends ListBasedReusableRow implements Serializable{
 
 	public SparkReusableRow(LinkedHashSet<String> fields) {

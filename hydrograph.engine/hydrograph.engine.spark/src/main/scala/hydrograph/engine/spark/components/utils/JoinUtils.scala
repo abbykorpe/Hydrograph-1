@@ -23,8 +23,11 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 9/26/2016.
- */
+  * The Class JoinOperation.
+  *
+  * @author Bitwise
+  *
+  */
 
 case class JoinOperation(compID: String, inSocketId: String, dataFrame: DataFrame, keyFields: Array[String], unused: Boolean, recordRequired: Boolean, outSocketId: String, unusedSocketId: String)
 

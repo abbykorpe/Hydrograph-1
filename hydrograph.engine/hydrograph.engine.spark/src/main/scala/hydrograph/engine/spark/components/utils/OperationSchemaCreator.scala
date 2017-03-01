@@ -24,7 +24,10 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by gurdits on 10/18/2016.
+  * The Class OperationSchemaCreator.
+  *
+  * @author Bitwise
+  *
   */
  class OperationSchemaCreator[T <: OperationEntityBase](entity: T, baseComponentParams: BaseComponentParams, outSocket: OutSocket) extends Serializable {
 

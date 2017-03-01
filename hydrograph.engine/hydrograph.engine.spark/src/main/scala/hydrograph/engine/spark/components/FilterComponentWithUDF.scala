@@ -27,7 +27,10 @@ import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
 
 /**
-  * Created by vaijnathp on 12/12/2016.
+  * The Class FilterComponentWithUDF.
+  *
+  * @author Bitwise
+  *
   */
 class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[FilterBase] with Serializable {
