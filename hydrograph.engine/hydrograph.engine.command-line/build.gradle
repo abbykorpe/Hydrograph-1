@@ -92,15 +92,10 @@ repositories {
         url 'http://maven.twttr.com/'
     }
     maven {
-        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
-    }
-    maven {
         name 'redshift'
         url 'http://redshift-maven-repository.s3-website-us-east-1.amazonaws.com/release'
     }
 }
-
-
 
 dependencies {
     //compile project(':hydrograph.engine.cascading')

@@ -90,12 +90,7 @@ repositories {
     maven {
         url 'http://maven.twttr.com/'
     }
-    maven {
-        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
-    }
-
 }
-
 
 dependencies {
 	compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, changing: true
