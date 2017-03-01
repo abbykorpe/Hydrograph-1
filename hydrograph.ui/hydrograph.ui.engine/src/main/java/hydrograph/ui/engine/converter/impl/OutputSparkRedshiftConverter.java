@@ -27,7 +27,7 @@ import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
-import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
+import hydrograph.engine.jaxb.osparkredshift.TypeOutputSparkredshiftInSocket;
 import hydrograph.engine.jaxb.oredshift.TypePrimaryKeys;
 import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
@@ -169,7 +169,7 @@ public class OutputSparkRedshiftConverter extends OutputConverter {
 		logger.debug("Generating TypeOutputInSocket data");
 		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
-			TypeOutputRedshiftInSocket outInSocket = new TypeOutputRedshiftInSocket();
+			TypeOutputSparkredshiftInSocket outInSocket = new TypeOutputSparkredshiftInSocket();
 			outInSocket.setId(link.getTargetTerminal());
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
