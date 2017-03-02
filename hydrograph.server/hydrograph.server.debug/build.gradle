@@ -7,7 +7,7 @@ version = '0.1'
 ext.hadoopVersion = '2.6.0'
 ext.hiveVersion = '1.2.0'
 group = 'hygrograph'
-archivesBaseName = 'hydrograph.services'
+archivesBaseName = 'hydrograph-services'
 
 buildscript {
     repositories {
@@ -16,6 +16,16 @@ buildscript {
     dependencies {
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
     }
+}
+
+task writePom {
+    pom {
+        project {
+			groupId 'hydrograph'
+            artifactId 'services'
+            version '0.0.1'
+        }
+	}.writeTo("$buildDir/pom.xml")
 }
 
 version = new Version(major: 0, minor: 1, revision: 1)
