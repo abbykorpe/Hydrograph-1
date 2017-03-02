@@ -290,7 +290,7 @@ public class Utils {
 		 * @param cursor
 		 */
 	 public void addMouseMoveListener(Text extSchemaPathText , Cursor cursor){
-		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
+		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')||ParameterUtil.containsParameter(extSchemaPathText.getText(),'\\')){
 				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255));	
 				extSchemaPathText.setCursor(cursor);
 				extSchemaPathText.addMouseMoveListener(getMouseListner(extSchemaPathText));
