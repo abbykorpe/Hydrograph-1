@@ -50,8 +50,8 @@ case class CsvRelation(componentId:String,
   private def tokenRdd(baseRDD: RDD[String], header: Array[String]): RDD[String] = {
 
     // If header is set, make sure firstLine is materialized before sending to executors.
-    val firstLine = baseRDD.first
-    val filterLine = if (useHeader) firstLine else null
+//    val firstLine = baseRDD.first
+    val filterLine = if (useHeader) baseRDD.first else null
 
     if (useHeader) baseRDD.filter(_ != filterLine) else baseRDD
 
