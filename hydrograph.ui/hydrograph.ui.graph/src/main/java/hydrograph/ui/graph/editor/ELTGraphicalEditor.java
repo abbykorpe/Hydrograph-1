@@ -935,7 +935,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(input, this);
-			container = genrateContainerData.getContainerData();
+			if(StringUtils.equals(this.getJobName()+".job", input.getName()) || StringUtils.equals(this.getJobName(), "ELT Graphical Editor")){
+				container = genrateContainerData.getContainerData();
+			}else{
+				this.setPartName(input.getName());
+			}
 			super.setInput(input);
 		} catch (CoreException | IOException ce) {
 			logger.error("Exception while setting input", ce);
