@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -18,7 +6,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.otfd.TypeOutputFileDelimitedBase;
 
 
@@ -41,7 +28,6 @@ import hydrograph.engine.jaxb.otfd.TypeOutputFileDelimitedBase;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -52,8 +38,7 @@ import hydrograph.engine.jaxb.otfd.TypeOutputFileDelimitedBase;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "avroFile", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
-    "path",
-    "runtimeProperties"
+    "path"
 })
 public class AvroFile
     extends TypeOutputFileDelimitedBase
@@ -61,7 +46,6 @@ public class AvroFile
 
     @XmlElement(required = true)
     protected AvroFile.Path path;
-    protected TypeProperties runtimeProperties;
 
     /**
      * Gets the value of the path property.
@@ -85,30 +69,6 @@ public class AvroFile
      */
     public void setPath(AvroFile.Path value) {
         this.path = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
 

@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -20,7 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
 
 
@@ -54,7 +41,6 @@ import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *         &lt;element name="quote" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -78,7 +64,6 @@ import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
     "safe",
     "strict",
     "charset",
-    "runtimeProperties",
     "quote"
 })
 public class TextFileMixedScheme
@@ -90,7 +75,6 @@ public class TextFileMixedScheme
     protected BooleanValueType safe;
     protected BooleanValueType strict;
     protected TextFileMixedScheme.Charset charset;
-    protected TypeProperties runtimeProperties;
     protected TextFileMixedScheme.Quote quote;
 
     /**
@@ -187,30 +171,6 @@ public class TextFileMixedScheme
      */
     public void setCharset(TextFileMixedScheme.Charset value) {
         this.charset = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
     /**

@@ -111,7 +111,7 @@
 	<!--*******************base component starts********************** -->
 	<xs:complexType name="type-base-component">
 		<xs:attribute name="id" type="xs:string" use="required" />
-		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="batch" type="xs:string" use="optional"
 			default="0" />
 	</xs:complexType>
@@ -122,6 +122,8 @@
 				<xs:sequence>
 					<xs:element name="outSocket" type="type-input-outSocket"
 						minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="runtimeProperties" type="type-properties"
+						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -134,6 +136,8 @@
 					<xs:element name="inSocket" type="type-output-inSocket"
 						minOccurs="1" maxOccurs="unbounded" />
 					<xs:element name="overWrite" type="type-true-false"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="type-properties"
 						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
@@ -190,8 +194,10 @@
 		<xs:complexContent>
 			<xs:extension base="type-base-component">
 				<xs:sequence>
-					<xs:element name="inSocket" type="type-base-inSocket" minOccurs="0" maxOccurs="unbounded" />
-					<xs:element name="outSocket" type="type-base-outSocket" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="inSocket" type="type-base-inSocket"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="outSocket" type="type-base-outSocket"
+						minOccurs="0" maxOccurs="unbounded" />
 					<xs:element name="properties" minOccurs="0" maxOccurs="1">
 						<xs:complexType>
 							<xs:attribute name="value" use="optional" type="xs:string" />
@@ -288,13 +294,14 @@
 				minOccurs="0" />
 			<xs:element name="properties" type="type-properties"
 				minOccurs="0" />
-				</xs:sequence>
+		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required" />
 		<xs:attribute name="expr" type="xs:string" use="required" />
-		<xs:attribute name="accumulatorInitalValue" type="xs:string" use="optional" />
+		<xs:attribute name="accumulatorInitalValue" type="xs:string"
+			use="optional" />
 		<xs:anyAttribute />
 	</xs:complexType>
-	
+
 	<xs:complexType name="type-output-record-count">
 		<xs:attribute name="value" type="xs:string" use="required" />
 	</xs:complexType>
