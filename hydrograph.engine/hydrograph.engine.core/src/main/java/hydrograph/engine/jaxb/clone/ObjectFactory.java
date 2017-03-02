@@ -50,19 +50,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeCloneInSocket }
-     * 
-     */
-    public TypeCloneInSocket createTypeCloneInSocket() {
-        return new TypeCloneInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
     public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
         return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeCloneInSocket }
+     * 
+     */
+    public TypeCloneInSocket createTypeCloneInSocket() {
+        return new TypeCloneInSocket();
     }
 
 }

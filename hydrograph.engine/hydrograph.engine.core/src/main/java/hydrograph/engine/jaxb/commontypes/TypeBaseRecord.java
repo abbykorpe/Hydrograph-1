@@ -28,6 +28,7 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeJdbcupdateRecord;
 import hydrograph.engine.jaxb.omysql.TypeMysqlRecord;
 import hydrograph.engine.jaxb.ooracle.TypeOracleRecord;
 import hydrograph.engine.jaxb.oredshift.TypeRedshiftRecord;
+import hydrograph.engine.jaxb.osparkredshift.TypeSparkredshiftRecord;
 import hydrograph.engine.jaxb.oteradata.TypeTeradataRecord;
 
 
@@ -66,6 +67,7 @@ import hydrograph.engine.jaxb.oteradata.TypeTeradataRecord;
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedRecord.class,
     TypeMysqlRecord.class,
     TypeRedshiftRecord.class,
+    TypeSparkredshiftRecord.class,
     TypeOracleRecord.class,
     TypeTeradataRecord.class,
     TypeExcelRecord.class,
@@ -75,9 +77,9 @@ import hydrograph.engine.jaxb.oteradata.TypeTeradataRecord;
 public class TypeBaseRecord {
 
     @XmlElements({
+        @XmlElement(name = "field", type = TypeBaseField.class),
         @XmlElement(name = "record", type = TypeBaseRecord.class),
-        @XmlElement(name = "includeExternalSchema", type = TypeExternalSchema.class),
-        @XmlElement(name = "field", type = TypeBaseField.class)
+        @XmlElement(name = "includeExternalSchema", type = TypeExternalSchema.class)
     })
     protected List<Object> fieldOrRecordOrIncludeExternalSchema;
     @XmlAttribute(name = "name", required = true)
@@ -101,9 +103,9 @@ public class TypeBaseRecord {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link TypeBaseField }
      * {@link TypeBaseRecord }
      * {@link TypeExternalSchema }
-     * {@link TypeBaseField }
      * 
      * 
      */

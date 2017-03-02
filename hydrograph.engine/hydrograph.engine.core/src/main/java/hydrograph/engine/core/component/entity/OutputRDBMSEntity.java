@@ -49,7 +49,25 @@ public class OutputRDBMSEntity extends InputOutputEntityBase {
     private String sid;
     private String driverType;
     private String _interface;
+    private String temps3dir;
 
+    /**
+     * @return temps3dir - of type String
+     */
+    public String getTemps3dir() {
+        return temps3dir;
+    }
+
+    /**
+     * @param temps3dir - of type String
+     */
+    public void setTemps3dir(String temps3dir) {
+        this.temps3dir = temps3dir;
+    }
+
+    /**
+     * @return _inteface - of type String
+     */
     public String get_interface() {
         return _interface;
     }

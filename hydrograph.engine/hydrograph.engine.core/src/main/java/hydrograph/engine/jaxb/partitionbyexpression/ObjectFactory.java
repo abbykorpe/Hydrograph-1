@@ -42,6 +42,38 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypePbeInputFields }
+     * 
+     */
+    public TypePbeInputFields createTypePbeInputFields() {
+        return new TypePbeInputFields();
+    }
+
+    /**
+     * Create an instance of {@link TypePbeOperationInputField }
+     * 
+     */
+    public TypePbeOperationInputField createTypePbeOperationInputField() {
+        return new TypePbeOperationInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypePbeInSocket }
+     * 
+     */
+    public TypePbeInSocket createTypePbeInSocket() {
+        return new TypePbeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypePbeOutSocket }
+     * 
+     */
+    public TypePbeOutSocket createTypePbeOutSocket() {
+        return new TypePbeOutSocket();
+    }
+
+    /**
      * Create an instance of {@link PartitionByExpressionBase }
      * 
      */
@@ -55,38 +87,6 @@ public class ObjectFactory {
      */
     public TypePbeOperation createTypePbeOperation() {
         return new TypePbeOperation();
-    }
-
-    /**
-     * Create an instance of {@link TypePbeInSocket }
-     * 
-     */
-    public TypePbeInSocket createTypePbeInSocket() {
-        return new TypePbeInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypePbeOperationInputField }
-     * 
-     */
-    public TypePbeOperationInputField createTypePbeOperationInputField() {
-        return new TypePbeOperationInputField();
-    }
-
-    /**
-     * Create an instance of {@link TypePbeInputFields }
-     * 
-     */
-    public TypePbeInputFields createTypePbeInputFields() {
-        return new TypePbeInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypePbeOutSocket }
-     * 
-     */
-    public TypePbeOutSocket createTypePbeOutSocket() {
-        return new TypePbeOutSocket();
     }
 
 }

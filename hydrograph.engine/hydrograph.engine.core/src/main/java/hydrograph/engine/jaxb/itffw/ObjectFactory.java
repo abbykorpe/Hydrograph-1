@@ -42,22 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFixedwidthRecord }
-     * 
-     */
-    public TypeFixedwidthRecord createTypeFixedwidthRecord() {
-        return new TypeFixedwidthRecord();
-    }
-
-    /**
-     * Create an instance of {@link TypeFixedwidthField }
-     * 
-     */
-    public TypeFixedwidthField createTypeFixedwidthField() {
-        return new TypeFixedwidthField();
-    }
-
-    /**
      * Create an instance of {@link TypeInputFixedwidthOutSocket }
      * 
      */
@@ -71,6 +55,22 @@ public class ObjectFactory {
      */
     public TypeFixedWidthBase createTypeFixedWidthBase() {
         return new TypeFixedWidthBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeFixedwidthField }
+     * 
+     */
+    public TypeFixedwidthField createTypeFixedwidthField() {
+        return new TypeFixedwidthField();
+    }
+
+    /**
+     * Create an instance of {@link TypeFixedwidthRecord }
+     * 
+     */
+    public TypeFixedwidthRecord createTypeFixedwidthRecord() {
+        return new TypeFixedwidthRecord();
     }
 
 }

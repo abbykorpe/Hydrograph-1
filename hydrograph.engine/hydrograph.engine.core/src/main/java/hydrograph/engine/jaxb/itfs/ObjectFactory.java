@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputFileSequenceBase }
-     * 
-     */
-    public TypeInputFileSequenceBase createTypeInputFileSequenceBase() {
-        return new TypeInputFileSequenceBase();
-    }
-
-    /**
      * Create an instance of {@link TypeInputSequenceOutSocket }
      * 
      */
     public TypeInputSequenceOutSocket createTypeInputSequenceOutSocket() {
         return new TypeInputSequenceOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputFileSequenceBase }
+     * 
+     */
+    public TypeInputFileSequenceBase createTypeInputFileSequenceBase() {
+        return new TypeInputFileSequenceBase();
     }
 
 }

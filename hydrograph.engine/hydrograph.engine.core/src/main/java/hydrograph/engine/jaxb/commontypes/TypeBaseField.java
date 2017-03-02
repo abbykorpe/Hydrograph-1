@@ -29,6 +29,7 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeJdbcupdateField;
 import hydrograph.engine.jaxb.omysql.TypeMysqlField;
 import hydrograph.engine.jaxb.ooracle.TypeOracleField;
 import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
+import hydrograph.engine.jaxb.osparkredshift.TypeSparkredshiftField;
 import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
 
 
@@ -61,6 +62,7 @@ import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedField.class,
     TypeMysqlField.class,
     TypeRedshiftField.class,
+    TypeSparkredshiftField.class,
     TypeOracleField.class,
     TypeTeradataField.class,
     TypeExcelField.class,
