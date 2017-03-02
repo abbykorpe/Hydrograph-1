@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Activator;
 
 /**
@@ -39,6 +40,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	public static final String DEFUALT_LOG_LEVEL = "Info";
 	public static final String SAVE_JOB_BEFORE_RUN_PREFRENCE = "save_job__before_run_prefrence";
 	public static final String LOG_LEVEL_PREFERENCE="log_level_preference";
+	
 	private JobRunPreferenceComposite jobRunPreferenceComposite;
 
 	public JobRunPreference() {
@@ -57,7 +59,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 		getPreferenceStore().setDefault(SAVE_JOB_BEFORE_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
 		getPreferenceStore().setDefault(LOG_LEVEL_PREFERENCE,DEFUALT_LOG_LEVEL);
 		String value = Activator.getDefault().getPreferenceStore()
-				.getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE);
+				.getString(SAVE_JOB_BEFORE_RUN_PREFRENCE);
 		if (StringUtils.equals(MessageDialogWithToggle.ALWAYS, value)) {
 			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, value);
 		} else {
@@ -72,6 +74,13 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 		} else {
 			getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE, DEFUALT_LOG_LEVEL);
 		}
+		
+		String consoleBufferValue = Activator.getDefault().getPreferenceStore().getString(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME);
+		if(StringUtils.isNotBlank(consoleBufferValue)){
+			getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME, consoleBufferValue);
+		}else{
+			getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME, Constants.DEFUALT_CONSOLE_BUFFER_SIZE);
+		}
 	}
 
 	/*
@@ -85,7 +94,9 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	protected Control createContents(Composite parent) {
 		getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE);
 		jobRunPreferenceComposite = new JobRunPreferenceComposite(parent, SWT.NONE,
-				getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE),getPreferenceStore().getString(LOG_LEVEL_PREFERENCE));
+				getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE),
+				getPreferenceStore().getString(LOG_LEVEL_PREFERENCE),
+				getPreferenceStore().getString(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME),this);
 		jobRunPreferenceComposite.setLayout(new GridLayout(1, false));
 		jobRunPreferenceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
@@ -106,6 +117,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 		}
 		Activator.getDefault().getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, selection);
 		Activator.getDefault().getPreferenceStore().setValue(LOG_LEVEL_PREFERENCE,jobRunPreferenceComposite.getLoglevel());
+		Activator.getDefault().getPreferenceStore().setValue(Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME, jobRunPreferenceComposite.getConsoleBufferSize());
 		return returnCode;
 	}
 

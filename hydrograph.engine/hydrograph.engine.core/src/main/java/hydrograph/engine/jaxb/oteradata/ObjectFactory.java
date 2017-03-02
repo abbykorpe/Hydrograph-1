@@ -42,35 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputTeradataOutSocket }
+     * Create an instance of {@link TypePrimaryKeys }
      * 
      */
-    public TypeOutputTeradataOutSocket createTypeOutputTeradataOutSocket() {
-        return new TypeOutputTeradataOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputTeradataBase }
-     * 
-     */
-    public TypeOutputTeradataBase createTypeOutputTeradataBase() {
-        return new TypeOutputTeradataBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeUpdateKeys }
-     * 
-     */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeTeradataField }
-     * 
-     */
-    public TypeTeradataField createTypeTeradataField() {
-        return new TypeTeradataField();
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
     }
 
     /**
@@ -82,11 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTeradataRecord }
+     * Create an instance of {@link TypeOutputTeradataOutSocket }
      * 
      */
-    public TypeTeradataRecord createTypeTeradataRecord() {
-        return new TypeTeradataRecord();
+    public TypeOutputTeradataOutSocket createTypeOutputTeradataOutSocket() {
+        return new TypeOutputTeradataOutSocket();
     }
 
     /**
@@ -98,11 +74,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeys }
+     * Create an instance of {@link TypeUpdateKeys }
      * 
      */
-    public TypePrimaryKeys createTypePrimaryKeys() {
-        return new TypePrimaryKeys();
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeTeradataRecord }
+     * 
+     */
+    public TypeTeradataRecord createTypeTeradataRecord() {
+        return new TypeTeradataRecord();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputTeradataBase }
+     * 
+     */
+    public TypeOutputTeradataBase createTypeOutputTeradataBase() {
+        return new TypeOutputTeradataBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeTeradataField }
+     * 
+     */
+    public TypeTeradataField createTypeTeradataField() {
+        return new TypeTeradataField();
     }
 
 }

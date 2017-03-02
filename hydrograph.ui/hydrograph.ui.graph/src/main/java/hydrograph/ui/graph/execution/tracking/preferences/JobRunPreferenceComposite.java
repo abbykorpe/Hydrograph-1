@@ -12,17 +12,26 @@
  ******************************************************************************/
 package hydrograph.ui.graph.execution.tracking.preferences;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.Messages;
 
@@ -32,17 +41,25 @@ import hydrograph.ui.graph.Messages;
  */
 public class JobRunPreferenceComposite extends Composite {
 
+	private static final String REGEX_POSITIVE_INTEGER_ONLY = "[\\d]*";
 	private static final String HASH_REGEX = "#";
 	private Button btnRadioButtonAlways;
 	private Button btnRadioButtonPrompt;
     private CCombo ccLogLevels;
-	JobRunPreferenceComposite(Composite parent, int none, String selection,String logLevel) {
+    private Text textWidget;
+    private JobRunPreference jobRunPreference;
+    
+	JobRunPreferenceComposite(Composite parent, int none, String selection,String logLevel, String bufferSize, JobRunPreference jobRunPreference) {
 		super(parent, none);
 		setLayout(new GridLayout(1, false));
 
 		createSaveJobPromtGroup(selection);
 		
 		createLogLevelGroup(logLevel);
+		
+		createConsoleBufferWidget(bufferSize);
+		
+		this.jobRunPreference = jobRunPreference;
 	}
 
 
@@ -102,6 +119,102 @@ public class JobRunPreferenceComposite extends Composite {
 	}
 	
 	/**
+	 * Create console buffer widget
+	 * @param bufferSize
+	 */
+	private void createConsoleBufferWidget(String bufferSize){
+		HydroGroup hydroGroup = new HydroGroup(this, SWT.NONE);
+		
+		hydroGroup.setHydroGroupText(Messages.HYDROGRAPH_CONSOLE_PREFERANCE_PAGE_GROUP_NAME);
+		hydroGroup.setLayout(new GridLayout(1, false));
+		hydroGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		hydroGroup.getHydroGroupClientArea().setLayout(new GridLayout(2, false));
+		
+		Label label = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
+		
+		label.setText(Messages.PREFERANCE_CONSOLE_BUFFER_SIZE);
+		
+		textWidget = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
+		textWidget.setText(bufferSize);
+		textWidget.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		textWidget.setTextLimit(6);
+		
+		attachConsoleBufferValidator();
+		
+		Composite purgeComposite = new Composite(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
+		purgeComposite.setLayout(new GridLayout(2, false));
+		purgeComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+		
+		Label lblNote = new Label(purgeComposite, SWT.TOP | SWT.WRAP);
+		lblNote.setText(Messages.PREFERANCE_PAGE_NOTE);
+		FontData fontData = lblNote.getFont().getFontData()[0];
+		Font font = new Font(purgeComposite.getDisplay(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		lblNote.setFont(font);
+		Label lblmsg = new Label(purgeComposite, SWT.TOP | SWT.WRAP);
+		lblmsg.setText(Messages.UI_PERFORMANCE_NOTE_IN_CASE_OF_CHANGE_IN_BUFFER_SIZE);
+		
+	}
+
+	private void attachConsoleBufferValidator() {
+		textWidget.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				
+				String text = textWidget.getText();
+				setPreferanceError(null);
+				if(StringUtils.isBlank(text)){
+					setPreferanceError(Messages.PREFERANCE_ERROR_EMPTY_CONSOLE_BUFFER_FIELD);
+					return;
+				}
+				
+				if(!isValidNumber(text)){
+					setPreferanceError(Messages.PREFERANCE_ERROR_INVALID_CONSOLE_BUFFER_INPUT);
+					return;
+				}
+				
+				int value=Integer.parseInt(text);
+				if(!isValidConsoleBufferSize(value)){
+					setPreferanceError(Messages.PREFERANCE_ERROR_INVALID_CONSOLE_BUFFER_INPUT);
+					return;
+				}else{
+					setPreferanceError(null);
+				}
+			}
+		});
+	}
+	
+	protected boolean isValidConsoleBufferSize(int value) {
+		if(value<1000 || value>40000){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+
+	private boolean isValidNumber(String text) {
+		Matcher matchs=Pattern.compile(REGEX_POSITIVE_INTEGER_ONLY).matcher(text);
+		if(!matchs.matches()){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+
+	private void setPreferanceError(String errorMessage) {
+		if(!StringUtils.isBlank(errorMessage)){
+			jobRunPreference.setErrorMessage(errorMessage);
+			jobRunPreference.setValid(false);
+		}else{
+			jobRunPreference.setErrorMessage(null);
+			jobRunPreference.setValid(true);
+		}
+		
+	}
+	
+	/**
 	 * @return selection of radio button
 	 */
 	public boolean getAlwaysButtonSelection() {
@@ -114,6 +227,15 @@ public class JobRunPreferenceComposite extends Composite {
 	public void storeDefaults() {
 		btnRadioButtonPrompt.setSelection(true);
 		btnRadioButtonAlways.setSelection(false);
+		ccLogLevels.select(3);
+		textWidget.setText(Constants.DEFUALT_CONSOLE_BUFFER_SIZE);
+	}
+	
+	/**
+	 * @return buffer size
+	 */
+	public String getConsoleBufferSize(){
+		return textWidget.getText();
 	}
 	
 	/**

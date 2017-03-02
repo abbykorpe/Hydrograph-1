@@ -42,19 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TextFileDelimited.Path }
+     * Create an instance of {@link AvroFile }
      * 
      */
-    public TextFileDelimited.Path createTextFileDelimitedPath() {
-        return new TextFileDelimited.Path();
-    }
-
-    /**
-     * Create an instance of {@link AvroFile.Path }
-     * 
-     */
-    public AvroFile.Path createAvroFilePath() {
-        return new AvroFile.Path();
+    public AvroFile createAvroFile() {
+        return new AvroFile();
     }
 
     /**
@@ -66,139 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TextFileDelimited.Delimiter }
+     * Create an instance of {@link TextFileDelimited }
      * 
      */
-    public TextFileDelimited.Delimiter createTextFileDelimitedDelimiter() {
-        return new TextFileDelimited.Delimiter();
-    }
-
-    /**
-     * Create an instance of {@link ParquetHiveFile }
-     * 
-     */
-    public ParquetHiveFile createParquetHiveFile() {
-        return new ParquetHiveFile();
-    }
-
-    /**
-     * Create an instance of {@link XmlFile.AbsoluteXPath }
-     * 
-     */
-    public XmlFile.AbsoluteXPath createXmlFileAbsoluteXPath() {
-        return new XmlFile.AbsoluteXPath();
-    }
-
-    /**
-     * Create an instance of {@link Mysql }
-     * 
-     */
-    public Mysql createMysql() {
-        return new Mysql();
-    }
-
-    /**
-     * Create an instance of {@link TextFileMixedScheme.Quote }
-     * 
-     */
-    public TextFileMixedScheme.Quote createTextFileMixedSchemeQuote() {
-        return new TextFileMixedScheme.Quote();
-    }
-
-    /**
-     * Create an instance of {@link HiveTextFile.Quote }
-     * 
-     */
-    public HiveTextFile.Quote createHiveTextFileQuote() {
-        return new HiveTextFile.Quote();
-    }
-
-    /**
-     * Create an instance of {@link Teradata }
-     * 
-     */
-    public Teradata createTeradata() {
-        return new Teradata();
-    }
-
-    /**
-     * Create an instance of {@link Oracle }
-     * 
-     */
-    public Oracle createOracle() {
-        return new Oracle();
-    }
-
-    /**
-     * Create an instance of {@link Subjob.Path }
-     * 
-     */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
-    }
-
-    /**
-     * Create an instance of {@link SequenceInputFile }
-     * 
-     */
-    public SequenceInputFile createSequenceInputFile() {
-        return new SequenceInputFile();
-    }
-
-    /**
-     * Create an instance of {@link GenerateRecord.RecordCount }
-     * 
-     */
-    public GenerateRecord.RecordCount createGenerateRecordRecordCount() {
-        return new GenerateRecord.RecordCount();
-    }
-
-    /**
-     * Create an instance of {@link TextFileFixedWidth.Path }
-     * 
-     */
-    public TextFileFixedWidth.Path createTextFileFixedWidthPath() {
-        return new TextFileFixedWidth.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited.Quote }
-     * 
-     */
-    public TextFileDelimited.Quote createTextFileDelimitedQuote() {
-        return new TextFileDelimited.Quote();
-    }
-
-    /**
-     * Create an instance of {@link HiveTextFile.Delimiter }
-     * 
-     */
-    public HiveTextFile.Delimiter createHiveTextFileDelimiter() {
-        return new HiveTextFile.Delimiter();
-    }
-
-    /**
-     * Create an instance of {@link ParquetFile.Path }
-     * 
-     */
-    public ParquetFile.Path createParquetFilePath() {
-        return new ParquetFile.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited.Charset }
-     * 
-     */
-    public TextFileDelimited.Charset createTextFileDelimitedCharset() {
-        return new TextFileDelimited.Charset();
-    }
-
-    /**
-     * Create an instance of {@link XmlFile }
-     * 
-     */
-    public XmlFile createXmlFile() {
-        return new XmlFile();
+    public TextFileDelimited createTextFileDelimited() {
+        return new TextFileDelimited();
     }
 
     /**
@@ -210,6 +74,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GenerateRecord }
+     * 
+     */
+    public GenerateRecord createGenerateRecord() {
+        return new GenerateRecord();
+    }
+
+    /**
      * Create an instance of {@link HiveTextFile }
      * 
      */
@@ -218,35 +90,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AvroFile }
+     * Create an instance of {@link XmlFile }
      * 
      */
-    public AvroFile createAvroFile() {
-        return new AvroFile();
+    public XmlFile createXmlFile() {
+        return new XmlFile();
     }
 
     /**
-     * Create an instance of {@link TextFileFixedWidth.Charset }
+     * Create an instance of {@link SequenceInputFile }
      * 
      */
-    public TextFileFixedWidth.Charset createTextFileFixedWidthCharset() {
-        return new TextFileFixedWidth.Charset();
-    }
-
-    /**
-     * Create an instance of {@link Subjob }
-     * 
-     */
-    public Subjob createSubjob() {
-        return new Subjob();
-    }
-
-    /**
-     * Create an instance of {@link XmlFile.RowTag }
-     * 
-     */
-    public XmlFile.RowTag createXmlFileRowTag() {
-        return new XmlFile.RowTag();
+    public SequenceInputFile createSequenceInputFile() {
+        return new SequenceInputFile();
     }
 
     /**
@@ -258,11 +114,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link XmlFile.RootTag }
+     * Create an instance of {@link Subjob }
      * 
      */
-    public XmlFile.RootTag createXmlFileRootTag() {
-        return new XmlFile.RootTag();
+    public Subjob createSubjob() {
+        return new Subjob();
+    }
+
+    /**
+     * Create an instance of {@link Oracle }
+     * 
+     */
+    public Oracle createOracle() {
+        return new Oracle();
+    }
+
+    /**
+     * Create an instance of {@link Teradata }
+     * 
+     */
+    public Teradata createTeradata() {
+        return new Teradata();
     }
 
     /**
@@ -274,22 +146,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TextFileDelimited }
-     * 
-     */
-    public TextFileDelimited createTextFileDelimited() {
-        return new TextFileDelimited();
-    }
-
-    /**
-     * Create an instance of {@link TextFileMixedScheme.Charset }
-     * 
-     */
-    public TextFileMixedScheme.Charset createTextFileMixedSchemeCharset() {
-        return new TextFileMixedScheme.Charset();
-    }
-
-    /**
      * Create an instance of {@link Redshift }
      * 
      */
@@ -298,11 +154,83 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link XmlFile.Charset }
+     * Create an instance of {@link Mysql }
      * 
      */
-    public XmlFile.Charset createXmlFileCharset() {
-        return new XmlFile.Charset();
+    public Mysql createMysql() {
+        return new Mysql();
+    }
+
+    /**
+     * Create an instance of {@link ParquetHiveFile }
+     * 
+     */
+    public ParquetHiveFile createParquetHiveFile() {
+        return new ParquetHiveFile();
+    }
+
+    /**
+     * Create an instance of {@link Sparkredshift }
+     * 
+     */
+    public Sparkredshift createSparkredshift() {
+        return new Sparkredshift();
+    }
+
+    /**
+     * Create an instance of {@link AvroFile.Path }
+     * 
+     */
+    public AvroFile.Path createAvroFilePath() {
+        return new AvroFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth.Path }
+     * 
+     */
+    public TextFileFixedWidth.Path createTextFileFixedWidthPath() {
+        return new TextFileFixedWidth.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth.Charset }
+     * 
+     */
+    public TextFileFixedWidth.Charset createTextFileFixedWidthCharset() {
+        return new TextFileFixedWidth.Charset();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Path }
+     * 
+     */
+    public TextFileDelimited.Path createTextFileDelimitedPath() {
+        return new TextFileDelimited.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Delimiter }
+     * 
+     */
+    public TextFileDelimited.Delimiter createTextFileDelimitedDelimiter() {
+        return new TextFileDelimited.Delimiter();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Charset }
+     * 
+     */
+    public TextFileDelimited.Charset createTextFileDelimitedCharset() {
+        return new TextFileDelimited.Charset();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Quote }
+     * 
+     */
+    public TextFileDelimited.Quote createTextFileDelimitedQuote() {
+        return new TextFileDelimited.Quote();
     }
 
     /**
@@ -314,19 +242,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SequenceInputFile.Path }
+     * Create an instance of {@link TextFileMixedScheme.Charset }
      * 
      */
-    public SequenceInputFile.Path createSequenceInputFilePath() {
-        return new SequenceInputFile.Path();
+    public TextFileMixedScheme.Charset createTextFileMixedSchemeCharset() {
+        return new TextFileMixedScheme.Charset();
     }
 
     /**
-     * Create an instance of {@link GenerateRecord }
+     * Create an instance of {@link TextFileMixedScheme.Quote }
      * 
      */
-    public GenerateRecord createGenerateRecord() {
-        return new GenerateRecord();
+    public TextFileMixedScheme.Quote createTextFileMixedSchemeQuote() {
+        return new TextFileMixedScheme.Quote();
+    }
+
+    /**
+     * Create an instance of {@link GenerateRecord.RecordCount }
+     * 
+     */
+    public GenerateRecord.RecordCount createGenerateRecordRecordCount() {
+        return new GenerateRecord.RecordCount();
+    }
+
+    /**
+     * Create an instance of {@link HiveTextFile.Delimiter }
+     * 
+     */
+    public HiveTextFile.Delimiter createHiveTextFileDelimiter() {
+        return new HiveTextFile.Delimiter();
+    }
+
+    /**
+     * Create an instance of {@link HiveTextFile.Quote }
+     * 
+     */
+    public HiveTextFile.Quote createHiveTextFileQuote() {
+        return new HiveTextFile.Quote();
     }
 
     /**
@@ -335,6 +287,62 @@ public class ObjectFactory {
      */
     public XmlFile.Path createXmlFilePath() {
         return new XmlFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link XmlFile.AbsoluteXPath }
+     * 
+     */
+    public XmlFile.AbsoluteXPath createXmlFileAbsoluteXPath() {
+        return new XmlFile.AbsoluteXPath();
+    }
+
+    /**
+     * Create an instance of {@link XmlFile.RootTag }
+     * 
+     */
+    public XmlFile.RootTag createXmlFileRootTag() {
+        return new XmlFile.RootTag();
+    }
+
+    /**
+     * Create an instance of {@link XmlFile.RowTag }
+     * 
+     */
+    public XmlFile.RowTag createXmlFileRowTag() {
+        return new XmlFile.RowTag();
+    }
+
+    /**
+     * Create an instance of {@link XmlFile.Charset }
+     * 
+     */
+    public XmlFile.Charset createXmlFileCharset() {
+        return new XmlFile.Charset();
+    }
+
+    /**
+     * Create an instance of {@link SequenceInputFile.Path }
+     * 
+     */
+    public SequenceInputFile.Path createSequenceInputFilePath() {
+        return new SequenceInputFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link ParquetFile.Path }
+     * 
+     */
+    public ParquetFile.Path createParquetFilePath() {
+        return new ParquetFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link Subjob.Path }
+     * 
+     */
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
 }

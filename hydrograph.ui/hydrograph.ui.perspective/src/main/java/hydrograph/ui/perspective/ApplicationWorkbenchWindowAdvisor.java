@@ -124,7 +124,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	private void serviceInitiator(Properties properties) throws IOException{
 		if(OSValidator.isWindows()){		
-			String command = "java -cp " + getInstallationConfigPath().trim() + ";" +properties.getProperty(SERVICE_JAR) + " " +properties.getProperty(DRIVER_CLASS);
+			String command = "java -cp " + getInstallationConfigPath().trim() + ";"+Platform.getInstallLocation().getURL().getPath()+properties.getProperty(SERVICE_JAR) + " " +properties.getProperty(DRIVER_CLASS);
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", command});
 			builder.start();
 		}

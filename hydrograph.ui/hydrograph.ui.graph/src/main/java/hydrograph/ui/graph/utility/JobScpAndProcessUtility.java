@@ -73,7 +73,7 @@ public class JobScpAndProcessUtility {
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
 	private static final String JPS_COMMAND_TO_FIND_JAVA_PROCESES = "jps -m";
 	private static final String WINDOWS_COMMAND_TO_KILL_PROCESS = "TASKKILL /F /PID ";
-	private static final String MAC_COMMAND_TO_KILL_PROCESS = "kill -9 ";
+	private static final String MAC_COMMAND_TO_KILL_PROCESS = "bash -c kill -9 ";
 	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
 
 	private JobScpAndProcessUtility(){

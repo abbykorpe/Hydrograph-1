@@ -14,6 +14,7 @@
  
 package hydrograph.ui.joblogger.logger;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -24,6 +25,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.internal.console.ConsoleView;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.logging.factory.LogFactory;
 
 
@@ -36,9 +38,10 @@ import hydrograph.ui.logging.factory.LogFactory;
  */
 public class ConsoleLogger extends AbstractJobLogger{
 
+	private static final int DEFAULT_CONSOLE_HIGH_WATER_MARK_OFFSET = 8000;
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleLogger.class);
 	
-	//private static final String CONSOLE_NAME="Gradle Console";
 	private MessageConsoleStream messageConsoleStream;
 	
 	public ConsoleLogger(String projectName, String jobName) {
@@ -87,6 +90,9 @@ public class ConsoleLogger extends AbstractJobLogger{
 			messageConsole = createNewMessageConsole(conMan);
 			logger.debug("No existing console found, created new one");
 		}
+		
+		int lowWaterMark = getConsoleBufferSize();
+		messageConsole.setWaterMarks(lowWaterMark, lowWaterMark + DEFAULT_CONSOLE_HIGH_WATER_MARK_OFFSET);
 		return messageConsole;
 	}
 
@@ -116,9 +122,20 @@ public class ConsoleLogger extends AbstractJobLogger{
 		messageConsole = new MessageConsole(getFullJobName(), null);
 		conMan.addConsoles(new IConsole[] { messageConsole });
 		logger.debug("Created message console");
+		
 		return messageConsole;
 	}
 
+	private int getConsoleBufferSize(){
+		String bufferSize = Platform.getPreferencesService().getString(
+				Constants.GRAPH_PLUGIN_QUALIFIER,
+				Constants.CONSOLE_BUFFER_SIZE_PREFERANCE_NAME,
+				Constants.DEFUALT_CONSOLE_BUFFER_SIZE, null);
+
+		return Integer.parseInt(bufferSize);
+		
+	}
+	
 	/**
 	 * 
 	 * returns Gradle console if it is registered with console manager 

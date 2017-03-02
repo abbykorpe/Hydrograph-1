@@ -55,7 +55,6 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	private static final String DEFAULT_EXTENSION = ".job";
 	private final IWorkbench workbench;
     private static final String ERROR="Error";
-    private static final String ERROR_MESSAGE="File Name Too Long";
     private boolean isPageCreatedForSavingSubJob;
 	private IFile newFile;
     
@@ -93,12 +92,18 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 * @see JobCreationWizard#performFinish()
 	 */
 	boolean finish() {
-		String[] fileName=this.getFileName().split("\\.");
+		String[] fileName=this.getFileName().split(Constants.SEPERATOR);
+		String propertyFile=fileName[0]+Constants.PROPERTIES_EXTENSION;
+		IPath propertyFilePath = new Path(Constants.PARAM+propertyFile);
+		IProject iProject=ResourcesPlugin.getWorkspace().getRoot().getProject(this.getContainerFullPath().segment(0));
+		IFile proertyIFile=iProject.getFile(propertyFilePath);
 		if (fileName[0].length() > 50) {
-			return showErrorIfFileNameIsGreaterThanFiftyCharactors();
+			return showErrorMessage(Messages.FILE_NAME_ERROR);
 		}
-		
-       else {
+		else if (proertyIFile.exists()) {
+			return showErrorMessage(Messages.PROPERTY_FILE_ERROR);
+		}
+		else {
     	   if(!getFileName().endsWith(DEFAULT_EXTENSION)){
     		   this.setFileName(this.getFileName().concat(DEFAULT_EXTENSION));
     	   }
@@ -144,10 +149,10 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 		
 	}
 
-	private boolean showErrorIfFileNameIsGreaterThanFiftyCharactors() {
+	private boolean showErrorMessage(String errorMessage) {
 		MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 		messageBox.setText(ERROR);
-		messageBox.setMessage(ERROR_MESSAGE);
+		messageBox.setMessage(errorMessage);
 		if (messageBox.open() == SWT.OK) {
 			this.getControl().getShell().open();
 		}
