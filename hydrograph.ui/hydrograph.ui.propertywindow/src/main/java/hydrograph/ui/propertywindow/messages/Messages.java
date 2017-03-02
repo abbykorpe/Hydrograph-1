@@ -401,6 +401,7 @@ public class Messages extends NLS {
 	
 	public static String PARAMETER_FIELD_VALIDATION;
 	public static String PARAMETER_FILE_EXISTS;
+	public static String NOTE_FOR_SAME_PARAMETERS_DEFINED_IN_MULTIPLE_PARAMETER_FILES_THE_LOWERMOST_FILE_WILL_BE_GIVEN_PRECEDENCE_OVER_OTHERS;
 	
 	static {
 		// initialize resource bundle
