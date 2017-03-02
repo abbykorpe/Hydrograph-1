@@ -935,7 +935,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(input, this);
-			if(StringUtils.equals(this.getJobName()+".job", input.getName()) || StringUtils.equals(this.getJobName(), "ELT Graphical Editor")){
+			if(StringUtils.equals(this.getJobName()+Messages.JOBEXTENSION, input.getName()) || StringUtils.equals(this.getJobName(), Messages.ELT_GRAPHICAL_EDITOR)){
 				container = genrateContainerData.getContainerData();
 			}else{
 				this.setPartName(input.getName());
