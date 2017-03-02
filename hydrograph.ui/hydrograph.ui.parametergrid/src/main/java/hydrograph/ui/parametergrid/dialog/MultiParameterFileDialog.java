@@ -1324,7 +1324,9 @@ public class MultiParameterFileDialog extends Dialog {
 
 		for (String fileName : listOfFilesToBeImported) {
 			String absoluteFileName = source + fileName;
-			File destinationFile=new File(destination+File.separator+fileName);
+			IPath destinationIPath=new Path(destination);
+			destinationIPath=destinationIPath.append(fileName);
+			File destinationFile=destinationIPath.toFile();
 			try {
 				if (!ifDuplicate(listOfFilesToBeImported, paramterFileTypes)) {
 					if (StringUtils.equalsIgnoreCase(absoluteFileName, destinationFile.toString())) {
