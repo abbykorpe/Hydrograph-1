@@ -42,10 +42,11 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       val passthroughFields = joinUtils.getPassthroughFields()
       val mapFields = joinUtils.getMapFields()
       val copyOfInSocketFields = joinUtils.getCopyOfInSocketFields()
+      val mergedFields = (passthroughFields ++ mapFields ++ copyOfInSocketFields).distinct
+      val mergedInputs = mergedFields.map(f => f._1)
       val matchType = lookupEntity.getMatch
 
       def getDFWithRequiredFields(df: DataFrame): DataFrame = {
-        val mergedFields = (passthroughFields ++ mapFields ++ copyOfInSocketFields).distinct
         df.select(mergedFields.map(field => col(field._1).as(field._2)): _*)
       }
 
@@ -55,24 +56,27 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       val driverJoinOp = lookupOperations.filter { j => (j.inSocketId == driverInSocketId) }(0)
       val lookupJoinOp = lookupOperations.filter { j => (j.inSocketId == lookupInSocketId) }(0)
 
+      val driverDF = driverJoinOp.dataFrame.select((driverJoinOp.keyFields ++ driverJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)      
+      val lookupDF = lookupJoinOp.dataFrame.select((lookupJoinOp.keyFields ++ lookupJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)      
+      
       val broadcastDF = broadcast({
         if (matchType == "all")
-          lookupJoinOp.dataFrame
+          lookupDF
         else {
           val lookupKeyFields = lookupJoinOp.keyFields.map { str => col(str) }
-          val lookupOtherFields = lookupJoinOp.dataFrame.columns
+          val lookupOtherFields = lookupDF.columns
             .filter { str => !lookupJoinOp.keyFields.contains(str) }
             .map { str => if (matchType == "first") (first(str).as(str)) else (last(str).as(str)) }
 
           if (lookupOtherFields.isEmpty)
-            lookupJoinOp.dataFrame.dropDuplicates()
+            lookupDF.dropDuplicates()
           else
-            lookupJoinOp.dataFrame.groupBy(lookupKeyFields: _*).agg(lookupOtherFields.head, lookupOtherFields.tail: _*)
+            lookupDF.groupBy(lookupKeyFields: _*).agg(lookupOtherFields.head, lookupOtherFields.tail: _*)
         }
       })
-
+      
       val joinKey = createJoinKey(driverJoinOp.keyFields, lookupJoinOp.keyFields)
-      val outputDF = getDFWithRequiredFields(driverJoinOp.dataFrame.join(broadcastDF, joinKey, "leftouter"))
+      val outputDF = getDFWithRequiredFields(driverDF.join(broadcastDF, joinKey, "leftouter"))
 
       val key = driverJoinOp.outSocketId
 
@@ -86,22 +90,6 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
 
   }
 
-  /**
-    * Converts  StructFields to String
-    *
-    * @param structType
-    *                 StructType
-    *
-    * @return  an Array of Column
-    */
-  def convertStructFieldsTOString(structType: StructType): Array[Column] = {
-    val inputColumns = new Array[Column](structType.length)
-    structType.zipWithIndex.foreach {
-      case (sf, i) =>
-        inputColumns(i) = col(sf.name)
-    }
-    inputColumns
-  }
 
   /**
     * Creates key for Join
