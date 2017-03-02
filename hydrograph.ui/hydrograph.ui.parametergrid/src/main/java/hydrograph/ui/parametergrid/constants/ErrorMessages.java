@@ -43,6 +43,8 @@ public class ErrorMessages extends NLS{
 	public static String NAME_VALUE_CANNOT_BE_BLANK;
 	public static String BLANK_PARAMETER_WILL_BE_LOST;
 	public static String WARNING;
+
+	public static String IO_EXCEPTION_MESSAGE_FOR_SAME_FILE;
 	
 	static {
 		// initialize resource bundle

@@ -36,6 +36,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationException;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
@@ -1319,13 +1320,24 @@ public class MultiParameterFileDialog extends Dialog {
 		return fileDialog;
 	}
 	
-	private boolean importParamterFileToProject(String[] listOfFilesToBeImported, String source,String destination) {
+	private boolean importParamterFileToProject(String[] listOfFilesToBeImported, String source,String destination, ParamterFileTypes paramterFileTypes) {
 
 		for (String fileName : listOfFilesToBeImported) {
 			String absoluteFileName = source + fileName;
+			File destinationFile=new File(destination+File.separator+fileName);
 			try {
-				FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+				if(!ifDuplicate(listOfFilesToBeImported, paramterFileTypes)){
+					if(StringUtils.equalsIgnoreCase(absoluteFileName, destinationFile.toString())){
+						return true;
+					}
+					if (!destinationFile.exists() || (destinationFile.exists() && doUserConfirmsToOverRide())) {
+						FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+					} 
+				}
 			} catch (IOException e1) {
+				if(StringUtils.endsWithIgnoreCase(e1.getMessage(), ErrorMessages.IO_EXCEPTION_MESSAGE_FOR_SAME_FILE)){
+					return true;
+				}
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 				messageBox.setText(MessageType.ERROR.messageType());
 				messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + " " + e1.getMessage());
@@ -1336,6 +1348,18 @@ public class MultiParameterFileDialog extends Dialog {
 		}
 		return true;
 	}
+	
+	
+	private boolean doUserConfirmsToOverRide() {
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setMessage("File already exists in project, do you want to overwrite?");
+		if(messageBox.open()==SWT.YES){
+			return true;
+		}
+		return false;
+	}
+
+	
 	
 	private boolean isParamterFileNameExistInFileGrid(String[] listOfFilesToBeImported, ParamterFileTypes paramterFileTypes) {
 		if (ifDuplicate(listOfFilesToBeImported, paramterFileTypes)) {
@@ -1413,7 +1437,7 @@ public class MultiParameterFileDialog extends Dialog {
 		
 		String locationOfFilesToBeImported = getFileLocation(fileToBeImport);
 		
-		if(!importParamterFileToProject(listOfFilesToBeImported, locationOfFilesToBeImported,importLocation)){
+		if(!importParamterFileToProject(listOfFilesToBeImported, locationOfFilesToBeImported,importLocation,paramterFileTypes)){
 			return;
 		}
 		
