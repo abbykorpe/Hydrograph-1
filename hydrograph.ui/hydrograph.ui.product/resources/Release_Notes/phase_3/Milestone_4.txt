@@ -82,3 +82,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 65.#700 - [Sonia Raheja] - Error Message is getting displayed while deleting the job.
 66.#744 - [Vibhor Tyagi] - Need to add logger if user kill job successfully on MAC
 67.#743 - [shashank karnik]-When launch the tool from new toolbar, Execution tracking is not getting dispalyed due to Connection refused on host.
+68.#748 - [Vibhor Tyagi] - Post delivery: Save-as option does not generate required properties file
