@@ -19,7 +19,10 @@ import hydrograph.engine.transformation.userfunctions.base.{FilterBase, Reusable
 import org.apache.spark.util.LongAccumulator
 
 /**
-  * Created by gurdits on 12/19/2016.
+  * The Class ExecutionCounter.
+  *
+  * @author Bitwise
+  *
   */
 class ExecutionCounter(longAccumulator: LongAccumulator) extends FilterBase{
 //  var incrementer : Long = _

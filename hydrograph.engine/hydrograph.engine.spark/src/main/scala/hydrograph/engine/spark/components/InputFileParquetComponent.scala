@@ -20,7 +20,12 @@ import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputFileParquetComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[InputFileParquetComponent])

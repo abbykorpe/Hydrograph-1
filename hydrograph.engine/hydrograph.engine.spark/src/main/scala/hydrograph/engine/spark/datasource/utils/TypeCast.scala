@@ -15,7 +15,7 @@ package hydrograph.engine.spark.datasource.utils
 import java.math.BigDecimal
 import java.sql.{Date, Timestamp}
 import java.text.{NumberFormat, SimpleDateFormat}
-import java.util.{Locale, TimeZone}
+import java.util.Locale
 
 import org.apache.spark.sql.types.{DateType, StringType, _}
 import org.json4s.ParserUtil.ParseException
@@ -24,8 +24,11 @@ import scala.util.Try
 
 
 /**
-  * Utility functions for type casting
- */
+  * The Object TypeCast.
+  *
+  * @author Bitwise
+  *
+  */
 
 object TypeCast {
 

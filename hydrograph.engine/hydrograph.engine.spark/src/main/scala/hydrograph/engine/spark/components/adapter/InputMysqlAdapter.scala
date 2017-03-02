@@ -18,9 +18,11 @@ import hydrograph.engine.spark.components.InputMysqlComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
 /**
-  * Created by santlalg on 12/7/2016.
+  * The Class InputMysqlAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class InputMysqlAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
   private var inputMysql:InputMysqlEntityGenerator=null

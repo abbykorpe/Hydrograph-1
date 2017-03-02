@@ -20,7 +20,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.json.Test
 import org.scalatest.Matchers._
-
+/**
+  * The Class GenerateRecordComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class GenerateRecordComponentTest {
 
   @Test

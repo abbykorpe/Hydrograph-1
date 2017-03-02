@@ -20,7 +20,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.SparkException
 import org.apache.spark.sql._
 import org.junit.{Assert, Before, Test}
-
+/**
+  * The Class InputFileDelimitedComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileDelimitedComponentTest {
 
   var inputFileDelimitedEntity: InputFileDelimitedEntity = new InputFileDelimitedEntity

@@ -15,7 +15,10 @@ package hydrograph.engine.spark.components.adapter.base
 import hydrograph.engine.spark.components.base.SparkFlow
 
 /**
-  * Created by gurdits on 10/27/2016.
+  * The trait OutputAdatperBase .
+  *
+  * @author Bitwise
+  *
   */
 trait OutputAdatperBase extends AdapterBase{
 

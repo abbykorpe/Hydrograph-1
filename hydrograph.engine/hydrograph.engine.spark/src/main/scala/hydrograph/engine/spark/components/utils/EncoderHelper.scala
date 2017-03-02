@@ -18,8 +18,11 @@ import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
 import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 10/20/2016.
- */
+  * The Class EncoderHelper.
+  *
+  * @author Bitwise
+  *
+  */
 class EncoderHelper extends Serializable {
 
   def getDummy(): StructType = {

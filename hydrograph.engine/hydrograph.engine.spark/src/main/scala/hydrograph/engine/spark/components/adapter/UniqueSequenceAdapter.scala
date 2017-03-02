@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 /**
-  * Created by sandeepv on 12/28/2016.
+  * The Class UniqueSequenceAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class UniqueSequenceAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase{
 

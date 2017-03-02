@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by gurdits on 10/27/2016.
+  * The Class CloneAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class CloneAdapter(typeBaseComponent: TypeBaseComponent) extends StraightPullAdatperBase{
 

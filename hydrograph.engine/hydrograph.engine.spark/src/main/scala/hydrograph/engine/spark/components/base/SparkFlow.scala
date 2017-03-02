@@ -12,13 +12,11 @@
   *******************************************************************************/
 package hydrograph.engine.spark.components.base
 
-import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
-import org.apache.spark.util.LongAccumulator
-
-import scala.collection.mutable.ListBuffer
-
 /**
-  * Created by gurdits on 10/27/2016.
+  * The Class SparkFlow.
+  *
+  * @author Bitwise
+  *
   */
 abstract class SparkFlow {
 

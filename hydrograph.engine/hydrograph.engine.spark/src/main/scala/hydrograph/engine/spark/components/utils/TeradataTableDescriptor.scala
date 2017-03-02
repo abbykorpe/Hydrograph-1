@@ -13,12 +13,13 @@
 
 package hydrograph.engine.spark.components.utils
 
-/**
-  * Created by AniruddhaS on 1/6/2017.
-  */
-
 import org.slf4j.{Logger, LoggerFactory}
-
+/**
+  * The Class TeradataTableDescriptor.
+  *
+  * @author Bitwise
+  *
+  */
 
 class TeradataTableDescriptor(tableName: String,
                               columnNames: List[String],

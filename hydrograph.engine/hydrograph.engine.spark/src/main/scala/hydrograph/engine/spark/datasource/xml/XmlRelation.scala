@@ -16,18 +16,22 @@
 package hydrograph.engine.spark.datasource.xml
 
 import java.io.IOException
-import java.text.SimpleDateFormat
 
 import hydrograph.engine.spark.datasource.xml.parsers.StaxXmlParser
 import hydrograph.engine.spark.datasource.xml.util.{InferSchema, XmlFile}
 import org.apache.hadoop.fs.Path
-import org.slf4j.LoggerFactory
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.sources.{BaseRelation, InsertableRelation, PrunedScan, TableScan}
 import org.apache.spark.sql.types._
+import org.slf4j.LoggerFactory
 
-
+/**
+  * The Class XmlRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class XmlRelation protected[spark] (
     baseRDD: () => RDD[String],
     location: Option[String],

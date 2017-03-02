@@ -16,7 +16,10 @@ package hydrograph.engine.spark.components.utils
 import org.junit.{Assert, Test}
 
 /**
-  * Created by AniruddhaS on 1/6/2017.
+  * The Class TeradataTableDescriptorTest.
+  *
+  * @author Bitwise
+  *
   */
 class TeradataTableDescriptorTest {
   @Test

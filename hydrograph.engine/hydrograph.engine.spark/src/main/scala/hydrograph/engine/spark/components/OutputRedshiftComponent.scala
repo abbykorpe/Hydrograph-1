@@ -30,7 +30,10 @@ import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
 /**
-  * Created by amiyam on 16-12-2016.
+  * The Class OutputRedshiftComponent.
+  *
+  * @author Bitwise
+  *
   */
 class OutputRedshiftComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsParams: BaseComponentParams) extends
   SparkFlow {

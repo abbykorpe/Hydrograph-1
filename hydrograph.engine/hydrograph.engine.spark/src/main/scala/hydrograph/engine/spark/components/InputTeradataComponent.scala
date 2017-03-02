@@ -23,7 +23,10 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 /**
-  * Created by AniruddhaS on 12/27/2016.
+  * The Class InputTeradataComponent.
+  *
+  * @author Bitwise
+  *
   */
 class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
                              iComponentsParams: BaseComponentParams) extends InputComponentBase {

@@ -22,7 +22,12 @@ import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputRedshiftComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams: BaseComponentParams) extends
   InputComponentBase {
   val LOG: Logger = LoggerFactory.getLogger(classOf[InputRedshiftComponent])

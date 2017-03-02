@@ -20,6 +20,12 @@ import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
+/**
+  * The Class InputFileCsvComponent.
+  *
+  * @author Bitwise
+  *
+  */
 
 class InputFileCsvComponent(iFileDelimitedEntity: InputFileDelimitedEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase with Serializable {

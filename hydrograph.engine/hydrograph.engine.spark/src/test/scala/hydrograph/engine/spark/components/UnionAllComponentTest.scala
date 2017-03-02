@@ -19,7 +19,10 @@ import hydrograph.engine.testing.wrapper.{DataBuilder, Fields}
 import org.junit.Test
 
 /**
-  * Created by gurdits on 12/7/2016.
+  * The Class UnionAllComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class UnionAllComponentTest {
 

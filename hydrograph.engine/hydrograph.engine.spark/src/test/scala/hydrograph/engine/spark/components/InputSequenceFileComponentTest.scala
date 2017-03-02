@@ -21,7 +21,10 @@ import org.apache.spark.sql._
 import org.junit.{Assert, Test}
 
 /**
-  * Created by santlalg on 1/30/2017.
+  * The Class InputSequenceFileComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class InputSequenceFileComponentTest {
 

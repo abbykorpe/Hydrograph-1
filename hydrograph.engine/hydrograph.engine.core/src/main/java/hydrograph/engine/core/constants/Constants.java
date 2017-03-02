@@ -52,6 +52,8 @@ public class Constants {
     public static final String LENGTHS_AND_DELIMITERS_SEPARATOR = "~!@#@!~";
     public static final String DEFAULT_FORMAT = "yyyy-MM-dd";
 
+    public static final String TERADATA_PWD="PASSWORD";
+
     public static final int DEFAULT_DB_BATCHSIZE = 1000;
 
     public static final String REDSHIFT_DRIVER_NAME = "com.amazon.redshift.jdbc42.Driver";

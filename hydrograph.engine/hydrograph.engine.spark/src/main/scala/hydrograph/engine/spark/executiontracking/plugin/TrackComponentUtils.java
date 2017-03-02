@@ -12,8 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.spark.executiontracking.plugin;
 
-import java.util.*;
-
 import hydrograph.engine.core.component.entity.elements.InSocket;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
@@ -25,6 +23,13 @@ import hydrograph.engine.jaxb.commontypes.*;
 import hydrograph.engine.jaxb.operationstypes.Executiontracking;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 
+import java.util.*;
+/**
+ * The Class TrackComponentUtils.
+ *
+ * @author Bitwise
+ *
+ */
 
 class TrackComponentUtils {
 

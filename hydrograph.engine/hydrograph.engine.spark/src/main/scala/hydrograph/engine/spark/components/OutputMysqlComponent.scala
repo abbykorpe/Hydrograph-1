@@ -28,7 +28,10 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by santlalg on 12/8/2016.
+  * The Class OutputMysqlComponent.
+  *
+  * @author Bitwise
+  *
   */
 class OutputMysqlComponent(outputRDBMSEntity: OutputRDBMSEntity, cp:
 BaseComponentParams) extends SparkFlow {

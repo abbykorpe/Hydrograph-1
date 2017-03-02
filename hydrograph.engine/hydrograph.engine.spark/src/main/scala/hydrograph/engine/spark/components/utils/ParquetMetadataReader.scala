@@ -27,11 +27,9 @@ import org.apache.spark.sql.types._
 import scala.collection.JavaConverters._
 
 /**
-  * This converter class is used to convert Parquet [[MessageType]] to Spark SQL [[StructType]] and
-  * vice versa.
+  * The Class ParquetMetadataReader.
   *
-  * Parquet format backwards-compatibility rules are respected when converting Parquet
-  * [[MessageType]] schemas.
+  * @author Bitwise
   *
   */
 class ParquetMetadataReader(

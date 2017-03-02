@@ -19,15 +19,17 @@ import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.EncoderHelper
 import hydrograph.engine.transformation.userfunctions.base.FilterBase
-import org.apache.spark.sql
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.{DataFrame, Row, functions}
+import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
 
 /**
-  * Created by vaijnathp on 12/12/2016.
+  * The Class FilterComponentWithUDF.
+  *
+  * @author Bitwise
+  *
   */
 class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[FilterBase] with Serializable {

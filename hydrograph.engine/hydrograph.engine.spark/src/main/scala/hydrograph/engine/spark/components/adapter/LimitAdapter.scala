@@ -18,7 +18,12 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.spark.components.LimitComponent
 import hydrograph.engine.spark.components.adapter.base.StraightPullAdatperBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class LimitAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class LimitAdapter(typeBaseComponent: TypeBaseComponent) extends StraightPullAdatperBase {
 
   var limit:LimitEntityGenerator=null;

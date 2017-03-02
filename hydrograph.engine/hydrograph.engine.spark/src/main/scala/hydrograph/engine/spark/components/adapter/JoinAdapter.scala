@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by gurdits on 10/27/2016.
+  * The Class JoinAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class JoinAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase{
 

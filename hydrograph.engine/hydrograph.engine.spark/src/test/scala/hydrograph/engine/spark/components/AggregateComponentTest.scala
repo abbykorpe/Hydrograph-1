@@ -13,24 +13,22 @@
 package hydrograph.engine.spark.components
 
 import java.util
-
-import hydrograph.engine.core.component.entity.elements._
-import hydrograph.engine.core.component.entity.AggregateEntity
-import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
-import java.util.ArrayList
 import java.util.Properties
 
-import com.univocity.parsers.common.processor.RowWriterProcessor
+import hydrograph.engine.core.component.entity.AggregateEntity
+import hydrograph.engine.core.component.entity.elements._
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
 import org.apache.spark.sql._
 import org.junit.{Assert, Test}
-import org.junit.Test
 
 import scala.collection.JavaConverters._
 
-
 /**
-  * Created by manojp on 1/9/2017.
+  * The Class AggregateComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class AggregateComponentTest {
   @Test

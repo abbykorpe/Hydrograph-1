@@ -1,21 +1,19 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 package hydrograph.engine.spark.components
 
-import java.util
-
 import hydrograph.engine.core.component.entity.AggregateEntity
-import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
+import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.core.component.utils.OperationUtils
 import hydrograph.engine.expression.userfunctions.AggregateForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
@@ -31,10 +29,12 @@ import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by bitwise on 10/24/2016.
+  * The Class AggregateComponent.
+  *
+  * @author Bitwise
+  *
   */
 class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[AggregateTransformBase] with Serializable {
@@ -43,7 +43,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val inputSchema: StructType = componentsParams.getDataFrame().schema
   val outputFields = OperationUtils.getAllFields(aggregateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
-  val fieldsForOPeration=OperationUtils.getAllFieldsWithOperationFields(aggregateEntity,outputFields.toList.asJava)
+  val fieldsForOPeration = OperationUtils.getAllFieldsWithOperationFields(aggregateEntity, outputFields.toList.asJava)
   val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = aggregateEntity.getInSocketList.get(0).getInSocketId
@@ -54,12 +54,11 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       (_.name).asJava).asScala.toArray[String]
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
-  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]() else  aggregateEntity.getKeyFields.map(_
+  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]() else aggregateEntity.getKeyFields.map(_
     .getName)
   val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[AggregateComponent])
-
 
 
   override def createComponent(): Map[String, DataFrame] = {
@@ -88,7 +87,6 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
         )
       }
 
-      //Initialize Aggregarte to call prepare Method
       val aggregateList: List[SparkOperation[AggregateTransformBase]] = initializeOperationList[AggregateForExpression](aggregateEntity
         .getOperationsList,
         inputSchema,
@@ -96,17 +94,14 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
 
       aggregateList.foreach(sparkOperation => {
         sparkOperation.baseClassInstance match {
-          //For Expression Editor call extra methods
           case a: AggregateForExpression =>
             a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
             a.init()
-            a.callPrepare(sparkOperation.fieldName,sparkOperation.fieldType)
+            a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
           case a: AggregateTransformBase => a.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
             .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields, keyFields)
         }
       })
-
-
       var outRow: Array[Any] = null
       var previousRow: Row = null
       var tempOutRow: Array[Any] = null
@@ -120,8 +115,8 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
         override def hasNext: Boolean = {
           isContinue && !isItrEmpty
         }
+
         override def next(): Row = {
-          //          isItrEmpty=false
           val isEndOfIterator: Boolean = itr.isEmpty
           val isPrevKeyNull: Boolean = previousRow == null
 
@@ -146,7 +141,6 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           if (isPrevKeyDifferent) {
 
             if (!isPrevKeyNull) {
-              //Calling OnCompleteGroup
               aggregateList.foreach(agt => {
                 agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
               })
@@ -154,19 +148,16 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
 
             outRow = tempOutRow
             tempOutRow = new Array[Any](outSize)
-
-            //Map Fields
             copyFields(row, tempOutRow, mapFieldIndexes)
-            //Passthrough Fields
             copyFields(row, tempOutRow, passthroughIndexes)
 
           }
 
           aggregateList.foreach(agt => {
-            try{
+            try {
               agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
             } catch {
-              case e:Exception => throw new RuntimeException("Error in Aggregate Component:[\""+aggregateEntity.getComponentId+"\"] for "+e.getMessage)
+              case e: Exception => throw new RuntimeException("Error in Aggregate Component:[\"" + aggregateEntity.getComponentId + "\"] for " + e.getMessage)
             }
 
           })

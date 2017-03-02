@@ -17,12 +17,15 @@ package hydrograph.engine.spark.datasource.xml
 
 import java.text.SimpleDateFormat
 
-import org.slf4j.LoggerFactory
 import hydrograph.engine.spark.datasource.xml.util.ParseModes
+import org.slf4j.LoggerFactory
 
 /**
- * Options for the XML data source.
- */
+  * The Class XmlOptions.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] class XmlOptions(
     @transient private val parameters: Map[String, String])
   extends Serializable{

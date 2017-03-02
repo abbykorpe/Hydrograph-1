@@ -18,14 +18,17 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{ Column, DataFrame }
-import scala.collection.mutable.ListBuffer
+import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.collection.mutable.ListBuffer
+
 /**
- * Created by gurdits on 10/18/2016.
- *
- */
+  * The Class JoinComponent.
+  *
+  * @author Bitwise
+  *
+  */
 
 class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
 

@@ -17,8 +17,11 @@ import hydrograph.engine.core.component.entity.elements.KeyField
 import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 10/19/2016.
- */
+  * The Class FieldManupulating.
+  *
+  * @author Bitwise
+  *
+  */
 class FieldManupulating(operationInputFields: ListBuffer[ListBuffer[String]], operationOutputFields: ListBuffer[ListBuffer[String]], passthrougFields: ListBuffer[String], mapFields: ListBuffer[(String, String)], operationFields: ListBuffer[String], keyFields: Array[KeyField]) extends Serializable {
 
   val mapSourceFields = new ListBuffer[String]()

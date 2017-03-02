@@ -15,15 +15,19 @@
  */
 package hydrograph.engine.spark.datasource.xml.parsers
 
-import scala.collection.Map
-
 import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
-
+import hydrograph.engine.spark.datasource.xml.XmlOptions
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
-import hydrograph.engine.spark.datasource.xml.XmlOptions
 
-// This class is borrowed from Spark json datasource.
+import scala.collection.Map
+
+/**
+  * The Object StaxXmlGenerator.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object StaxXmlGenerator {
 
   /** Transforms a single Row to XML

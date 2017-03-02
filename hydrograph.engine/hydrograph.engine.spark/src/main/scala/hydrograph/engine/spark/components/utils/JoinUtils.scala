@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
-import hydrograph.engine.core.component.entity.{JoinEntity, LookupEntity}
 import hydrograph.engine.core.component.entity.base.OperationEntityBase
 import hydrograph.engine.core.component.entity.elements.PassThroughField
+import hydrograph.engine.core.component.entity.{JoinEntity, LookupEntity}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.DataFrame
 
@@ -23,8 +23,11 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 9/26/2016.
- */
+  * The Class JoinOperation.
+  *
+  * @author Bitwise
+  *
+  */
 
 case class JoinOperation(compID: String, inSocketId: String, dataFrame: DataFrame, keyFields: Array[String], unused: Boolean, recordRequired: Boolean, outSocketId: String, unusedSocketId: String)
 

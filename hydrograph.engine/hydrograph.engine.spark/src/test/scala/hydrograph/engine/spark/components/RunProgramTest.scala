@@ -30,7 +30,12 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.RunProgramEntity
 import org.junit.{Assert, Before, Test}
-
+/**
+  * The Class RunProgramTest.
+  *
+  * @author Bitwise
+  *
+  */
 class RunProgramTest {
   var runProgram: RunProgramComponent = null
 

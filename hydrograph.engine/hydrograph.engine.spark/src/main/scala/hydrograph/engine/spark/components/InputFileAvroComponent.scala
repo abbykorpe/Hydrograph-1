@@ -16,13 +16,15 @@ import hydrograph.engine.core.component.entity.InputFileAvroEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
-import org.apache.spark.sql.SparkSession
-import org.apache.avro.Schema
 import org.apache.spark.sql._
-import java.io.File
-import org.slf4j.LoggerFactory
-import org.slf4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 
+/**
+  * The Class InputFileAvroComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileAvroComponent(inputFileAvroEntity: InputFileAvroEntity, baseComponentParams: BaseComponentParams) extends InputComponentBase {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[InputFileAvroComponent])
 

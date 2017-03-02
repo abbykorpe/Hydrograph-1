@@ -14,7 +14,10 @@ import org.junit.{Assert, Before, Test}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by santlalg on 2/2/2017.
+  * The Class OutputFileCsvWithDateFormatsComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class OutputFileCsvWithDateFormatsComponentTest {
 

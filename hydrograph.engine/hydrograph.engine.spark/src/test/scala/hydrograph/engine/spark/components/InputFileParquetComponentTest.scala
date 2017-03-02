@@ -21,7 +21,12 @@ import org.apache.spark.sql.SparkSession
 import org.junit.{Assert, Test}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputFileParquetComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileParquetComponentTest {
 
   @Test

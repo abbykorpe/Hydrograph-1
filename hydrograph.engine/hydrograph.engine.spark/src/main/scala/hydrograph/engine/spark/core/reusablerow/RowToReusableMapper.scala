@@ -15,7 +15,12 @@ package hydrograph.engine.spark.core.reusablerow
 import java.util.LinkedHashSet
 
 import org.apache.spark.sql.types.StructType
-
+/**
+  * The Class RowToReusableMapper.
+  *
+  * @author Bitwise
+  *
+  */
 class RowToReusableMapper(allFields: StructType, requiredFields: Array[String]) extends Serializable {
 
   val requiredFieldsSet: LinkedHashSet[String] = {

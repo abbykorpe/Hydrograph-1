@@ -19,6 +19,12 @@ import hydrograph.engine.spark.components.adapter.base.OutputAdatperBase
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
+/**
+  * The Class OutputFileCsvWithDateFormatsAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileCsvWithDateFormatsAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase{
 
   private  var outputFileDelimited:OutputFileDelimitedEntityGenerator=null

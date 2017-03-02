@@ -16,20 +16,19 @@
 package hydrograph.engine.spark.datasource.xml.util
 
 import java.io.ByteArrayInputStream
-import javax.xml.stream.events._
 import javax.xml.stream._
+import javax.xml.stream.events._
 
-
-import org.slf4j.LoggerFactory
-
-import scala.collection.Seq
-import scala.collection.mutable.ArrayBuffer
-import scala.collection.JavaConversions._
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.types._
-import hydrograph.engine.spark.datasource.xml.util.TypeCast._
 import hydrograph.engine.spark.datasource.xml.XmlOptions
 import hydrograph.engine.spark.datasource.xml.parsers.StaxXmlParserUtils
+import hydrograph.engine.spark.datasource.xml.util.TypeCast._
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.types._
+import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConversions._
+import scala.collection.Seq
+import scala.collection.mutable.ArrayBuffer
 
 
 

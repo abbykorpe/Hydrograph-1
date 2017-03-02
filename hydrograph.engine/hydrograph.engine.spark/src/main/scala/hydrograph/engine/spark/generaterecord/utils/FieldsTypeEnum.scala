@@ -13,6 +13,13 @@
 package hydrograph.engine.spark.generaterecord.utils
 
 import java.math.BigDecimal
+
+/**
+  * The Class FieldsTypeEnum.
+  *
+  * @author Bitwise
+  *
+  */
 object FieldsTypeEnum {
 
  

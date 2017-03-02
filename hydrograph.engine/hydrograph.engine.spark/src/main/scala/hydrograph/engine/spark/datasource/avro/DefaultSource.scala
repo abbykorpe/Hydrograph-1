@@ -1,60 +1,54 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 package hydrograph.engine.spark.datasource.avro
 
 import java.io._
 import java.net.URI
 import java.util.zip.Deflater
-import scala.util.control.NonFatal
-import org.apache.avro.Schema
-import org.apache.avro.SchemaBuilder
-import org.apache.avro.file.DataFileConstants
-import org.apache.avro.file.DataFileReader
-import org.apache.avro.generic.GenericDatumReader
-import org.apache.avro.generic.GenericRecord
-import org.apache.avro.mapred.AvroOutputFormat
-import org.apache.avro.mapred.FsInput
+
+import com.esotericsoftware.kryo.{Kryo, KryoSerializable}
+import com.esotericsoftware.kryo.io.{Input, Output}
+import hydrograph.engine.spark.datasource.avro.DefaultSource.{AvroSchema, IgnoreFilesWithoutExtensionProperty, SerializableConfiguration}
+import org.apache.avro.{Schema, SchemaBuilder}
+import org.apache.avro.file.{DataFileConstants, DataFileReader}
+import org.apache.avro.generic.{GenericDatumReader, GenericRecord}
+import org.apache.avro.mapred.{AvroOutputFormat, FsInput}
 import org.apache.avro.mapreduce.AvroJob
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.FileStatus
-import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.{FileStatus, Path}
 import org.apache.hadoop.mapreduce.Job
 import org.apache.spark.TaskContext
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.apache.spark.sql.execution.datasources.FileFormat
-import org.apache.spark.sql.execution.datasources.OutputWriterFactory
-import org.apache.spark.sql.execution.datasources.PartitionedFile
-import org.apache.spark.sql.sources.DataSourceRegister
-import org.apache.spark.sql.sources.Filter
+import org.apache.spark.sql.execution.datasources.{FileFormat, OutputWriterFactory, PartitionedFile}
+import org.apache.spark.sql.sources.{DataSourceRegister, Filter}
 import org.apache.spark.sql.types._
 import org.slf4j.LoggerFactory
 
-import hydrograph.engine.spark.datasource.avro.DefaultSource.AvroSchema
+import scala.util.control.NonFatal
 
-import hydrograph.engine.spark.datasource.avro.DefaultSource.IgnoreFilesWithoutExtensionProperty
-import hydrograph.engine.spark.datasource.avro.DefaultSource.SerializableConfiguration
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.KryoSerializable
-import com.esotericsoftware.kryo.io.Input
-import com.esotericsoftware.kryo.io.Output
-
+/**
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
 private class DefaultSource extends FileFormat with DataSourceRegister {
   private val log = LoggerFactory.getLogger(getClass)
-  var precision : Array[Int]= new  Array[Int](CustomSparkToAvro.inputFieldsNumber)
-  var scale : Array[Int]= new  Array[Int](CustomSparkToAvro.inputFieldsNumber)
+  var precision: Array[Int] = new Array[Int](CustomSparkToAvro.inputFieldsNumber)
+  var scale: Array[Int] = new Array[Int](CustomSparkToAvro.inputFieldsNumber)
 
   override def equals(other: Any): Boolean = other match {
     case _: DefaultSource => true
@@ -62,9 +56,9 @@ private class DefaultSource extends FileFormat with DataSourceRegister {
   }
 
   override def inferSchema(
-      spark: SparkSession,
-      options: Map[String, String],
-      files: Seq[FileStatus]): Option[StructType] = {
+                            spark: SparkSession,
+                            options: Map[String, String],
+                            files: Seq[FileStatus]): Option[StructType] = {
     val conf = spark.sparkContext.hadoopConfiguration
 
     val sampleFile = if (conf.getBoolean(IgnoreFilesWithoutExtensionProperty, true)) {
@@ -108,21 +102,21 @@ private class DefaultSource extends FileFormat with DataSourceRegister {
   override def shortName(): String = "avro"
 
   override def isSplitable(
-      sparkSession: SparkSession,
-      options: Map[String, String],
-      path: Path): Boolean = true
+                            sparkSession: SparkSession,
+                            options: Map[String, String],
+                            path: Path): Boolean = true
 
   override def prepareWrite(
-      spark: SparkSession,
-      job: Job,
-      options: Map[String, String],
-      dataSchema: StructType): OutputWriterFactory = {
+                             spark: SparkSession,
+                             job: Job,
+                             options: Map[String, String],
+                             dataSchema: StructType): OutputWriterFactory = {
     val recordName = options.getOrElse("recordName", "topLevelRecord")
     val recordNamespace = options.getOrElse("recordNamespace", "SparkAvroRecord")
     val build = SchemaBuilder.record(recordName).namespace(recordNamespace)
     precision = CustomSparkToAvro.getPrecison()
     scale = CustomSparkToAvro.getScale()
-    val outputAvroSchema = CustomSparkToAvro.generateAvroSchemaFromFieldsAndTypes(recordNamespace, dataSchema,precision,scale)
+    val outputAvroSchema = CustomSparkToAvro.generateAvroSchemaFromFieldsAndTypes(recordNamespace, dataSchema, precision, scale)
     AvroJob.setOutputKeySchema(job, outputAvroSchema)
     val AVRO_COMPRESSION_CODEC = "spark.sql.avro.compression.codec"
     val AVRO_DEFLATE_LEVEL = "spark.sql.avro.deflate.level"
@@ -154,13 +148,13 @@ private class DefaultSource extends FileFormat with DataSourceRegister {
   }
 
   override def buildReader(
-      spark: SparkSession,
-      dataSchema: StructType,
-      partitionSchema: StructType,
-      requiredSchema: StructType,
-      filters: Seq[Filter],
-      options: Map[String, String],
-      hadoopConf: Configuration): (PartitionedFile) => Iterator[InternalRow] = {
+                            spark: SparkSession,
+                            dataSchema: StructType,
+                            partitionSchema: StructType,
+                            requiredSchema: StructType,
+                            filters: Seq[Filter],
+                            options: Map[String, String],
+                            hadoopConf: Configuration): (PartitionedFile) => Iterator[InternalRow] = {
 
     val broadcastedConf =
       spark.sparkContext.broadcast(new SerializableConfiguration(hadoopConf))
@@ -171,7 +165,7 @@ private class DefaultSource extends FileFormat with DataSourceRegister {
       val userProvidedSchema = options.get(AvroSchema).map(new Schema.Parser().parse)
       if (
         conf.getBoolean(IgnoreFilesWithoutExtensionProperty, true) &&
-        !file.filePath.endsWith(".avro")
+          !file.filePath.endsWith(".avro")
       ) {
         Iterator.empty
       } else {
@@ -242,7 +236,7 @@ private object DefaultSource {
   val AvroSchema = "avroSchema"
 
   class SerializableConfiguration(@transient var value: Configuration)
-      extends Serializable with KryoSerializable {
+    extends Serializable with KryoSerializable {
     @transient private lazy val log = LoggerFactory.getLogger(getClass)
 
     private def writeObject(out: ObjectOutputStream): Unit = tryOrIOException {
@@ -279,4 +273,5 @@ private object DefaultSource {
       value.readFields(new DataInputStream(in))
     }
   }
+
 }

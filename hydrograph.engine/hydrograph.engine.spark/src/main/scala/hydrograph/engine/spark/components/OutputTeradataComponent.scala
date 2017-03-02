@@ -29,6 +29,12 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 
+/**
+  * The Class OutputTeradataComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputTeradataComponent(outputRDBMSEntity: OutputRDBMSEntity,
                               cp: BaseComponentParams) extends SparkFlow {
 

@@ -18,7 +18,12 @@ import hydrograph.engine.spark.components.OutputFileFixedWidthComponent
 import hydrograph.engine.spark.components.adapter.base.OutputAdatperBase
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class OutputFileFixedWidthAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class OutputFileFixedWidthAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase{
 
   private  var outputFileFixedWidth:OutputFileFixedWidthEntityGenerator=null

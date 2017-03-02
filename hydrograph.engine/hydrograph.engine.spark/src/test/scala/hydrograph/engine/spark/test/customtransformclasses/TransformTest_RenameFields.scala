@@ -18,7 +18,10 @@ import java.util.Properties
 import hydrograph.engine.transformation.userfunctions.base.{ReusableRow, TransformBase}
 
 /**
-  * Created by sandeepv on 1/11/2017.
+  * The Class TransformTest_RenameFields.
+  *
+  * @author Bitwise
+  *
   */
 class TransformTest_RenameFields extends TransformBase{
   override def prepare(props: Properties, inputFields: util.ArrayList[String], outputFields: util.ArrayList[String]): Unit = {

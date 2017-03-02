@@ -20,7 +20,12 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
 
 import java.io.IOException;
-
+/**
+ * The Class DelimitedAndFixedWidthInputFormat.
+ *
+ * @author Bitwise
+ *
+ */
 public class DelimitedAndFixedWidthInputFormat extends
 		FileInputFormat<LongWritable, Text> {
 

@@ -20,8 +20,11 @@ import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
- * Created by gurdits on 10/27/2016.
- */
+  * The Class TransformAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class TransformAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase {
 
   var transform: TransformEntityGenerator = null;

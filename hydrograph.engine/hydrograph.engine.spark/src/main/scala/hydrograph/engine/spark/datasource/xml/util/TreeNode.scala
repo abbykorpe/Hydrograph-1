@@ -17,7 +17,10 @@ import org.apache.spark.sql.types.DataType
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by bitwise on 1/13/2017.
+  * The Class FieldContext.
+  *
+  * @author Bitwise
+  *
   */
 case class FieldContext(name: String, xPath: String, datatype: DataType, isNullable: Boolean, format: String) {
 }

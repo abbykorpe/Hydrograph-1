@@ -12,35 +12,19 @@
  *******************************************************************************/
 package hydrograph.engine.spark.datasource.avro
 
-import org.apache.spark.sql.types._
-import java.math.BigDecimal
-import java.nio.ByteBuffer
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Date
-import java.util.HashMap
-import java.util.Iterator
-import java.util.LinkedList
-import java.util.Map
-import org.apache.avro.AvroRuntimeException
-import org.apache.avro.Schema
-import org.apache.avro.Schema.Field
-import org.apache.avro.Schema.Type
-import org.apache.avro.generic.GenericData
-import org.apache.avro.generic.GenericData.Fixed
-import org.apache.avro.generic.GenericData.Record
-import org.apache.hadoop.hive.serde2.avro.AvroSerDe
-import org.apache.hadoop.io.BytesWritable
-import org.apache.avro.Schema.Type._
-import org.apache.spark.sql.types.{ DataType, DataTypes, StructField, StructType }
-import org.slf4j.{ Logger, LoggerFactory }
-import scala.collection.JavaConversions._
-import org.apache.spark.sql.types.StructType
-import org.apache.hadoop.io.ByteWritable
-import org.apache.hadoop.hive.metastore.api.Decimal
-import scala.beans.BeanProperty
-import hydrograph.engine.core.constants.Constants
+import java.util.{ArrayList, LinkedList}
 
+import org.apache.avro.Schema
+import org.apache.avro.Schema.{Field, Type}
+import org.apache.avro.Schema.Type._
+import org.apache.hadoop.hive.serde2.avro.AvroSerDe
+import org.apache.spark.sql.types.{DataType, StructField, StructType, _}
+/**
+  * The Object CustomSparkToAvro.
+  *
+  * @author Bitwise
+  *
+  */
 object CustomSparkToAvro {
 
   var inputFieldsNumber: Int = 0

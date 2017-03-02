@@ -22,7 +22,10 @@ import org.apache.spark.sql.{SparkSession, _}
 import org.junit.{Assert, Test}
 
 /**
-  * Created by manojp on 1/6/2017.
+  * The Class InputTeradataComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class InputTeradataComponentTest {
 

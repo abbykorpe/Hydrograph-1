@@ -24,7 +24,12 @@ import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputFileMixedSchemeComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedSchemeEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileMixedSchemeComponent])

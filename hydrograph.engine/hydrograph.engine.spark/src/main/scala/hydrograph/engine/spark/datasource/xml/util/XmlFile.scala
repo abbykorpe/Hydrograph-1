@@ -19,17 +19,22 @@ import java.io.CharArrayWriter
 import java.nio.charset.Charset
 import javax.xml.stream.XMLOutputFactory
 
+import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
+import hydrograph.engine.spark.datasource.xml.parsers.StaxXmlGenerator
+import hydrograph.engine.spark.datasource.xml.{XmlInputFormat, XmlOptions}
+import org.apache.hadoop.io.{LongWritable, Text}
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.DataFrame
+
 import scala.collection.Map
 
-import hydrograph.engine.spark.datasource.xml.parsers.StaxXmlGenerator
-import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
-import org.apache.hadoop.io.{Text, LongWritable}
-
-import org.apache.spark.rdd.RDD
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.DataFrame
-import hydrograph.engine.spark.datasource.xml.{XmlOptions, XmlInputFormat}
-
+/**
+  * The Object XmlFile.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object XmlFile {
   val DEFAULT_INDENT = "    "
   val DEFAULT_ROW_SEPARATOR = "\n"

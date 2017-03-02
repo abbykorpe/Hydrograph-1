@@ -22,7 +22,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * The Class DelimitedAndFixedWidthHelper.
+ *
+ * @author Bitwise
+ *
+ */
 @SuppressWarnings("rawtypes")
 public class DelimitedAndFixedWidthHelper {
 

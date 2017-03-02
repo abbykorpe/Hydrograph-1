@@ -13,9 +13,10 @@
 package hydrograph.engine.spark.executiontracking.plugin;
 
 /**
- * Class TrackContext stores the component data which is consumed by
- * 
- * @author bitwise
+ * The Class TrackContext.
+ *
+ * @author Bitwise
+ *
  */
 public class TrackContext {
 	private String fromComponentId;

@@ -24,7 +24,9 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by gurdits on 10/18/2016.
+  * The Class LookupComponent.
+  *
+  * @author Bitwise
   *
   */
 
