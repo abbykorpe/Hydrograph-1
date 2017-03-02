@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License.
+ * limitations under the License
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
@@ -28,6 +28,7 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeOutputJdbcupdateBase;
 import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
 import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
+import hydrograph.engine.jaxb.osparkredshift.TypeOutputSparkredshiftBase;
 import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataBase;
 import hydrograph.engine.jaxb.otffw.TypeFixedWidthBase;
 import hydrograph.engine.jaxb.otfs.TypeOutputFileSequenceBase;
@@ -72,6 +73,7 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
     hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase.class,
     TypeOutputMysqlBase.class,
     TypeOutputRedshiftBase.class,
+    TypeOutputSparkredshiftBase.class,
     TypeOutputOracleBase.class,
     TypeOutputTeradataBase.class,
     TypeOutputFileXmlBase.class,

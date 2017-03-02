@@ -12,18 +12,18 @@
     limitations under the License.
  -->
  
- 
+
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
-		name="ORedshift" nameInPalette="Redshift" defaultNamePrefix="ORedshift" 
-		description="Used to write data from Redshift tables"
-		helpFilePath="/hydrograph.ui.help/html/Components/Output_Redshift.html"
-		acronym="OReds">
-		<tns:category>OUTPUT</tns:category>
+		name="ISRedshift" nameInPalette="Redshift" defaultNamePrefix="IRedshift" 
+		description="Used to read data from Redshift tables stored in Parquet format."
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_Redshift.html"
+		acronym="IReds">
+		<tns:category>INPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" portTerminal="in0" />
+			<tns:portSpecification numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" portTerminal="out0" />
 			</tns:portSpecification>
 		</tns:port>
 		
@@ -31,24 +31,18 @@
 			group="GENERAL" subGroup="DETAILS" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 			
-			<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
+		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="databaseName" value="" renderer="DATABASE_NAME_WIDGET"
+				<tns:property dataType="string" name="databaseName" value="" renderer="DATABASE_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Hive Database Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="jdbcDriver" value="JDBC 4.2" renderer="JDBC_DRIVER_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with database">
-			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
-		</tns:property>
-		
 		<tns:property dataType="string" name="hostName" value="" renderer="HOST_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Host Name provided by the user">
@@ -70,7 +64,7 @@
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Password requires for connection with Database">
+			usage="REQUIRED" propertyHelpText="Password requires for connection with database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -79,20 +73,20 @@
 			usage="OPTIONAL" propertyHelpText="Displays the button for testing out the above given values">
 		</tns:property>
 		
-		
-		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
+		<tns:property dataType="string" name="temporaryDirectory" value="" renderer="TEMPORARY_DIR_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
+			usage="REQUIRED" propertyHelpText="Define path of temporary directory on S3">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
-		
-		<tns:property dataType="string" name="load_type_configuration" renderer="LOAD_TYPE_CONFIGURATION_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Provides user to select the Load Type i.e. records are to be inserted,updated or to create a new table.">
-			<tns:validator>DATABASE_KEY_VALIDATION</tns:validator>
+			
+			
+		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED" propertyHelpText="Select TableName or Query#Sql Query#Click to import schema from metastore#Table Name#Click to import schema from metastore">
+			<tns:validator>TOGGLE_SELECTION_VALIDATOR</tns:validator>
 		</tns:property>
-		
-			<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+			
+		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time.">
 			<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
