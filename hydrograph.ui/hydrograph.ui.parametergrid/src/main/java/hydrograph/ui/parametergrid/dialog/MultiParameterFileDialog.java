@@ -1326,13 +1326,21 @@ public class MultiParameterFileDialog extends Dialog {
 			String absoluteFileName = source + fileName;
 			File destinationFile=new File(destination+File.separator+fileName);
 			try {
-				if(!ifDuplicate(listOfFilesToBeImported, paramterFileTypes)){
-					if(StringUtils.equalsIgnoreCase(absoluteFileName, destinationFile.toString())){
+				if (!ifDuplicate(listOfFilesToBeImported, paramterFileTypes)) {
+					if (StringUtils.equalsIgnoreCase(absoluteFileName, destinationFile.toString())) {
 						return true;
-					}
-					if (!destinationFile.exists() || (destinationFile.exists() && doUserConfirmsToOverRide())) {
+					} else if (destinationFile.exists()) {
+						int returnCode = doUserConfirmsToOverRide();
+						if (returnCode == SWT.YES) {
+							FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+						} else if (returnCode == SWT.NO) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
 						FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
-					} 
+					}
 				}
 			} catch (IOException e1) {
 				if(StringUtils.endsWithIgnoreCase(e1.getMessage(), ErrorMessages.IO_EXCEPTION_MESSAGE_FOR_SAME_FILE)){
@@ -1350,13 +1358,10 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 	
 	
-	private boolean doUserConfirmsToOverRide() {
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+	private int doUserConfirmsToOverRide() {
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO|SWT.CANCEL);
 		messageBox.setMessage("File already exists in project, do you want to overwrite?");
-		if(messageBox.open()==SWT.YES){
-			return true;
-		}
-		return false;
+		return messageBox.open();
 	}
 
 	
