@@ -46,7 +46,7 @@ dependencies {
 	hgModel group: 'xpp3', name: 'xpp3_min', version: '1.1.4c'
 	hgModel group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'
 	
-	//hgService group: 'hydrograph', name:'services', version: '0.1.1'
+	hgService group: 'hydrograph', name:'services', version: '0.1.1'
 	hgService group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
 	hgService group: 'cascading', name: 'lingual-hadoop2-mr1', version: '1.2.1', classifier:'jdbc'
   	hgService group: 'com.sparkjava', name: 'spark-core', version: '2.5.1'
@@ -75,15 +75,15 @@ dependencies {
 
     hgService 'junit:junit:4.11'
 }
-task pullServiceDependencies(type: Sync) {
+task pullServiceDependencies(type: Copy) {
     dependsOn configurations.hgService
 
     from { // use of closure defers evaluation until execution time
         configurations.hgService.collect {it}
     }
-    into "hydrograph.ui/hydrograph.ui.product/resources/config/service/"
+    into "hydrograph.ui/hydrograph.ui.product/resources/config/service"
 }
-task pullModelDependencies(type: Sync) {
+task pullModelDependencies(type: Copy) {
     dependsOn configurations.hgModel
 
     from { // use of closure defers evaluation until execution time
@@ -91,7 +91,7 @@ task pullModelDependencies(type: Sync) {
     }
     into "hydrograph.ui/hydrograph.ui.model/lib/"
 }
-task pullGraphDependencies(type: Sync) {
+task pullGraphDependencies(type: Copy) {
     dependsOn configurations.hgGraph
 
     from { // use of closure defers evaluation until execution time
@@ -99,7 +99,7 @@ task pullGraphDependencies(type: Sync) {
     }
     into "hydrograph.ui/hydrograph.ui.graph/libs/"
 }
-task pullPropertyWindowDependencies(type: Sync) {
+task pullPropertyWindowDependencies(type: Copy) {
     dependsOn configurations.hgPropertywindow
 
     from { // use of closure defers evaluation until execution time
@@ -107,7 +107,7 @@ task pullPropertyWindowDependencies(type: Sync) {
     }
     into "hydrograph.ui/hydrograph.ui.propertywindow/resources/lib/"
 }
-task pullDataViewerDependencies(type: Sync) {
+task pullDataViewerDependencies(type: Copy) {
     dependsOn configurations.hgDataviewer
 
     from { // use of closure defers evaluation until execution time

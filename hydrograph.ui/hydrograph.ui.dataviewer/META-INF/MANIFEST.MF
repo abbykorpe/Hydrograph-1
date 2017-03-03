@@ -31,4 +31,4 @@ Export-Package: hydrograph.ui.dataviewer.adapters,
  hydrograph.ui.dataviewer.utilities,
  hydrograph.ui.dataviewer.window
 Import-Package: com.jcraft.jsch
-Bundle-Vendor: BITWISE
+Bundle-Vendor: Bitwise

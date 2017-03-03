@@ -4,7 +4,7 @@ Bundle-Name: hydrograph.ui.graph
 Bundle-SymbolicName: hydrograph.ui.graph;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: hydrograph.ui.graph.Activator
-Bundle-Vendor: BITWISE
+Bundle-Vendor: Bitwise
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.gef,

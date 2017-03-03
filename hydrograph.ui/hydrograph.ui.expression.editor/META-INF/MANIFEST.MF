@@ -4,7 +4,7 @@ Bundle-Name: hydrograph.ui.expression.editor
 Bundle-SymbolicName: hydrograph.ui.expression.editor;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: hydrograph.ui.expression.editor.Activator
-Bundle-Vendor: BITWISE
+Bundle-Vendor: Bitwise
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.gef,
