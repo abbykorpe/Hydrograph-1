@@ -89,7 +89,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
 
 			if (jobsFolder != null) {
-				jobIFile=jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH));
+				jobIFile=jobsFolder.getFile(modifiedResource.getFullPath().removeFirstSegments(2).removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH));
 			}
 			if (propertiesFolder != null) {
 				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
@@ -110,7 +110,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			IFolder jobsFolder = iProject.getFolder(CustomMessages.ProjectSupport_JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
 			if (jobsFolder != null) {
-				xmlIFile=jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH));
+				xmlIFile=jobsFolder.getFile(modifiedResource.getFullPath().removeFirstSegments(2).removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH));
 			}
 			if (propertiesFolder != null) {
 				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
