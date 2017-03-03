@@ -13,11 +13,12 @@
 package hydrograph.engine.spark.helper;
 
 import hydrograph.engine.core.constants.Constants;
+
 import hydrograph.engine.spark.datasource.utils.TypeCast;
 import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.apache.commons.lang3.time.FastDateFormat;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class DelimitedAndFixedWidthHelper {
     public static Object[] getFields(
             StructType schema, String line,
             String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-            boolean safe, String quote, List<SimpleDateFormat> dateFormats)  throws Exception{
+            boolean safe, String quote, List<FastDateFormat> dateFormats)  throws Exception{
 
         if (!line.equals("")) {
 
@@ -119,13 +120,13 @@ public class DelimitedAndFixedWidthHelper {
 
     private static Object[] coerceParsedTokens(
             String line, Object[] tokens, boolean safe,
-            StructType schema, List<SimpleDateFormat> dateFormats)  throws Exception {
+            StructType schema, List<FastDateFormat> dateFormats)  throws Exception {
 
         Object[] result = new Object[tokens.length];
         for (int i = 0; i < tokens.length; i++) {
             try {
                 tokens[i] = !schema.apply(i).dataType().simpleString().equalsIgnoreCase("String") ? tokens[i].toString().trim() : tokens[i];
-                result[i] = TypeCast.inputValue(tokens[i], schema.apply(i).dataType(),
+                result[i] = TypeCast.inputValue(tokens[i].toString(), schema.apply(i).dataType(),
                         schema.apply(i).nullable(), "null", true, dateFormats.get(i));
             } catch (Exception exception) {
                 result[i] = null;

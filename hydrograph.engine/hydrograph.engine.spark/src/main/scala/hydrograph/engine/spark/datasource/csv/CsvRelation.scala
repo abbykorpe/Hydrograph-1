@@ -25,6 +25,7 @@ import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions._
+import org.apache.commons.lang3.time.FastDateFormat
 
 /**
   * The Class CsvRelation.
@@ -39,7 +40,7 @@ case class CsvRelation(componentId:String,
   delimiter: Char,
   quote: Character,
   treatEmptyValuesAsNullsFlag: Boolean,
-  dateFormats: List[SimpleDateFormat],
+  dateFormats: List[FastDateFormat],
   safe: Boolean,
   strict: Boolean,
   userSchema: StructType = null)(@transient val sqlContext: SQLContext)
@@ -92,6 +93,10 @@ case class CsvRelation(componentId:String,
     } else {
       var index = 0
       val record = records.head
+      if (strict && schemaFields.length < record.size()) {
+      LOG.error("\n Line no being parsed => " + line+" has fields size is more than schema field size");
+        throw new RuntimeException("\n Line no being parsed => " + line+" has fields size is more than schema field size")
+      }
       while (index < schemaFields.length) {
         val field = schemaFields(index)
 
@@ -106,7 +111,7 @@ case class CsvRelation(componentId:String,
             Some(Row.fromSeq(tokenArray))
             }
             else{
-              LOG.error("Line being parsed => " + line);
+            LOG.error("\n Line no being parsed => " + line+" has fields size is not matching with schema field size");
             throw new RuntimeException("\n Line no being parsed => " + line+" has fields size not matching with schema field size  ");
             }
 
