@@ -46,7 +46,6 @@ dependencies {
 	hgModel group: 'xpp3', name: 'xpp3_min', version: '1.1.4c'
 	hgModel group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'
 	
-	hgService group: 'hydrograph', name:'services', version: '0.1.1'
 	hgService group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
 	hgService group: 'cascading', name: 'lingual-hadoop2-mr1', version: '1.2.1', classifier:'jdbc'
   	hgService group: 'com.sparkjava', name: 'spark-core', version: '2.5.1'

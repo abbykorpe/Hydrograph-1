@@ -62,6 +62,9 @@ test {
 
 
 repositories {
+	flatDir {
+       dirs '../libs'
+    }
 	mavenLocal()
     mavenCentral()
     maven {

@@ -148,7 +148,6 @@
 /log4j-1.2.17.jar
 /mysql-connector-java-5.1.34.jar
 /netty-3.7.0.Final.jar
-/ojdbc6-11.2.0.4.jar
 /opencsv-2.3.jar
 /optiq-core-0.4.12.4.jar
 /oro-2.0.8.jar
@@ -156,9 +155,7 @@
 /parquet-hadoop-bundle-1.6.0.jar
 /pentaho-aggdesigner-algorithm-5.1.5-jhyde.jar
 /protobuf-java-2.5.0.jar
-/redshiftJDBC42-1.2.1.1001.jar
 /riffle-1.0.0.jar
-/services-0.1.1.jar
 /servlet-api-2.5.jar
 /slf4j-api-1.7.13.jar
 /slf4j-log4j12-1.7.5.jar
@@ -168,8 +165,6 @@
 /stax-api-1.0-2.jar
 /stax-api-1.0.1.jar
 /stringtemplate-3.2.1.jar
-/tdgssconfig-0.1.jar
-/terajdbc4-0.1.jar
 /velocity-1.5.jar
 /websocket-api-9.3.6.v20151106.jar
 /websocket-client-9.3.6.v20151106.jar
