@@ -85,3 +85,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 68.#748 - [Vibhor Tyagi] - Post delivery: Save-as option does not generate required properties file
 69.#650 - [Pooja Yadav] - Copy/paste is not working for renamed jobs.
 70.#695 - [Pooja Yadav] - User is getting error pop up while creating job file through file resource.
+71.#724 - [Pooja Yadav] - On view changes, Need to handle Hydrograph icon on .exe files for windows.
