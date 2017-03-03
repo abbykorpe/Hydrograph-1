@@ -21,6 +21,7 @@ import org.apache.hadoop.fs.Path
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
+import org.apache.commons.lang3.time.FastDateFormat    
 
 /**
   * The Class DefaultSource.
@@ -55,7 +56,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     }
     val useHeader = parameters.getOrElse("header", "false")
     val componentId = parameters.getOrElse("componentId", "")
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
 
     val headerFlag = if (useHeader.equals("true")) {
@@ -112,18 +113,19 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     )(sqlContext)
   }
 
-  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map { e =>
+  private def getDateFormats(dateFormats: List[String]): List[FastDateFormat] = dateFormats.map { e =>
     if (e.equals("null")) {
       null
     } else {
-      simpleDateFormat(e)
+      fastDateFormat(e)
     }
   }
 
-  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!dateFormat.equalsIgnoreCase("null")) {
-    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
-    date.setLenient(false)
-    date.setTimeZone(TimeZone.getDefault)
+  private def fastDateFormat(dateFormat: String): FastDateFormat = if (!dateFormat.equalsIgnoreCase("null")) {
+      val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+//    val date = new FastDateFormat(dateFormat, Locale.getDefault)
+//    date.setLenient(false)
+//    date.setTimeZone(TimeZone.getDefault)
     date
   } else null
 
@@ -171,7 +173,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
 
     //    val dateFormatter: SimpleDateFormat = new SimpleDateFormat(dateFormat)
     val dateFormats = parameters.getOrElse("dateFormats", "null")
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
     val delimiterChar = if (delimiter.length == 1) {
       delimiter.charAt(0)

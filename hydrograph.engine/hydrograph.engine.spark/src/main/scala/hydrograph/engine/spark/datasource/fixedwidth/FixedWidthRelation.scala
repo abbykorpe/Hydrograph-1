@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.datasource.fixedwidth
 
 import java.text.SimpleDateFormat
+import org.apache.commons.lang3.time.FastDateFormat
 
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.spark.rdd.RDD
@@ -27,7 +28,7 @@ import org.slf4j.{Logger, LoggerFactory}
   *
   */
 class FixedWidthRelation(componentName:String, path: String, charset: String, fieldslength: String,
-                         strict:Boolean, safe:Boolean, dateFormats: List[SimpleDateFormat], userSchema: StructType)
+                         strict:Boolean, safe:Boolean, dateFormats: List[FastDateFormat], userSchema: StructType)
                         (@transient val sqlContext: SQLContext)
   extends BaseRelation with TableScan with Serializable {
 

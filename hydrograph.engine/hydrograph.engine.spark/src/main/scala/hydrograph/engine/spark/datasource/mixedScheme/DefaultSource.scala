@@ -14,6 +14,7 @@
 package hydrograph.engine.spark.datasource.mixedScheme
 
 import java.text.SimpleDateFormat
+
 import java.util.{Locale, TimeZone}
 
 import hydrograph.engine.core.constants.Constants
@@ -23,6 +24,7 @@ import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
+import org.apache.commons.lang3.time.FastDateFormat
 import org.slf4j.{Logger, LoggerFactory}
 /**
   * The Class DefaultSource.
@@ -68,7 +70,7 @@ class DefaultSource extends RelationProvider
       throw new RuntimeException("MixedScheme Input File path cannot be null or empty")
     }
 
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
     MixedSchemeRelation(componentName,
       Some(path),
@@ -86,18 +88,19 @@ class DefaultSource extends RelationProvider
   }
 
 
-  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
-    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
-    date.setLenient(false)
-    date.setTimeZone(TimeZone.getDefault)
+  private def fastDateFormat(dateFormat: String): FastDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+      val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+//    val date = new FastDateFormat(dateFormat, Locale.getDefault)
+//    date.setLenient(false)
+//    date.setTimeZone(TimeZone.getDefault)
     date
   } else null
 
-  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map{ e =>
+  private def getDateFormats(dateFormats: List[String]): List[FastDateFormat] = dateFormats.map{ e =>
     if (e.equals("null")){
       null
     } else {
-      simpleDateFormat(e)
+      fastDateFormat(e)
     }
   }
 
@@ -149,7 +152,7 @@ class DefaultSource extends RelationProvider
     val lengthsAndDelimiters = parameters.getOrElse("lengthsAndDelimiters", "")
     val lengthsAndDelimitersType = parameters.getOrElse("lengthsAndDelimitersType", "")
     val hasaNewLineField: Boolean = DelimitedAndFixedWidthHelper.hasaNewLineField(lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR))
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
     var outputRow: String = ""
     var recordToBeSpilled: String = ""
     val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext,parameters.getOrElse("codec", null))

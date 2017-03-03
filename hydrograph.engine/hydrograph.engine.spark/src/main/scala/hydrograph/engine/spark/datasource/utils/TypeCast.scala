@@ -21,7 +21,7 @@ import org.apache.spark.sql.types.{DateType, StringType, _}
 import org.json4s.ParserUtil.ParseException
 
 import scala.util.Try
-
+import org.apache.commons.lang3.time.FastDateFormat
 
 /**
   * The Object TypeCast.
@@ -32,55 +32,52 @@ import scala.util.Try
 
 object TypeCast {
 
- /* private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
-    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
+ /* private def FastDateFormat(dateFormat: String): FastDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+    val date = new FastDateFormat(dateFormat, Locale.getDefault)
     date.setLenient(false)
     date.setTimeZone(TimeZone.getDefault)
     date
   } else null*/
 @throws(classOf[Exception])
-  def inputValue(value: Any, castType: DataType, nullable: Boolean = true, nullValue:String, treatEmptyValuesAsNulls:Boolean=true, dateFormat: SimpleDateFormat) : Any= {
+  def inputValue(value: String, castType: DataType, nullable: Boolean = true, nullValue:String, treatEmptyValuesAsNulls:Boolean=true, dateFormat: FastDateFormat) : Any= {
 
      if (value == nullValue && nullable || (value == nullValue && treatEmptyValuesAsNulls)) {
         null
       } else {
-
         castType match {
-
-          case _: ByteType => value.toString.toByte
-          case _: ShortType => value.toString.toShort
-          case _: IntegerType => value.toString.toInt
-          case _: LongType => value.toString.toLong
-          case _: FloatType => Try(value.toString.toFloat)
-            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString).floatValue())
-          case _: DoubleType => Try(value.toString.toDouble)
-            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString).doubleValue())
-          case _: BooleanType => value.toString.toBoolean
-          case _: DecimalType => new BigDecimal(value.toString.replaceAll(",",""))
+          case _: StringType => value
+          case _: IntegerType => value.toInt
+          case _: LongType => value.toLong
+          case _: ByteType => value.toByte
+          case _: ShortType => value.toShort
+          case _: DecimalType => new BigDecimal(value.replaceAll(",",""))
+          case _: DateType =>  {
+        	  try{
+        		  new Date(dateFormat.parse(value).getTime)
+        	  }catch{
+        	  case e:Exception => {
+        		  throw new RuntimeException(", Error being -> "+e.getMessage)
+        	  }
+        	  }
+          }
+          case _: FloatType => Try(value.toFloat)
+            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value).floatValue())
+          case _: DoubleType => Try(value.toDouble)
+            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value).doubleValue())
+          case _: BooleanType => value.toBoolean
           case _: TimestampType  => {
             try{
-              new Timestamp(dateFormat.parse(value.toString).getTime)
+              new Timestamp(dateFormat.parse(value).getTime)
             }catch{
               case e:ParseException => throw new RuntimeException(e.getMessage)
             }
-
           }
-          case _: DateType =>  {
-            try{
-              new Date(dateFormat.parse(value.toString).getTime)
-            }catch{
-              case e:Exception => {
-                throw new RuntimeException(", Error being -> "+e.getMessage)
-              }
-            }
-          }
-          case _: StringType => value
           case _ => throw new RuntimeException(s"Unsupported type: ${castType.typeName}")
         }
     }
   }
 
-  def outputValue(value: Any, castType: DataType, dateFormat: SimpleDateFormat) : AnyRef= {
+  def outputValue(value: Any, castType: DataType, dateFormat: FastDateFormat) : AnyRef= {
 
     castType match {
       case _: TimestampType => if (value == null) "" else if (!dateFormat.equals("null")) dateFormat.format(new Date(value.asInstanceOf[Timestamp].getTime)) else value.toString
