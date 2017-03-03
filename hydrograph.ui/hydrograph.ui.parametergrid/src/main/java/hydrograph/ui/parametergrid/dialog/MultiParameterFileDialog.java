@@ -36,7 +36,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationException;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
@@ -1381,7 +1380,7 @@ public class MultiParameterFileDialog extends Dialog {
 	
 	private String getFileLocation(String importedParamterFile) {
 		IPath iPath = new Path(importedParamterFile);
-		String importedFileLocation = iPath.removeLastSegments(1).toOSString() + "\\";
+		String importedFileLocation = iPath.removeLastSegments(1).toOSString() + File.separator;
 		return importedFileLocation;
 	}
 	
