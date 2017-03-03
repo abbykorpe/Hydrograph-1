@@ -160,9 +160,10 @@ public class Messages extends NLS {
 	public static String OPEN_SUBJOB_THROUGH_TRACK_SUBJOB;
   	public static String RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB;
 
-
 	public static String FILE_NAME_ERROR;
 	public static String PROPERTY_FILE_ERROR;
+	
+  	public static String ELT_GRAPHICAL_EDITOR;
 	
   	public static String HYDROGRAPH_CONSOLE_PREFERANCE_PAGE_GROUP_NAME;
   	public static String PREFERANCE_CONSOLE_BUFFER_SIZE;
