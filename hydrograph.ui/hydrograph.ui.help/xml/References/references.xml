@@ -16,11 +16,12 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="References">
-   <anchor id="dosandDonts"/>
+   <!--<anchor id="dosandDonts"/>-->
+   
    <anchor id="JobExamples"/>
    <anchor id="OperationExamples"/>
    <anchor id="ReferenceURLs"/>
    <topic label="FAQs">
-      <anchor id="FAQs"/>
+      <!--<anchor id="FAQs"/>-->
    </topic>
 </toc>
