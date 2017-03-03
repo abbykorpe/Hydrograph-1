@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Cursor;
@@ -272,6 +273,32 @@ public class Utils {
 			return paramValue+remainingString;
 		}		
 		
+	 /**
+		 * 
+		 * get the file Path according to the Parameter value
+		 * @param extSchemaPath
+		 * @param paramValue
+		 * @param extSchemaPathText
+		 * @return the file Path according to the Parameter value
+		 */
+	 public String getParamFilePath(String extSchemaPath, String paramValue, StyledText extSchemaPathText){
+			String remainingString = "";
+		    if( checkParameterValue(extSchemaPath)){
+		    	if(StringUtils.isNotEmpty(paramValue)){
+		    		extSchemaPathText.setToolTipText(paramValue+remainingString);
+		    	}else{
+		    		extSchemaPathText.setToolTipText(PARAMETER_NOT_FOUND);
+		    	}
+		    }else if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND)){
+		    	extSchemaPathText.setToolTipText(remainingString);
+		    }else{
+		    	remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+1, extSchemaPath.length());
+		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
+		   		}
+		    	
+			return paramValue+remainingString;
+		}
+	 
 	 private boolean checkParameterValue(String value){
 		 boolean isParam = false;
 		 String[] splitString = value.split("/");
@@ -301,7 +328,19 @@ public class Utils {
 				extSchemaPathText.setCursor(null);
 			}
 	 }		
-		
+	 public void addMouseMoveListener(StyledText extSchemaPathText , Cursor cursor){
+		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')||ParameterUtil.containsParameter(extSchemaPathText.getText(),'\\')){
+				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255));	
+				extSchemaPathText.setCursor(cursor);
+				extSchemaPathText.addMouseMoveListener(getMouseListner(extSchemaPathText));
+					}
+			else{
+				extSchemaPathText.removeMouseMoveListener(getMouseListner(extSchemaPathText));
+				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
+				extSchemaPathText.setCursor(null);
+			}
+	 }	
+	 
 	 private void getParamMap(List<File> FileNameList){
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
@@ -363,6 +402,22 @@ public class Utils {
 				};
 			return listner;
 		}		
+	 
+	 private MouseMoveListener getMouseListner(final StyledText extSchemaPathText){
+			final MouseMoveListener listner = new MouseMoveListener() {
+				
+				@Override
+				public void mouseMove(MouseEvent e) {
+					String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
+				    finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
+				    while(ParameterUtil.containsParameter(finalParamPath, '/')){
+				    	paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
+				    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
+			    		}
+					}
+				};
+			return listner;
+		}	
 	 
 	 private File[]  listFilesForFolder(final File folder) {
 			File[] listofFiles = folder.listFiles();

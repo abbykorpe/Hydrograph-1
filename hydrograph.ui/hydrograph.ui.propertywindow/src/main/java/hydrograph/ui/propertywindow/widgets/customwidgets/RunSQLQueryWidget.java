@@ -22,6 +22,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
@@ -31,6 +32,7 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -52,7 +54,7 @@ public class RunSQLQueryWidget extends AbstractWidget{
 	private List<AbstractWidget> widgets;
 	private ControlDecoration txtDecorator;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-
+	private Cursor cursor;
 	
 	public RunSQLQueryWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -108,6 +110,13 @@ public class RunSQLQueryWidget extends AbstractWidget{
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		});
+		
+		Utils.INSTANCE.loadProperties();
+		cursor = container.getContainerControl().getDisplay().getSystemCursor(SWT.CURSOR_HAND);
+		String property = propertyValue;
+		if(StringUtils.isNotBlank(property) ){
+			Utils.INSTANCE.addMouseMoveListener(styledText, cursor);
+		}
 	}
 
 	
