@@ -75,6 +75,8 @@
 					<xs:element name="outSocket"
 						type="type-input-hive-text-delimited-out-socket" minOccurs="1"
 						maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>
 			</xs:restriction>
 		</xs:complexContent>

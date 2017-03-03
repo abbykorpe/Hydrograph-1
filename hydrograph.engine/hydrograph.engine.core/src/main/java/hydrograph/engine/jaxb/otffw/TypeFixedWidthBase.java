@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.otffw;
@@ -33,6 +33,7 @@ import hydrograph.engine.jaxb.outputtypes.TextFileFixedWidth;
  *       &lt;sequence>
  *         &lt;element name="inSocket" type="{hydrograph/engine/jaxb/otffw}type-output-fixedwidth-in-socket"/>
  *         &lt;element name="overWrite" type="{hydrograph/engine/jaxb/commontypes}type-true-false" minOccurs="0"/>
+ *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
