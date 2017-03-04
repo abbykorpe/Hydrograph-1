@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -40,6 +41,7 @@ import javax.xml.namespace.QName;
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="expr" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="mergeExpr" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="accumulatorInitalValue" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
@@ -57,6 +59,7 @@ import javax.xml.namespace.QName;
 })
 @XmlSeeAlso({
     hydrograph.engine.jaxb.aggregate.TypeTransformExpression.class,
+    hydrograph.engine.jaxb.groupcombine.TypeTransformExpression.class,
     hydrograph.engine.jaxb.cumulate.TypeTransformExpression.class,
     hydrograph.engine.jaxb.normalize.TypeTransformExpression.class
 })
@@ -69,6 +72,8 @@ public class TypeTransformExpression {
     protected String id;
     @XmlAttribute(name = "expr", required = true)
     protected String expr;
+    @XmlAttribute(name = "mergeExpr")
+    protected String mergeExpr;
     @XmlAttribute(name = "accumulatorInitalValue")
     protected String accumulatorInitalValue;
     @XmlAnyAttribute
@@ -192,6 +197,30 @@ public class TypeTransformExpression {
      */
     public void setExpr(String value) {
         this.expr = value;
+    }
+
+    /**
+     * Gets the value of the mergeExpr property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMergeExpr() {
+        return mergeExpr;
+    }
+
+    /**
+     * Sets the value of the mergeExpr property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMergeExpr(String value) {
+        this.mergeExpr = value;
     }
 
     /**

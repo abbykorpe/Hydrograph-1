@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.component.utils.OperationOutputField
 import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
 
 import scala.collection.mutable.ListBuffer
@@ -43,6 +44,22 @@ class EncoderHelper extends Serializable {
       case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(schema.getFieldPrecision),schema.getFieldScale)
     }
   }
+
+  def getDataType(dataType: String, dateformat:String, scale:Int, precision:Int): DataType = {
+    Class.forName(dataType).getSimpleName match {
+      case "Integer" => DataTypes.IntegerType
+      case "String" => DataTypes.StringType
+      case "Long" => DataTypes.LongType
+      case "Short" => DataTypes.ShortType
+      case "Boolean" => DataTypes.BooleanType
+      case "Float" => DataTypes.FloatType
+      case "Double" => DataTypes.DoubleType
+      case "Date" if (dateformat.matches(".*[H|m|s|S].*")) => DataTypes.TimestampType
+      case "Date" => DataTypes.DateType
+      case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(precision),scale)
+    }
+  }
+
  def checkPrecision(precision:Int):Int={
     if(precision== -999) 38 else precision
   }
@@ -75,6 +92,13 @@ class EncoderHelper extends Serializable {
     StructType(structFields)
   }
 
+  def getEncoder(operationFields: Array[OperationOutputField]): StructType = {
+    val structFields = new Array[StructField](operationFields.size)
+    operationFields.zipWithIndex.foreach(f => {
+      structFields(f._2) = new StructField(f._1.getFieldName, getDataType(f._1.getDataType, f._1.getFormat,f._1.getScale,f._1.getPrecision), true)
+    })
+    StructType(structFields)
+  }
 }
 object EncoderHelper {
   def apply(): EncoderHelper = {

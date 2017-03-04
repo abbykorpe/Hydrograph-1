@@ -13,13 +13,15 @@
 package hydrograph.engine.expression.utils;
 
 import hydrograph.engine.expression.api.ValidationAPI;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by gurdits on 1/6/2017.
  */
-public class ExpressionWrapper {
+public class ExpressionWrapper implements Serializable {
 
 	private ValidationAPI validationAPI;
 	private String intialValueExpression;
@@ -30,6 +32,10 @@ public class ExpressionWrapper {
 	private List<String> operationOutputFields;
 	private List<String> listOfExpressions;
 	private List<ValidationAPI> validationAPIList;
+
+	public ExpressionWrapper(ValidationAPI validationAPI) {
+		this.validationAPI = validationAPI;
+	}
 
 	public ExpressionWrapper(ValidationAPI validationAPI, String intialValue) {
 		this.validationAPI = validationAPI;

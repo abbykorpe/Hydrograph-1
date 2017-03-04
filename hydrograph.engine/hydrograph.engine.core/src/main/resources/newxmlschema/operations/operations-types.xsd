@@ -10,7 +10,7 @@
 <xs:schema xmlns="hydrograph/engine/jaxb/operationstypes"
 	xmlns:cmn="hydrograph/engine/jaxb/commontypes" xmlns:transform="hydrograph/engine/jaxb/transform"
 	xmlns:aggregate="hydrograph/engine/jaxb/aggregate" xmlns:join="hydrograph/engine/jaxb/join"
-	xmlns:filter="hydrograph/engine/jaxb/filter"
+	xmlns:filter="hydrograph/engine/jaxb/filter" xmlns:groupcombine="hydrograph/engine/jaxb/groupcombine"
 	xmlns:executiontracking="hydrograph/engine/jaxb/executiontracking" xmlns:gen_seq="hydrograph/engine/jaxb/generatesequence"
 	xmlns:cumulate="hydrograph/engine/jaxb/cumulate" xmlns:lookup="hydrograph/engine/jaxb/lookup"
 	xmlns:normalize="hydrograph/engine/jaxb/normalize" xmlns:pbe="hydrograph/engine/jaxb/partitionByExpression"
@@ -23,6 +23,8 @@
 		namespace="hydrograph/engine/jaxb/transform" />
 	<xs:import schemaLocation="./aggregate/aggregate-types.xsd"
 		namespace="hydrograph/engine/jaxb/aggregate" />
+	<xs:import schemaLocation="./groupcombine/groupcombine-types.xsd"
+			   namespace="hydrograph/engine/jaxb/groupcombine" />
 	<xs:import schemaLocation="./join/join-types.xsd" namespace="hydrograph/engine/jaxb/join" />
 	<xs:import schemaLocation="./filter/filter-types.xsd"
 		namespace="hydrograph/engine/jaxb/filter" />
@@ -88,6 +90,16 @@
 					<xs:element name="primaryKeys" type="aggregate:type-primary-key-fields" />
 					<xs:element name="secondaryKeys" type="aggregate:type-secondary-key-fields"
 						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="groupcombine">
+		<xs:complexContent>
+			<xs:extension base="groupcombine:groupcombine-base">
+				<xs:sequence>
+					<xs:element name="primaryKeys" type="groupcombine:type-primary-key-fields" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>

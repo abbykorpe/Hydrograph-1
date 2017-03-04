@@ -42,6 +42,7 @@ public class Operation implements Serializable{
 	private Properties operationProperties;
 	private String expression;
 	private String accumulatorInitialValue;
+	private String mergeExpression;
 	private boolean isExpressionPresent;
 	private OperationOutputField[] operationFields;
 
@@ -80,7 +81,22 @@ public class Operation implements Serializable{
 	public void setExpression(String expression) {
 		this.expression = expression;
 	}
-	
+
+	/**
+	 * @return the mergeExpression
+	 */
+	public String getMergeExpression() {
+		return mergeExpression;
+	}
+
+	/**
+	 * @param mergeExpression
+	 *            the mergeExpression to set
+	 */
+	public void setMergeExpression(String mergeExpression) {
+		this.mergeExpression = mergeExpression;
+	}
+
 	/**
 	 * @return the operationClass
 	 */
