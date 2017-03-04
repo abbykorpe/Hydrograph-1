@@ -1,14 +1,14 @@
 package hydrograph.engine.spark.operation.handler
 
 import hydrograph.engine.spark.core.reusablerow._
-import hydrograph.engine.transformation.userfunctions.base.{AggregatorTransformBase, BufferField, BufferSchema}
+import hydrograph.engine.transformation.userfunctions.base.{GroupCombineTransformBase, BufferField, BufferSchema}
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
 import org.apache.spark.sql.types.{StructField, _}
 
 import scala.collection.JavaConversions._
 
-case class AggregateCustomHandler(aggregatorTransform: AggregatorTransformBase, inSchema: StructType, outSchema: StructType, isDeterministic: Boolean) extends UserDefinedAggregateFunction {
+case class GroupCombineCustomHandler(aggregatorTransform: GroupCombineTransformBase, inSchema: StructType, outSchema: StructType, isDeterministic: Boolean) extends UserDefinedAggregateFunction {
 
   def inputSchema: StructType = inSchema
 
@@ -44,7 +44,7 @@ case class AggregateCustomHandler(aggregatorTransform: AggregatorTransformBase, 
     Row.fromSeq(output)
   }
 
-  def createBufferSchema(aggregatorTransformBase: AggregatorTransformBase): StructType = {
+  def createBufferSchema(aggregatorTransformBase: GroupCombineTransformBase): StructType = {
     val bufferSchema: BufferSchema = aggregatorTransformBase.initBufferSchema()
     var bufferFieldMap: Map[String, BufferField] = Map()
         for(bufferField <- bufferSchema.getSchema){

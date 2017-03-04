@@ -26,7 +26,7 @@ import java.io.Serializable;
  *
  * @author bitwise
  */
-public interface AggregatorTransformBase extends Serializable {
+public interface GroupCombineTransformBase extends Serializable {
 
 //    public void prepare(Properties props, ArrayList<String> inputFields, ArrayList<String> outputFields,
 //                        ArrayList<String> keyFields);
@@ -39,7 +39,7 @@ public interface AggregatorTransformBase extends Serializable {
 
     public void merge(ReusableRow bufferRow1, ReusableRow bufferRow2);
 
-    public ReusableRow evaluate(ReusableRow bufferRow, ReusableRow outRow);
+    public void evaluate(ReusableRow bufferRow, ReusableRow outRow);
 
 //    public void cleanup();
 

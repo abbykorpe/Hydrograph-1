@@ -1,11 +1,11 @@
-package hydrograph.engine.transformation.userfunctions.aggregate;
+package hydrograph.engine.transformation.userfunctions.groupcombine;
 
-import hydrograph.engine.transformation.userfunctions.base.AggregatorTransformBase;
+import hydrograph.engine.transformation.userfunctions.base.GroupCombineTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.BufferField;
 import hydrograph.engine.transformation.userfunctions.base.BufferSchema;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
-public class SumUDAF implements AggregatorTransformBase {
+public class Sum implements GroupCombineTransformBase {
 
     @Override
     public BufferSchema initBufferSchema() {
@@ -31,8 +31,7 @@ public class SumUDAF implements AggregatorTransformBase {
     }
 
     @Override
-    public ReusableRow evaluate(ReusableRow bufferRow, ReusableRow outRow) {
+    public void evaluate(ReusableRow bufferRow, ReusableRow outRow) {
         outRow.setField("sum", bufferRow.getField("sum"));
-        return outRow;
     }
 }
