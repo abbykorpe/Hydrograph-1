@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ooracle;
@@ -50,22 +50,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeUpdateKeys }
-     * 
-     */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeOracleField }
-     * 
-     */
-    public TypeOracleField createTypeOracleField() {
-        return new TypeOracleField();
-    }
-
-    /**
      * Create an instance of {@link TypePrimaryKeys }
      * 
      */
@@ -82,6 +66,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOracleField }
+     * 
+     */
+    public TypeOracleField createTypeOracleField() {
+        return new TypeOracleField();
+    }
+
+    /**
      * Create an instance of {@link TypeLoadChoice }
      * 
      */
@@ -90,11 +82,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputOracleBase }
+     * Create an instance of {@link TypeUpdateKeys }
      * 
      */
-    public TypeOutputOracleBase createTypeOutputOracleBase() {
-        return new TypeOutputOracleBase();
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
     }
 
     /**
@@ -103,6 +95,14 @@ public class ObjectFactory {
      */
     public TypeOracleRecord createTypeOracleRecord() {
         return new TypeOracleRecord();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputOracleBase }
+     * 
+     */
+    public TypeOutputOracleBase createTypeOutputOracleBase() {
+        return new TypeOutputOracleBase();
     }
 
 }

@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
 import hydrograph.engine.jaxb.ihivetextfile.HivePathType;
@@ -62,7 +61,6 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
  *         &lt;/element>
  *         &lt;element name="safe" type="{hydrograph/engine/jaxb/commontypes}boolean-value-type" minOccurs="0"/>
  *         &lt;element name="strict" type="{hydrograph/engine/jaxb/commontypes}boolean-value-type" minOccurs="0"/>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -81,8 +79,7 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
     "externalTablePath",
     "quote",
     "safe",
-    "strict",
-    "runtimeProperties"
+    "strict"
 })
 public class HiveTextFile
     extends TypeInputHiveTextFileDelimitedBase
@@ -99,7 +96,6 @@ public class HiveTextFile
     protected HiveTextFile.Quote quote;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
-    protected TypeProperties runtimeProperties;
 
     /**
      * Gets the value of the partitionKeys property.
@@ -315,30 +311,6 @@ public class HiveTextFile
      */
     public void setStrict(BooleanValueType value) {
         this.strict = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
 

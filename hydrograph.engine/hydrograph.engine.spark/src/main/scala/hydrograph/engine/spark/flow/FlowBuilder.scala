@@ -12,24 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.spark.flow
 
-import com.google.inject.Guice
-import hydrograph.engine.spark.components.ExecutionTrackingComponent
-import hydrograph.engine.spark.components.adapter.{ExecutionTrackingAdapter, OutputFileDelimitedAdapter}
+import hydrograph.engine.jaxb.commontypes._
+import hydrograph.engine.jaxb.main.Graph
+import hydrograph.engine.spark.components.adapter.ExecutionTrackingAdapter
 import hydrograph.engine.spark.components.adapter.base.{RunProgramAdapterBase, _}
 import hydrograph.engine.spark.components.base.{ComponentParameterBuilder, SparkFlow}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.util.LongAccumulator
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.storage.StorageLevel
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
-
 /**
-  * Created by gurdits on 10/17/2016.
+  * The Class FlowBuilder.
+  *
+  * @author Bitwise
+  *
   */
-
 
 class FlowBuilder(runtimeContext: RuntimeContext) {
 
@@ -62,6 +62,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
         adapterBase.createComponent(baseComponentParams)
         val inputDataFrame= adapterBase.asInstanceOf[InputAdatperBase].getComponent().createComponent()
+        setCacheLevel(extractRuntimeProperties(compID,runtimeContext.hydrographJob.getJAXBObject),inputDataFrame)
         outLinkMap +=(compID -> inputDataFrame)
       }
         else if(adapterBase.isInstanceOf[ExecutionTrackingAdapter]){
@@ -90,6 +91,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
         adapterBase.createComponent(baseComponentParams)
         val opDataFrame= adapterBase.asInstanceOf[OperationAdatperBase].getComponent().createComponent()
+        setCacheLevel(extractRuntimeProperties(compID,runtimeContext.hydrographJob.getJAXBObject),opDataFrame)
         outLinkMap +=(compID -> opDataFrame)
 
       }
@@ -99,6 +101,8 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
         adapterBase.createComponent(baseComponentParams)
         val opDataFrame= adapterBase.asInstanceOf[StraightPullAdatperBase].getComponent().createComponent()
+        setCacheLevel(extractRuntimeProperties(compID,runtimeContext.hydrographJob.getJAXBObject),opDataFrame)
+
         outLinkMap +=(compID -> opDataFrame)
       }
       else if (adapterBase.isInstanceOf[OutputAdatperBase]) {
@@ -123,7 +127,42 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 flow
   }
 
+  private def extractRuntimeProperties(compId:String,graph: Graph): TypeProperties ={
+    val jaxbObject=graph.getInputsOrOutputsOrStraightPulls.asScala
 
+    jaxbObject.filter(c=>c.getId.equals(compId)).head match {
+      case op: TypeInputComponent =>
+        op.asInstanceOf[TypeInputComponent].getRuntimeProperties
+      case op: TypeOutputComponent =>
+        op.asInstanceOf[TypeOutputComponent].getRuntimeProperties
+      case st: TypeStraightPullComponent =>
+        st.asInstanceOf[TypeStraightPullComponent].getRuntimeProperties
+      case op: TypeOperationsComponent =>
+        op.asInstanceOf[TypeOperationsComponent].getRuntimeProperties
+
+    }
+  }
+
+  private def setCacheLevel(typeProperty: TypeProperties,dataFrameMap:Map[String,DataFrame]): Unit ={
+    val splitter=":"
+    if(typeProperty!= null && typeProperty.getProperty!=null){
+      typeProperty.getProperty.asScala.filter(tp=> tp.getName.equalsIgnoreCase("cache")).foreach(tp=>{
+        if(tp.getValue.contains(splitter)) {
+          val storageType = tp.getValue.trim.substring(tp.getValue.trim.lastIndexOf(splitter) + 1, tp.getValue.trim.length)
+          val outSocketId = tp.getValue.trim.substring(0, tp.getValue.trim.lastIndexOf(splitter))
+          if(storageType.equalsIgnoreCase("disk"))
+            dataFrameMap(outSocketId).persist(StorageLevel.DISK_ONLY)
+          else if(storageType.equalsIgnoreCase("memory"))
+            dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_ONLY_SER)
+          else if(storageType.equalsIgnoreCase("memory_and_disk"))
+            dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_AND_DISK_SER)
+        }
+        else{
+          throw new RuntimeException("Cache Property value should be in proper format eg: outSocketID : One of \"disk,memory,memory_and_disk\", But user provides: "+ tp.getValue)
+        }
+      })
+    }
+  }
 }
 
 object FlowBuilder {

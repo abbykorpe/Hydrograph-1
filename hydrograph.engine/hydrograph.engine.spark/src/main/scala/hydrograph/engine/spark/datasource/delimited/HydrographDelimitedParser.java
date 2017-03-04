@@ -23,7 +23,14 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.time.FastDateFormat;
 
+/**
+ * The Class HydrographDelimitedParser.
+ *
+ * @author Bitwise
+ *
+ */
 public class HydrographDelimitedParser implements Serializable {
     static final String SPECIAL_REGEX_CHARS = "([\\]\\[|.*<>\\\\$^?()=!+])";
     static final String QUOTED_REGEX_FORMAT = "%2$s(?=(?:[^%1$s]*%1$s[^%1$s]*[^%1$s%2$s]*%1$s)*(?![^%1$s]*%1$s))";
@@ -53,17 +60,17 @@ public class HydrographDelimitedParser implements Serializable {
 
     protected StructType schema;
 
-    protected List<SimpleDateFormat> dateFormats;
+    protected List<FastDateFormat> dateFormats;
 
-    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, List<SimpleDateFormat> dateFormats,StructType schema) {
+    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, List<FastDateFormat> dateFormats,StructType schema) {
         reset(delimiter, quote, types, strict, safe, dateFormats, schema);
     }
 
-    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, boolean strict, boolean safe, List<SimpleDateFormat> dateFormats, StructType schema) {
+    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, boolean strict, boolean safe, List<FastDateFormat> dateFormats, StructType schema) {
         reset(delimiter, quote, types, strict, safe, dateFormats, schema/*, null, null*/);
     }
 
-    public void reset(String delimiter, String quote, Type[] types, boolean strict, boolean safe, List<SimpleDateFormat> dateFormats, StructType schema) {
+    public void reset(String delimiter, String quote, Type[] types, boolean strict, boolean safe, List<FastDateFormat> dateFormats, StructType schema) {
         if (delimiter == null || delimiter.isEmpty())
             throw new IllegalArgumentException("delimiter may not be null or empty");
 
@@ -206,7 +213,7 @@ public class HydrographDelimitedParser implements Serializable {
         for (int i = 0; i < split.length; i++) {
             try {
                 split[i] = !schema.apply(i).dataType().simpleString().equalsIgnoreCase("String") ? split[i].toString().trim() : split[i];
-                result[i] = TypeCast.inputValue(split[i], schema.apply(i).dataType(),
+                result[i] = TypeCast.inputValue(split[i].toString(), schema.apply(i).dataType(),
                         schema.apply(i).nullable(), "null", true, dateFormats.get(i));
             } catch (Exception exception) {
                 result[i] = null;

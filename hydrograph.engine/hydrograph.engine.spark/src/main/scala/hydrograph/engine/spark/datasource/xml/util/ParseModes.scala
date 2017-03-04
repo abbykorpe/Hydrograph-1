@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 package hydrograph.engine.spark.datasource.xml.util
-
+/**
+  * The Object ParseModes .
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object ParseModes {
   val PERMISSIVE_MODE = "PERMISSIVE"
   val DROP_MALFORMED_MODE = "DROPMALFORMED"

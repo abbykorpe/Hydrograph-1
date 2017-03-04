@@ -12,14 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.adapter
 
-import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.base.InputComponentBase
-import hydrograph.engine.spark.components.InputFileAvroComponent
-import hydrograph.engine.core.component.generator.InputFileDelimitedEntityGenerator
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.core.component.generator.InputFileAvroEntityGenerator
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
+import hydrograph.engine.spark.components.InputFileAvroComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
-
+import hydrograph.engine.spark.components.base.InputComponentBase
+import hydrograph.engine.spark.components.platform.BaseComponentParams
+/**
+  * The Class InputFileAvroAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileAvroAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
 
   private var inputFileAvroEntityGenerator:InputFileAvroEntityGenerator=null

@@ -20,7 +20,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.SparkException
 import org.apache.spark.sql._
 import org.junit.{Assert, Test}
-
+/**
+  * The Class InputFileFixedWidthComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileFixedWidthComponentTest {
 
   /**

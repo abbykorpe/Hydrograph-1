@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
 import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.omysql.TypeLoadChoice;
 import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
 
@@ -42,7 +41,6 @@ import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/omysql}type-load-choice"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -62,7 +60,6 @@ import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
     "username",
     "password",
     "chunkSize",
-    "runtimeProperties",
     "loadType"
 })
 public class Mysql
@@ -83,7 +80,6 @@ public class Mysql
     @XmlElement(required = true)
     protected ElementValueStringType password;
     protected ElementValueIntegerType chunkSize;
-    protected TypeProperties runtimeProperties;
     @XmlElement(required = true)
     protected TypeLoadChoice loadType;
 
@@ -277,30 +273,6 @@ public class Mysql
      */
     public void setChunkSize(ElementValueIntegerType value) {
         this.chunkSize = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
     /**

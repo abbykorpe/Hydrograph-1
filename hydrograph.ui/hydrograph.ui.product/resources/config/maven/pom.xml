@@ -19,13 +19,14 @@
 	<packaging>pom</packaging>
 
 	<repositories>
+	<!-- Add urls of Nexus/Artifactory in <url></url> tag -->
 		<repository>
 			<id>mavenRepo</id>
-			<url>http://10.30.127.67:9091/artifactory/libs-release</url>
+			<url></url>
 		</repository>
 		<repository>
 			<id>mavenRepo1</id>
-			<url>http://10.30.127.67:9091/artifactory/hydrograph-for-spark</url>
+			<url></url>
 		</repository>
 		<repository>
 			<id>mavenRepo2</id>

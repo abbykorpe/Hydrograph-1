@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.lookup;
@@ -42,11 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInSocket }
+     * Create an instance of {@link TypeKeyFields }
      * 
      */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
+    public TypeKeyFields createTypeKeyFields() {
+        return new TypeKeyFields();
     }
 
     /**
@@ -58,11 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeKeyFields }
+     * Create an instance of {@link TypeInSocket }
      * 
      */
-    public TypeKeyFields createTypeKeyFields() {
-        return new TypeKeyFields();
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
     }
 
     /**

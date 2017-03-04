@@ -29,9 +29,11 @@ import org.apache.spark.sql.{Column, Row, _}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
-
 /**
-  * Created by vaijnathp on 12/13/2016.
+  * The Class CumulateComponent.
+  *
+  * @author Bitwise
+  *
   */
 class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[CumulateTransformBase] with Serializable {

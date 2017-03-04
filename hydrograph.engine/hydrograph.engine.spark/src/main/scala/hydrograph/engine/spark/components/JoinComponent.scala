@@ -1,4 +1,5 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,7 +10,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ * *****************************************************************************
+ */
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.JoinEntity
@@ -20,12 +22,16 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ Column, DataFrame }
 import scala.collection.mutable.ListBuffer
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{ Logger, LoggerFactory }
+import org.apache.spark.sql.Row
+import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 10/18/2016.
- *
- */
+  * The Class JoinComponent.
+  *
+  * @author Bitwise
+  *
+  */
 
 class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
 
@@ -46,27 +52,20 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
       LOG.debug("Created Join Component '" + joinEntity.getComponentId + "' in Batch" + joinEntity.getBatch)
 
       join(joinOperationsSorted, passthroughFields, mapFields, copyOfInSocketFields)
-    }
-    catch {
+    } catch {
       case ex: RuntimeException =>
         LOG.error("Error in Join component '" + joinEntity.getComponentId + "', Error" + ex.getMessage, ex); throw ex
     }
   }
 
   def join(joinOperations: Array[JoinOperation], passthroughFields: List[(String, String)], mapFields: List[(String, String)], copyOfInSocketFields: List[(String, String)]): Map[String, DataFrame] = {
-    var outCollection = ListBuffer[(String, DataFrame)]()
 
-    val requiredUnusedSchemas = {
-      val tempBuffer = ListBuffer[(String, String, Array[String])]()
-      val requiredUnusedInputs = joinOperations.filter { j => ((j.recordRequired == true) && (j.unused == true)) }
-
-      requiredUnusedInputs.foreach { j =>
-        {
-          tempBuffer += ((j.inSocketId, j.unusedSocketId, j.dataFrame.columns.map(c => j.inSocketId + "_" + c)))
-        }
-      }
-      tempBuffer
-    }
+    var outMap = Map[String, DataFrame]()
+    val requiredUnusedJoinOps = joinOperations.filter(j => ((j.recordRequired == true) && (j.unused == true)))
+    val requiredUnusedInputs = requiredUnusedJoinOps.map(j => j.inSocketId)
+    var requiredUnusedProcessedInputs = ListBuffer[String]()
+    val mergedFields = (passthroughFields ++ mapFields ++ copyOfInSocketFields).distinct
+    val mergedInputs = mergedFields.map(f => f._1)
 
     def dfJoin(headJoin: JoinOperation, tailJoins: Array[JoinOperation]): JoinOperation = {
 
@@ -89,8 +88,8 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
     def innerJoin(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
       val rhsModified = getJoinOpWithPrefixAdded(rhs, rhs.inSocketId)
 
-      val lhsDF = lhs.dataFrame
-      val rhsDF = rhsModified.dataFrame
+      val lhsDF = lhs.dataFrame.select((lhs.keyFields ++ lhs.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+      val rhsDF = rhsModified.dataFrame.select((rhsModified.keyFields ++ rhsModified.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
       val lhsKeys = lhs.keyFields
       val rhsKeys = rhsModified.keyFields
 
@@ -102,8 +101,8 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
     def leftOuterJoin(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
       val rhsModified = getJoinOpWithPrefixAdded(rhs, rhs.inSocketId)
 
-      val lhsDF = lhs.dataFrame
-      val rhsDF = rhsModified.dataFrame
+      val lhsDF = lhs.dataFrame.select((lhs.keyFields ++ lhs.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+      val rhsDF = rhsModified.dataFrame.select((rhsModified.keyFields ++ rhsModified.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
       val lhsKeys = lhs.keyFields
       val rhsKeys = rhsModified.keyFields
 
@@ -115,57 +114,54 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
     def fullOuterJoin(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
       val rhsModified = getJoinOpWithPrefixAdded(rhs, rhs.inSocketId)
 
-      val lhsDF = lhs.dataFrame
-      val rhsDF = rhsModified.dataFrame
+      val lhsDF = lhs.dataFrame.select((lhs.keyFields ++ lhs.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+      val rhsDF = rhsModified.dataFrame.select((rhsModified.keyFields ++ rhsModified.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
       val lhsKeys = lhs.keyFields
       val rhsKeys = rhsModified.keyFields
 
       val joinedDF = lhsDF.join(rhsDF, createJoinKey(lhsKeys, rhsKeys), "outer")
 
-      val blankDF = joinedDF.filter("false")
+      val session = joinedDF.sparkSession
+      val blankDF = session.createDataFrame(session.sparkContext.emptyRDD[Row], StructType(lhsDF.schema.fields ++ rhsDF.schema.fields))
       val blankDF_lhs = blankDF.select(convertStructFieldsTOString(lhsDF.schema): _*)
       val blankDF_rhs = blankDF.select(convertStructFieldsTOString(rhsDF.schema): _*)
 
       val blankDF_lhs_prefixRemoved = blankDF_lhs.select(blankDF_lhs.columns.map(c => col(c).as(c.replaceFirst(lhs.inSocketId + "_", ""))): _*)
       val blankDF_rhs_prefixRemoved = blankDF_rhs.select(blankDF_rhs.columns.map(c => col(c).as(c.replaceFirst(rhs.inSocketId + "_", ""))): _*)
 
-      if (lhs.unused) (outCollection += ((lhs.unusedSocketId, blankDF_lhs_prefixRemoved)))
-      if (rhs.unused) (outCollection += ((rhs.unusedSocketId, blankDF_rhs_prefixRemoved)))
+      if (lhs.unused) (outMap += (lhs.unusedSocketId -> blankDF_lhs_prefixRemoved))
+      if (rhs.unused) (outMap += (rhs.unusedSocketId -> blankDF_rhs_prefixRemoved))
 
       JoinOperation("join", "in", joinedDF, lhsKeys, false, false, lhs.outSocketId, "")
     }
 
     def innerJoinForUnused(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
-      val rhsModified = getJoinOpWithPrefixAdded(rhs, rhs.inSocketId)
+      val outJoinOp = innerJoin(lhs, rhs)
 
-      val lhsDF = if (lhs.dataFrame.columns.contains("required")) (lhs.dataFrame.withColumnRenamed("required", "input1")) else (lhs.dataFrame.withColumn("input1", lit(1)))
-      val rhsDF = rhsModified.dataFrame
-      val lhsKeys = lhs.keyFields
-      val rhsKeys = rhsModified.keyFields
+      requiredUnusedProcessedInputs += lhs.inSocketId
+      requiredUnusedProcessedInputs += rhs.inSocketId
 
-      val joinedDF = lhsDF.join(rhsDF.withColumn("input2", lit(1)), createJoinKey(lhsKeys, rhsKeys), "outer")
-      val joinedDF1 = joinedDF.withColumn("required", when((col("input1") === 1) && (col("input2") === 1), 1).otherwise(null))
+      //Check if all required-unused inputs have been processed
+      if (requiredUnusedInputs.forall(p => requiredUnusedProcessedInputs.contains(p))) {
+        collectUnusedDFs(outJoinOp)
+      }
 
-      val outputDF = joinedDF1.drop("input1", "input2").filter("(required == 1)")
-      val unusedDF = joinedDF1.filter("(required is null)")
+      outJoinOp
+    }
 
-      val unusedDFSchema = unusedDF.columns
+    def collectUnusedDFs(outJoinOp: JoinOperation): Unit = {
 
-      requiredUnusedSchemas.foreach(sch => {
-        if (unusedDFSchema.contains(sch._3(0))) {
+      val lhsDF = outJoinOp.dataFrame.withColumn("input1", lit(1))
+      val lhsKeys = outJoinOp.keyFields
 
-          val partialUnusedDF = {
-            if (lhs.dataFrame.columns.contains(sch._3(0)))
-              unusedDF.select(sch._3.map(c => col(c).as(c.replaceFirst(sch._1 + "_", ""))): _*).filter("(input1 == 1)")
-            else
-              unusedDF.select(sch._3.map(c => col(c).as(c.replaceFirst(sch._1 + "_", ""))): _*).filter("(input2 == 1)")
-          }
+      requiredUnusedJoinOps.foreach(j => {
+        val joinedDF = lhsDF.join(j.dataFrame, createJoinKey(lhsKeys, j.keyFields), "outer")
+        val unusedDF = joinedDF.filter("(input1 is null)")
 
-          outCollection += ((sch._2, partialUnusedDF))
-        }
+        val unusedDF1 = unusedDF.select(j.dataFrame.columns.map(c => col(c)): _*)
+
+        outMap += (j.unusedSocketId -> unusedDF1)
       })
-
-      JoinOperation("join", "in", outputDF, lhsKeys, false, true, lhs.outSocketId, "")
     }
 
     def leftOuterJoinForUnused(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
@@ -186,8 +182,8 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
 
       val outputDF = joinedDF.filter("(input1 == 1)").select(convertStructFieldsTOString(lhsDF.schema) ++ convertStructFieldsTOString(rhsDF.schema): _*)
 
-      if (lhs.unused) (outCollection += ((lhs.unusedSocketId, unusedDF_lhs_prefixRemoved)))
-      if (rhs.unused) (outCollection += ((rhs.unusedSocketId, unusedDF_rhs_prefixRemoved)))
+      if (lhs.unused) (outMap += (lhs.unusedSocketId -> unusedDF_lhs_prefixRemoved))
+      if (rhs.unused) (outMap += (rhs.unusedSocketId -> unusedDF_rhs_prefixRemoved))
 
       JoinOperation("join", "in", outputDF, lhsKeys, false, true, lhs.outSocketId, "")
     }
@@ -204,32 +200,8 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
 
     def getDFWithRequiredFields(df: DataFrame): DataFrame = {
 
-      val mergedFields = (passthroughFields ++ mapFields ++ copyOfInSocketFields).distinct
       df.select(mergedFields.map(field => col(field._1).as(field._2)): _*)
 
-    }
-
-    def getResultMap(outCollection: ListBuffer[(String, DataFrame)]): Map[String, DataFrame] = {
-
-      def dfUnion(dfList: ListBuffer[DataFrame]): DataFrame = {
-        if (dfList.tail.length == 0)
-          dfList.head
-        else
-          dfList.head.union(dfUnion(dfList.tail))
-      }
-
-      var outMap = Map[String, DataFrame]()
-      val uniqueOutSocketIds = outCollection.map(f => f._1).distinct
-
-      uniqueOutSocketIds.foreach { id =>
-        {
-          val partialDfList = outCollection.filter(p => p._1 == id).map(f => f._2)
-          val combinedDf = dfUnion(partialDfList)
-          outMap += (id -> combinedDf)
-        }
-      }
-
-      outMap
     }
 
     val headJoinOp = getJoinOpWithPrefixAdded(joinOperations.head, joinOperations.head.inSocketId)
@@ -238,9 +210,9 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
 
     val outputResultDF = getDFWithRequiredFields(outputJoin.dataFrame)
 
-    outCollection += ((joinOperations.head.outSocketId, outputResultDF))
+    outMap += (joinOperations.head.outSocketId -> outputResultDF)
 
-    getResultMap(outCollection)
+    outMap
 
   }
 

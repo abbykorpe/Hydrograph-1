@@ -18,9 +18,11 @@ import hydrograph.engine.spark.components.NormalizeComponent
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
 /**
-  * Created by gurdits on 10/27/2016.
+  * The Class NormalizeAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class NormalizeAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase{
 

@@ -11,7 +11,10 @@ import org.apache.spark.sql._
 import org.junit.{Assert, Test}
 
 /**
-  * Created by bitwise on 2/9/2017.
+  * The Class OutputFileMixedSchemeComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class OutputFileMixedSchemeComponentTest {
 

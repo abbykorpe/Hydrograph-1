@@ -18,24 +18,25 @@ import hydrograph.engine.transformation.userfunctions.base.TransformBase;
 import java.util.ArrayList;
 import java.util.Properties;
 
+/**
+ * The Class TransformTest.
+ *
+ * @author Bitwise
+ */
 public class TransformTest implements TransformBase {
 
-	@Override
-	public void prepare(Properties props, ArrayList<String> inputFields,
-			ArrayList<String> outputFields) {
-		// TODO Auto-generated method stub
+    @Override
+    public void prepare(Properties props, ArrayList<String> inputFields,
+                        ArrayList<String> outputFields) {
+    }
 
-	}
+    @Override
+    public void transform(ReusableRow inputRow, ReusableRow outputRow) {
+        outputRow.setField(0, inputRow.getString(0).length());
+    }
 
-	@Override
-	public void transform(ReusableRow inputRow, ReusableRow outputRow) {
-		outputRow.setField(0, inputRow.getString(0).length());
-	}
-
-	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
-
-	}
+    @Override
+    public void cleanup() {
+    }
 
 }

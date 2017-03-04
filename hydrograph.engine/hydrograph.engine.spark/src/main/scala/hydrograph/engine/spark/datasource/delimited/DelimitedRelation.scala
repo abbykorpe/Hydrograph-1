@@ -18,7 +18,12 @@ import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
-
+/**
+  * The Class DelimitedRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class DelimitedRelation(
                               charset: String,
                               path: String,

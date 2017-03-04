@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.straightpulltypes;
@@ -42,35 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveDups.Keep }
+     * Create an instance of {@link RemoveDups }
      * 
      */
-    public RemoveDups.Keep createRemoveDupsKeep() {
-        return new RemoveDups.Keep();
-    }
-
-    /**
-     * Create an instance of {@link Clone }
-     * 
-     */
-    public Clone createClone() {
-        return new Clone();
-    }
-
-    /**
-     * Create an instance of {@link UnionAll }
-     * 
-     */
-    public UnionAll createUnionAll() {
-        return new UnionAll();
-    }
-
-    /**
-     * Create an instance of {@link Limit.MaxRecords }
-     * 
-     */
-    public Limit.MaxRecords createLimitMaxRecords() {
-        return new Limit.MaxRecords();
+    public RemoveDups createRemoveDups() {
+        return new RemoveDups();
     }
 
     /**
@@ -82,6 +58,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UnionAll }
+     * 
+     */
+    public UnionAll createUnionAll() {
+        return new UnionAll();
+    }
+
+    /**
+     * Create an instance of {@link Clone }
+     * 
+     */
+    public Clone createClone() {
+        return new Clone();
+    }
+
+    /**
      * Create an instance of {@link Sort }
      * 
      */
@@ -90,11 +82,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveDups }
+     * Create an instance of {@link RemoveDups.Keep }
      * 
      */
-    public RemoveDups createRemoveDups() {
-        return new RemoveDups();
+    public RemoveDups.Keep createRemoveDupsKeep() {
+        return new RemoveDups.Keep();
+    }
+
+    /**
+     * Create an instance of {@link Limit.MaxRecords }
+     * 
+     */
+    public Limit.MaxRecords createLimitMaxRecords() {
+        return new Limit.MaxRecords();
     }
 
 }

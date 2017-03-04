@@ -13,16 +13,21 @@
 package hydrograph.engine.spark.datasource.fixedwidth
 
 import java.text.SimpleDateFormat
-import java.util.{TimeZone, Locale}
+import org.apache.commons.lang3.time.FastDateFormat
+import java.util.{Locale, TimeZone}
 
 import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TypeCast}
 import org.apache.hadoop.fs.Path
-import org.apache.spark.SparkContext
 import org.apache.spark.sql.sources.{BaseRelation, CreatableRelationProvider, RelationProvider, SchemaRelationProvider}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
-
+/**
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
 
 class DefaultSource extends RelationProvider
   with SchemaRelationProvider with CreatableRelationProvider with Serializable {
@@ -31,18 +36,19 @@ class DefaultSource extends RelationProvider
     createRelation(sqlContext, parameters, null)
 
 
-  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
-    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
-    date.setLenient(false)
-    date.setTimeZone(TimeZone.getDefault)
+  private def fastDateFormat(dateFormat: String): FastDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+     val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+//    val date = new FastDateFormat(dateFormat, Locale.getDefault)
+//    date.setLenient(false)
+//    date.setTimeZone(TimeZone.getDefault)
     date
   } else null
 
-  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map{ e =>
+  private def getDateFormats(dateFormats: List[String]): List[FastDateFormat] = dateFormats.map{ e =>
     if (e.equals("null")){
       null
     } else {
-      simpleDateFormat(e)
+      fastDateFormat(e)
     }
   }
 
@@ -56,7 +62,7 @@ class DefaultSource extends RelationProvider
       LOG.error("Fixed Width Input File path cannot be null or empty")
       throw new RuntimeException("Delimited Input File path cannot be null or empty")
     }
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
     new FixedWidthRelation(componentName,path, parameters.get("charset").get,
       fieldLengths, parameters.getOrElse("strict","true").toBoolean,
@@ -76,7 +82,7 @@ class DefaultSource extends RelationProvider
     val schema = dataFrame.schema
     val fieldlen: Array[Int] = toIntLength( parameters.get("length").get)
     val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext,parameters.getOrElse("codec", null))
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
 
     val valueRDD = dataFrame.rdd.map(row => {
         if (strict && (row.length != fieldlen.length)){

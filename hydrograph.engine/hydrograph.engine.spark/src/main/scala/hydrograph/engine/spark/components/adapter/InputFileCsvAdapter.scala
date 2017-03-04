@@ -14,11 +14,16 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.InputFileDelimitedEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
+import hydrograph.engine.spark.components.InputFileCsvComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.{InputFileCsvComponent}
-
+/**
+  * The Class InputFileCsvAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileCsvAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
 
   private var inputFileDelimited:InputFileDelimitedEntityGenerator=null

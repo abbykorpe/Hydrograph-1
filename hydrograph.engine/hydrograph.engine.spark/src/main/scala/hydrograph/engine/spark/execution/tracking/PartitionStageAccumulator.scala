@@ -5,7 +5,10 @@ import org.apache.spark.util.AccumulatorV2
 import scala.collection.immutable.HashMap
 
 /**
-  * Created by aniketmo on 2/7/2017.
+  * The Class PartitionStageAccumulator.
+  *
+  * @author Bitwise
+  *
   */
 class PartitionStageAccumulator extends AccumulatorV2 [Long, HashMap[Int, HashMap[Int, (Long, Int)]]] {
   private var _map = new HashMap[Int, HashMap[Int, (Long, Int)]]()

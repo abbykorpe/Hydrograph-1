@@ -19,7 +19,12 @@ import hydrograph.engine.spark.components.InputTeradataComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class InputTeradataAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputTeradataAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
   private var inputTeradata:InputTeradataEntityGenerator=null
   private var inputTeradataComponent:InputTeradataComponent=null

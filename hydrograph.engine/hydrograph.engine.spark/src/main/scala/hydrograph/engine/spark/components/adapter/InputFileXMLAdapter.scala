@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by bitwise on 1/12/2017.
+  * The Class InputFileXMLAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class InputFileXMLAdapter (typeBaseComponent: TypeBaseComponent) extends InputAdatperBase {
 

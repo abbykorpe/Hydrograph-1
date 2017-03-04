@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ioracle;
@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputOracleOutSocket }
-     * 
-     */
-    public TypeInputOracleOutSocket createTypeInputOracleOutSocket() {
-        return new TypeInputOracleOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeInputOracleBase }
      * 
      */
     public TypeInputOracleBase createTypeInputOracleBase() {
         return new TypeInputOracleBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputOracleOutSocket }
+     * 
+     */
+    public TypeInputOracleOutSocket createTypeInputOracleOutSocket() {
+        return new TypeInputOracleOutSocket();
     }
 
 }

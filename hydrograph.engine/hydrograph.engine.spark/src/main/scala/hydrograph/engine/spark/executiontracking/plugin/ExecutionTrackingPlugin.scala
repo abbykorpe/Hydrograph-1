@@ -17,7 +17,7 @@ import hydrograph.engine.core.utilities.SocketUtilities
 import hydrograph.engine.execution.tracking.ComponentInfo
 import hydrograph.engine.jaxb.commontypes._
 import hydrograph.engine.jaxb.operationstypes.Executiontracking
-import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow, SparkFlow}
+import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.execution.tracking.{ComponentMapping, JobInfo}
 import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.scheduler._
@@ -27,7 +27,12 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-
+/**
+  * The Class Component.
+  *
+  * @author Bitwise
+  *
+  */
 class Component(val compId:String,val compName:String,val batch:String,val outSocket:String,val newComponentId:String,val inSocketsPresent:Boolean){
 
   override def equals(obj: scala.Any): Boolean = {

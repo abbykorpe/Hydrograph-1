@@ -12,5 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.spark.generaterecord.utils;
 
-
+/**
+  * The Class FieldEntity.
+  *
+  * @author Bitwise
+  *
+  */
 case class FieldEntity(defaultValue:String,rangeFromValue:String,rangeToValue:String,fieldLength:Int,fieldFormat:String,fieldScale:Int)  

@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 package hydrograph.engine.spark.datasource.csv
 
 import java.text.SimpleDateFormat
@@ -18,31 +18,30 @@ import java.util.{Locale, TimeZone}
 import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TextFile, TypeCast}
 import org.apache.commons.csv.CSVFormat
 import org.apache.hadoop.fs.Path
-import org.apache.spark.SparkContext
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
+import org.apache.commons.lang3.time.FastDateFormat    
 
 /**
- * Provides access to CSV data from pure SQL statements (i.e. for users of the
- * JDBC server).
- */
-class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with CreatableRelationProvider {
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
+class DefaultSource extends RelationProvider with SchemaRelationProvider with CreatableRelationProvider {
 
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String]): BaseRelation = {
     createRelation(sqlContext, parameters, null)
   }
 
-
-
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): CsvRelation = {
 
-
     val filePath = parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
-    val filesystemPath = new Path(filePath)
-    val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
-    val path=if(fs.exists(filesystemPath)) filePath else  sys.error(" Provided file path:[\""+filePath+"\"] does not exist ")
+//    val filesystemPath = new Path(filePath)
+//    val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
+    val path=filePath
 
     val delimiter = parameters.getOrElse("delimiter", ",").charAt(0)
     val dateFormats = parameters.getOrElse("dateFormats", "null")
@@ -57,7 +56,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     }
     val useHeader = parameters.getOrElse("header", "false")
     val componentId = parameters.getOrElse("componentId", "")
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
 
     val headerFlag = if (useHeader.equals("true")) {
@@ -69,7 +68,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     }
 
 
-     val safe = parameters.getOrElse("safe", "false")
+    val safe = parameters.getOrElse("safe", "false")
     val safeFlag = if (safe.equals("true")) {
       true
     } else if (safe.equals("false")) {
@@ -99,36 +98,36 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     }
     val charset = parameters.getOrElse("charset", TextFile.DEFAULT_CHARSET.name())
 
-      CsvRelation(
-        componentId,
-        charset,
-        path,
-        headerFlag,
-        delimiter,
-        quoteChar,
-        treatEmptyValuesAsNullsFlag,
-        dateFormat,
-        safeFlag,
-        strictFlag,
-        schema
-      )(sqlContext)
+    CsvRelation(
+      componentId,
+      charset,
+      path,
+      headerFlag,
+      delimiter,
+      quoteChar,
+      treatEmptyValuesAsNullsFlag,
+      dateFormat,
+      safeFlag,
+      strictFlag,
+      schema
+    )(sqlContext)
   }
 
-  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map { e =>
+  private def getDateFormats(dateFormats: List[String]): List[FastDateFormat] = dateFormats.map { e =>
     if (e.equals("null")) {
       null
     } else {
-      simpleDateFormat(e)
+      fastDateFormat(e)
     }
   }
 
-  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!dateFormat.equalsIgnoreCase("null")) {
-    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
-    date.setLenient(false)
-    date.setTimeZone(TimeZone.getDefault)
+  private def fastDateFormat(dateFormat: String): FastDateFormat = if (!dateFormat.equalsIgnoreCase("null")) {
+      val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+//    val date = new FastDateFormat(dateFormat, Locale.getDefault)
+//    date.setLenient(false)
+//    date.setTimeZone(TimeZone.getDefault)
     date
   } else null
-
 
 
   /*Saving Data in csv format*/
@@ -174,7 +173,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
 
     //    val dateFormatter: SimpleDateFormat = new SimpleDateFormat(dateFormat)
     val dateFormats = parameters.getOrElse("dateFormats", "null")
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
     val delimiterChar = if (delimiter.length == 1) {
       delimiter.charAt(0)
@@ -199,10 +198,9 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
       "" // There is no need to generate header in this case
     }
 
-    val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext,parameters.getOrElse("codec", null))
+    val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext, parameters.getOrElse("codec", null))
     val schema = dataFrame.schema
     val schemaFields = schema.fields
-
 
 
     val strRDD = dataFrame.rdd.mapPartitions {
@@ -212,7 +210,6 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
           var firstRow: Boolean = generateHeader
 
           override def hasNext: Boolean = iter.hasNext || firstRow
-
 
           override def next: String = {
             if (iter.nonEmpty) {
@@ -225,7 +222,6 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
                 fields(i) = TypeCast.outputValue(tuple.get(i), schemaFields(i).dataType, dateFormat(i))
                 i = i + 1
               }
-
 
               val row: String = csvFormat.format(fields: _*)
 

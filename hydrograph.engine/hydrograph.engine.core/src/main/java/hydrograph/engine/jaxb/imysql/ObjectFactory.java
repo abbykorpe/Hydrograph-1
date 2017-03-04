@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.imysql;
@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputMysqlOutSocket }
-     * 
-     */
-    public TypeInputMysqlOutSocket createTypeInputMysqlOutSocket() {
-        return new TypeInputMysqlOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeInputMysqlBase }
      * 
      */
     public TypeInputMysqlBase createTypeInputMysqlBase() {
         return new TypeInputMysqlBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputMysqlOutSocket }
+     * 
+     */
+    public TypeInputMysqlOutSocket createTypeInputMysqlOutSocket() {
+        return new TypeInputMysqlOutSocket();
     }
 
 }

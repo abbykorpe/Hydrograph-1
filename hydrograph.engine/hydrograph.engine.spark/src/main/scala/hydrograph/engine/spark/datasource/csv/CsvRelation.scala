@@ -14,20 +14,25 @@
  */
 package hydrograph.engine.spark.datasource.csv
 
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-import hydrograph.engine.spark.datasource.utils.{ TextFile, TypeCast }
+import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.commons.csv._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
-import org.apache.spark.sql.sources.{ BaseRelation, TableScan }
+import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types._
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import scala.collection.JavaConversions._
-import scala.util.control.NonFatal
+import org.slf4j.{Logger, LoggerFactory}
 
+import scala.collection.JavaConversions._
+import org.apache.commons.lang3.time.FastDateFormat
+
+/**
+  * The Class CsvRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class CsvRelation(componentId:String,
   charset: String,
   path: String,
@@ -35,7 +40,7 @@ case class CsvRelation(componentId:String,
   delimiter: Char,
   quote: Character,
   treatEmptyValuesAsNullsFlag: Boolean,
-  dateFormats: List[SimpleDateFormat],
+  dateFormats: List[FastDateFormat],
   safe: Boolean,
   strict: Boolean,
   userSchema: StructType = null)(@transient val sqlContext: SQLContext)
@@ -50,8 +55,8 @@ case class CsvRelation(componentId:String,
   private def tokenRdd(baseRDD: RDD[String], header: Array[String]): RDD[String] = {
 
     // If header is set, make sure firstLine is materialized before sending to executors.
-    val firstLine = baseRDD.first
-    val filterLine = if (useHeader) firstLine else null
+//    val firstLine = baseRDD.first
+    val filterLine = if (useHeader) baseRDD.first else null
 
     if (useHeader) baseRDD.filter(_ != filterLine) else baseRDD
 
@@ -88,6 +93,10 @@ case class CsvRelation(componentId:String,
     } else {
       var index = 0
       val record = records.head
+      if (strict && schemaFields.length < record.size()) {
+      LOG.error("\n Line no being parsed => " + line+" has fields size is more than schema field size");
+        throw new RuntimeException("\n Line no being parsed => " + line+" has fields size is more than schema field size")
+      }
       while (index < schemaFields.length) {
         val field = schemaFields(index)
 
@@ -102,7 +111,7 @@ case class CsvRelation(componentId:String,
             Some(Row.fromSeq(tokenArray))
             }
             else{
-              LOG.error("Line being parsed => " + line);
+            LOG.error("\n Line no being parsed => " + line+" has fields size is not matching with schema field size");
             throw new RuntimeException("\n Line no being parsed => " + line+" has fields size not matching with schema field size  ");
             }
 

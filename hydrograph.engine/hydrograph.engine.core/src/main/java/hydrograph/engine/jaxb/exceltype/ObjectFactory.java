@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.exceltype;
@@ -50,6 +50,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeExcelRecord }
+     * 
+     */
+    public TypeExcelRecord createTypeExcelRecord() {
+        return new TypeExcelRecord();
+    }
+
+    /**
      * Create an instance of {@link TypeExcelOutSocket }
      * 
      */
@@ -63,14 +71,6 @@ public class ObjectFactory {
      */
     public TypeFileExcelBase createTypeFileExcelBase() {
         return new TypeFileExcelBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeExcelRecord }
-     * 
-     */
-    public TypeExcelRecord createTypeExcelRecord() {
-        return new TypeExcelRecord();
     }
 
 }

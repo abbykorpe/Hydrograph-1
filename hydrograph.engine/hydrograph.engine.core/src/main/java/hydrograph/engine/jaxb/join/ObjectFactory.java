@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.join;
@@ -42,22 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JoinBase }
-     * 
-     */
-    public JoinBase createJoinBase() {
-        return new JoinBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeInSocket }
-     * 
-     */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeKeyFields }
      * 
      */
@@ -71,6 +55,22 @@ public class ObjectFactory {
      */
     public TypeOutSocket createTypeOutSocket() {
         return new TypeOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeInSocket }
+     * 
+     */
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link JoinBase }
+     * 
+     */
+    public JoinBase createJoinBase() {
+        return new JoinBase();
     }
 
 }

@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.igr;
@@ -50,6 +50,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeGenerateRecordOutSocket }
+     * 
+     */
+    public TypeGenerateRecordOutSocket createTypeGenerateRecordOutSocket() {
+        return new TypeGenerateRecordOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeGenerateRecordRecord }
      * 
      */
@@ -63,14 +71,6 @@ public class ObjectFactory {
      */
     public TypeGenerateRecordField createTypeGenerateRecordField() {
         return new TypeGenerateRecordField();
-    }
-
-    /**
-     * Create an instance of {@link TypeGenerateRecordOutSocket }
-     * 
-     */
-    public TypeGenerateRecordOutSocket createTypeGenerateRecordOutSocket() {
-        return new TypeGenerateRecordOutSocket();
     }
 
 }

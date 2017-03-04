@@ -5,6 +5,12 @@ import javax.xml.stream.events._
 
 import hydrograph.engine.spark.datasource.xml.XmlOptions
 
+/**
+  * The Object StaxXmlParserUtils.
+  *
+  * @author Bitwise
+  *
+  */
 private[xml] object StaxXmlParserUtils {
   /**
    * Skips elements until this meets the given type of a element

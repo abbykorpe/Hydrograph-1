@@ -17,7 +17,10 @@ import org.junit.{Assert, Test}
 
 
 /**
-  * Created by santlalg on 1/17/2017.
+  * The Class DbUpdateTableDescriptorTest.
+  *
+  * @author Bitwise
+  *
   */
 class DbUpdateTableDescriptorTest {
 

@@ -22,19 +22,24 @@ import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.hadoop.mapred.InputFormat
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.sources.{BaseRelation, TableScan}
-import org.apache.spark.sql.types.{StructField, StructType}
+import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
-
+import org.apache.commons.lang3.time.FastDateFormat
 import scala.collection.JavaConversions._
-
+/**
+  * The Class MixedSchemeRelation.
+  *
+  * @author Bitwise
+  *
+  */
 case class MixedSchemeRelation(componentName:String,
                                 location: Option[String],
                                 charset: String,
                                 quote: String,
                                 safe: Boolean,
                                 strict: Boolean,
-                                dateFormats:  List[SimpleDateFormat],
+                                dateFormats:  List[FastDateFormat],
                                 lengthsAndDelimiters: String,
                                 lengthsAndDelimitersType: String,
                                 nullValue: String,

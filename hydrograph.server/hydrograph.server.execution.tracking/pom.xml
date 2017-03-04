@@ -12,10 +12,11 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+	<!-- Add urls of Nexus/Artifactory in <url></url> tag -->
 	<repositories>
 		<repository>
 			<id>mavenRepo</id>
-			<url>http://10.30.127.67:9091/artifactory/libs-release/</url>
+			<url></url>
 		</repository>
 	</repositories>
 	<build>

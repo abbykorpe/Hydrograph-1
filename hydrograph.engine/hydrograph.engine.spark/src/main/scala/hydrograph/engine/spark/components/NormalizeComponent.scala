@@ -12,10 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components
 
-import java.util
-
 import hydrograph.engine.core.component.entity.NormalizeEntity
-import hydrograph.engine.core.component.entity.elements.Operation
 import hydrograph.engine.core.component.utils.OperationUtils
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.NormalizeForExpression
@@ -26,9 +23,9 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.EncoderHelper
 import hydrograph.engine.spark.core.reusablerow.{InputReusableRow, OutputReusableRow, RowToReusableMapper}
 import hydrograph.engine.transformation.userfunctions.base.{NormalizeTransformBase, OutputDispatcher}
-import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions.seqAsJavaList
@@ -36,7 +33,10 @@ import scala.collection.JavaConverters.{asScalaBufferConverter, seqAsJavaListCon
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by bitwise on 10/18/2016.
+  * The Class NormalizeComponent.
+  *
+  * @author Bitwise
+  *
   */
 class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) 
  extends OperationComponentBase with Serializable with OperationHelper[NormalizeTransformBase] {

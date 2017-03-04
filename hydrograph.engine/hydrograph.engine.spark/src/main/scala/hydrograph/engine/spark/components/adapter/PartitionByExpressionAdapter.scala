@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by santlalg on 12/15/2016.
+  * The Class PartitionByExpressionAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class PartitionByExpressionAdapter (typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase{
 

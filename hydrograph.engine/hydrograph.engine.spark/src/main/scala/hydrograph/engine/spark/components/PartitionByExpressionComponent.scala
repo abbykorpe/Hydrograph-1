@@ -21,10 +21,14 @@ import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpres
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 
 /**
-  * Created by santlalg on 12/15/2016.
+  * The Class PartitionByExpressionComponent.
+  *
+  * @author Bitwise
+  *
   */
 class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExpressionEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[CustomPartitionExpression] with Serializable {

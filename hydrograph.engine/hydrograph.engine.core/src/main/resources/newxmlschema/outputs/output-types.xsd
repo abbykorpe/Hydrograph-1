@@ -23,6 +23,7 @@
            xmlns:omysql="hydrograph/engine/jaxb/omysql"
            xmlns:excel="hydrograph/engine/jaxb/exceltype"
            xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
+           xmlns:osparkredshift="hydrograph/engine/jaxb/osparkredshift"
            xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
            xmlns:oteradata="hydrograph/engine/jaxb/oteradata"
            xmlns:ofxml="hydrograph/engine/jaxb/ofxml"
@@ -55,6 +56,8 @@
                namespace="hydrograph/engine/jaxb/omysql"/>
     <xs:import schemaLocation="./redshift-type/output-redshift-types.xsd"
                namespace="hydrograph/engine/jaxb/oredshift"/>
+    <xs:import schemaLocation="./sparkredshift-type/output-sparkredshift-types.xsd"
+               namespace="hydrograph/engine/jaxb/osparkredshift"/>
     <xs:import schemaLocation="./oracle-type/output-oracle-types.xsd"
                namespace="hydrograph/engine/jaxb/ooracle"/>
     <xs:import schemaLocation="./teradata-type/output-teradata-types.xsd"
@@ -79,8 +82,6 @@
                             <xs:attribute name="uri" type="xs:string" use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -113,8 +114,6 @@
                                           use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                     <xs:element name="quote" minOccurs="0">
                         <xs:complexType>
                             <xs:attribute name="value" type="xs:string"/>
@@ -175,8 +174,6 @@
                             <xs:attribute name="uri" type="xs:string" use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -201,8 +198,6 @@
                                           use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -228,8 +223,6 @@
                             <xs:attribute name="uri" type="xs:string" use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -248,8 +241,6 @@
                                 minOccurs="1" maxOccurs="1"/>
                     <xs:element name="externalTablePath" type="ohiveparquet:hive_path_type"
                                 maxOccurs="1" minOccurs="0"/>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -283,8 +274,6 @@
                                 minOccurs="0"/>
                     <xs:element name="strict" type="cmn:boolean-value-type"
                                 minOccurs="0"/>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -309,8 +298,6 @@
                                           use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                     <xs:element name="quote" minOccurs="0">
                         <xs:complexType>
                             <xs:attribute name="value" type="xs:string"/>
@@ -330,8 +317,6 @@
                             <xs:attribute name="uri" type="xs:string" use="required"/>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                     <xs:element name="subjobParameter" type="cmn:type-properties"
                                 minOccurs="0"/>
                 </xs:sequence>
@@ -343,8 +328,6 @@
         <xs:complexContent>
             <xs:extension base="ofsubjob:type-output-file-delimited-subjob">
                 <xs:sequence>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -369,8 +352,6 @@
                     <xs:element name="password" type="cmn:element-value-string-type"
                                 minOccurs="1" maxOccurs="1"/>
                     <xs:element name="chunkSize" type="cmn:element-value-integer-type"
-                                minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
                                 minOccurs="0" maxOccurs="1"/>
                     <xs:element name="loadType" type="omysql:type-load-choice"
                                 minOccurs="1"/>
@@ -403,12 +384,40 @@
                                 minOccurs="0" maxOccurs="1"/>
                     <xs:element name="schemaName" type="cmn:element-value-string-type"
                                 minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="sparkredshift">
+        <xs:complexContent>
+            <xs:extension base="osparkredshift:type-output-sparkredshift-base">
+                <xs:sequence>
+                    <xs:element name="databaseName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="hostName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="port" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="tableName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="userName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="password" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="temps3dir" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="loadType" type="oredshift:type-load-choice"
+                                minOccurs="1"/>
+                    <xs:element name="chunkSize" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="schemaName" type="cmn:element-value-string-type"
                                 minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
 
     <xs:complexType name="oracle">
         <xs:complexContent>
@@ -433,8 +442,6 @@
                     <xs:element name="schemaName" type="cmn:element-value-string-type"
                                 minOccurs="0" maxOccurs="1"/>
                     <xs:element name="chunkSize" type="cmn:element-value-integer-type"
-                                minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
                                 minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:extension>
@@ -463,8 +470,6 @@
                                 minOccurs="1" maxOccurs="1"/>
                     <!-- <xs:element name="chunkSize" type="cmn:element-value-integer-type"
                                 minOccurs="0" maxOccurs="1" /> -->
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0" maxOccurs="1"/>
                     <xs:element name="loadType" type="oteradata:type-load-choice"
                                 minOccurs="1"/>
                 </xs:sequence>
@@ -506,8 +511,6 @@
                                           use="required" />
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -531,8 +534,6 @@
                                 minOccurs="0" maxOccurs="1" />
                     <xs:element name="update" type="ojdbcupdate:type-update-keys"
                                 minOccurs="1" maxOccurs="1" />
-                    <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0" maxOccurs="1" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

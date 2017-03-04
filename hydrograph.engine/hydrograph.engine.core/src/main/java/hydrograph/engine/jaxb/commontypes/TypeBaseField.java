@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
@@ -29,6 +29,7 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeJdbcupdateField;
 import hydrograph.engine.jaxb.omysql.TypeMysqlField;
 import hydrograph.engine.jaxb.ooracle.TypeOracleField;
 import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
+import hydrograph.engine.jaxb.osparkredshift.TypeSparkredshiftField;
 import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
 
 
@@ -61,6 +62,7 @@ import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedField.class,
     TypeMysqlField.class,
     TypeRedshiftField.class,
+    TypeSparkredshiftField.class,
     TypeOracleField.class,
     TypeTeradataField.class,
     TypeExcelField.class,

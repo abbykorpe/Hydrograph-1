@@ -26,7 +26,10 @@ import org.junit.Assert._
 import org.junit.Test
 
 /**
-  * Created by vaijnathp on 20/12/2016.
+  * The Class FilterComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class FilterComponentTest {
 

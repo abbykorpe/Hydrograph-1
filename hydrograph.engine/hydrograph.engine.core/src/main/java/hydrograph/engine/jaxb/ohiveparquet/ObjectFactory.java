@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ohiveparquet;
@@ -42,43 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HiveType }
-     * 
-     */
-    public HiveType createHiveType() {
-        return new HiveType();
-    }
-
-    /**
      * Create an instance of {@link HivePartitionFieldsType }
      * 
      */
     public HivePartitionFieldsType createHivePartitionFieldsType() {
         return new HivePartitionFieldsType();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link PartitionFieldBasicType }
-     * 
-     */
-    public PartitionFieldBasicType createPartitionFieldBasicType() {
-        return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputDelimitedInSocket }
-     * 
-     */
-    public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
-        return new TypeOutputDelimitedInSocket();
     }
 
     /**
@@ -90,11 +58,43 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutputDelimitedInSocket }
+     * 
+     */
+    public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
+        return new TypeOutputDelimitedInSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeOutputFileDelimitedBase }
      * 
      */
     public TypeOutputFileDelimitedBase createTypeOutputFileDelimitedBase() {
         return new TypeOutputFileDelimitedBase();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link HiveType }
+     * 
+     */
+    public HiveType createHiveType() {
+        return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
     }
 
 }

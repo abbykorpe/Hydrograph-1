@@ -8,14 +8,17 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.commandtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -114,29 +117,29 @@ public class RunSQL
 {
 
     @XmlElement(name = "database_Connection_Name", required = true)
-    protected DatabaseConnectionName databaseConnectionName;
+    protected RunSQL.DatabaseConnectionName databaseConnectionName;
     @XmlElement(name = "server_Name", required = true)
-    protected ServerName serverName;
+    protected RunSQL.ServerName serverName;
     @XmlElement(name = "port_Number", required = true)
-    protected PortNumber portNumber;
+    protected RunSQL.PortNumber portNumber;
     @XmlElement(name = "database_Name", required = true)
-    protected DatabaseName databaseName;
+    protected RunSQL.DatabaseName databaseName;
     @XmlElement(name = "db_User_Name", required = true)
-    protected DbUserName dbUserName;
+    protected RunSQL.DbUserName dbUserName;
     @XmlElement(name = "db_Password", required = true)
-    protected DbPassword dbPassword;
+    protected RunSQL.DbPassword dbPassword;
     @XmlElement(required = true)
-    protected QueryCommand queryCommand;
+    protected RunSQL.QueryCommand queryCommand;
 
     /**
      * Gets the value of the databaseConnectionName property.
      * 
      * @return
      *     possible object is
-     *     {@link DatabaseConnectionName }
+     *     {@link RunSQL.DatabaseConnectionName }
      *     
      */
-    public DatabaseConnectionName getDatabaseConnectionName() {
+    public RunSQL.DatabaseConnectionName getDatabaseConnectionName() {
         return databaseConnectionName;
     }
 
@@ -145,10 +148,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link DatabaseConnectionName }
+     *     {@link RunSQL.DatabaseConnectionName }
      *     
      */
-    public void setDatabaseConnectionName(DatabaseConnectionName value) {
+    public void setDatabaseConnectionName(RunSQL.DatabaseConnectionName value) {
         this.databaseConnectionName = value;
     }
 
@@ -157,10 +160,10 @@ public class RunSQL
      * 
      * @return
      *     possible object is
-     *     {@link ServerName }
+     *     {@link RunSQL.ServerName }
      *     
      */
-    public ServerName getServerName() {
+    public RunSQL.ServerName getServerName() {
         return serverName;
     }
 
@@ -169,10 +172,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link ServerName }
+     *     {@link RunSQL.ServerName }
      *     
      */
-    public void setServerName(ServerName value) {
+    public void setServerName(RunSQL.ServerName value) {
         this.serverName = value;
     }
 
@@ -181,10 +184,10 @@ public class RunSQL
      * 
      * @return
      *     possible object is
-     *     {@link PortNumber }
+     *     {@link RunSQL.PortNumber }
      *     
      */
-    public PortNumber getPortNumber() {
+    public RunSQL.PortNumber getPortNumber() {
         return portNumber;
     }
 
@@ -193,10 +196,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link PortNumber }
+     *     {@link RunSQL.PortNumber }
      *     
      */
-    public void setPortNumber(PortNumber value) {
+    public void setPortNumber(RunSQL.PortNumber value) {
         this.portNumber = value;
     }
 
@@ -205,10 +208,10 @@ public class RunSQL
      * 
      * @return
      *     possible object is
-     *     {@link DatabaseName }
+     *     {@link RunSQL.DatabaseName }
      *     
      */
-    public DatabaseName getDatabaseName() {
+    public RunSQL.DatabaseName getDatabaseName() {
         return databaseName;
     }
 
@@ -217,10 +220,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link DatabaseName }
+     *     {@link RunSQL.DatabaseName }
      *     
      */
-    public void setDatabaseName(DatabaseName value) {
+    public void setDatabaseName(RunSQL.DatabaseName value) {
         this.databaseName = value;
     }
 
@@ -229,10 +232,10 @@ public class RunSQL
      * 
      * @return
      *     possible object is
-     *     {@link DbUserName }
+     *     {@link RunSQL.DbUserName }
      *     
      */
-    public DbUserName getDbUserName() {
+    public RunSQL.DbUserName getDbUserName() {
         return dbUserName;
     }
 
@@ -241,10 +244,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link DbUserName }
+     *     {@link RunSQL.DbUserName }
      *     
      */
-    public void setDbUserName(DbUserName value) {
+    public void setDbUserName(RunSQL.DbUserName value) {
         this.dbUserName = value;
     }
 
@@ -253,10 +256,10 @@ public class RunSQL
      * 
      * @return
      *     possible object is
-     *     {@link DbPassword }
+     *     {@link RunSQL.DbPassword }
      *     
      */
-    public DbPassword getDbPassword() {
+    public RunSQL.DbPassword getDbPassword() {
         return dbPassword;
     }
 
@@ -265,10 +268,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link DbPassword }
+     *     {@link RunSQL.DbPassword }
      *     
      */
-    public void setDbPassword(DbPassword value) {
+    public void setDbPassword(RunSQL.DbPassword value) {
         this.dbPassword = value;
     }
 
@@ -277,10 +280,10 @@ public class RunSQL
      * 
      * @return
      *     possible object is
-     *     {@link QueryCommand }
+     *     {@link RunSQL.QueryCommand }
      *     
      */
-    public QueryCommand getQueryCommand() {
+    public RunSQL.QueryCommand getQueryCommand() {
         return queryCommand;
     }
 
@@ -289,10 +292,10 @@ public class RunSQL
      * 
      * @param value
      *     allowed object is
-     *     {@link QueryCommand }
+     *     {@link RunSQL.QueryCommand }
      *     
      */
-    public void setQueryCommand(QueryCommand value) {
+    public void setQueryCommand(RunSQL.QueryCommand value) {
         this.queryCommand = value;
     }
 

@@ -26,7 +26,10 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 /**
-  * Created by santlalg on 1/19/2017.
+  * The Class OutputJdbcUpdateComponent.
+  *
+  * @author Bitwise
+  *
   */
 class OutputJdbcUpdateComponent (outputJdbcUpdateEntity: OutputJdbcUpdateEntity, cp:
 BaseComponentParams) extends SparkFlow {

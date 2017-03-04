@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.commandtypes;
@@ -42,27 +42,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Subjob.Path }
+     * Create an instance of {@link Hplsql }
      * 
      */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
+    public Hplsql createHplsql() {
+        return new Hplsql();
     }
 
     /**
-     * Create an instance of {@link Hplsql.Execute.Query }
+     * Create an instance of {@link Hplsql.Execute }
      * 
      */
-    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
-        return new Hplsql.Execute.Query();
+    public Hplsql.Execute createHplsqlExecute() {
+        return new Hplsql.Execute();
     }
 
     /**
-     * Create an instance of {@link RunProgram.Command }
+     * Create an instance of {@link RunSQL }
      * 
      */
-    public RunProgram.Command createRunProgramCommand() {
-        return new RunProgram.Command();
+    public RunSQL createRunSQL() {
+        return new RunSQL();
     }
 
     /**
@@ -71,14 +71,6 @@ public class ObjectFactory {
      */
     public RunProgram createRunProgram() {
         return new RunProgram();
-    }
-
-    /**
-     * Create an instance of {@link FtpIn.Host }
-     * 
-     */
-    public FtpIn.Host createFtpInHost() {
-        return new FtpIn.Host();
     }
 
     /**
@@ -98,6 +90,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Hplsql.Command }
+     * 
+     */
+    public Hplsql.Command createHplsqlCommand() {
+        return new Hplsql.Command();
+    }
+
+    /**
+     * Create an instance of {@link Hplsql.Execute.Query }
+     * 
+     */
+    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
+        return new Hplsql.Execute.Query();
+    }
+
+    /**
      * Create an instance of {@link Hplsql.Execute.Uri }
      * 
      */
@@ -106,27 +114,83 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hplsql }
+     * Create an instance of {@link RunSQL.DatabaseConnectionName }
      * 
      */
-    public Hplsql createHplsql() {
-        return new Hplsql();
+    public RunSQL.DatabaseConnectionName createRunSQLDatabaseConnectionName() {
+        return new RunSQL.DatabaseConnectionName();
     }
 
     /**
-     * Create an instance of {@link Hplsql.Execute }
+     * Create an instance of {@link RunSQL.ServerName }
      * 
      */
-    public Hplsql.Execute createHplsqlExecute() {
-        return new Hplsql.Execute();
+    public RunSQL.ServerName createRunSQLServerName() {
+        return new RunSQL.ServerName();
     }
 
     /**
-     * Create an instance of {@link Hplsql.Command }
+     * Create an instance of {@link RunSQL.PortNumber }
      * 
      */
-    public Hplsql.Command createHplsqlCommand() {
-        return new Hplsql.Command();
+    public RunSQL.PortNumber createRunSQLPortNumber() {
+        return new RunSQL.PortNumber();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DatabaseName }
+     * 
+     */
+    public RunSQL.DatabaseName createRunSQLDatabaseName() {
+        return new RunSQL.DatabaseName();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DbUserName }
+     * 
+     */
+    public RunSQL.DbUserName createRunSQLDbUserName() {
+        return new RunSQL.DbUserName();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DbPassword }
+     * 
+     */
+    public RunSQL.DbPassword createRunSQLDbPassword() {
+        return new RunSQL.DbPassword();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.QueryCommand }
+     * 
+     */
+    public RunSQL.QueryCommand createRunSQLQueryCommand() {
+        return new RunSQL.QueryCommand();
+    }
+
+    /**
+     * Create an instance of {@link RunProgram.Command }
+     * 
+     */
+    public RunProgram.Command createRunProgramCommand() {
+        return new RunProgram.Command();
+    }
+
+    /**
+     * Create an instance of {@link FtpIn.Host }
+     * 
+     */
+    public FtpIn.Host createFtpInHost() {
+        return new FtpIn.Host();
+    }
+
+    /**
+     * Create an instance of {@link Subjob.Path }
+     * 
+     */
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
 }

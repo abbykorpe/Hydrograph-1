@@ -12,18 +12,19 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components
 
-import scala.collection.JavaConverters.seqAsJavaListConverter
-
-import org.junit.Assert
-import org.junit.Test
-
 import hydrograph.engine.core.component.entity.LimitEntity
 import hydrograph.engine.core.component.entity.elements.OutSocket
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.testing.wrapper.Bucket
-import hydrograph.engine.testing.wrapper.DataBuilder
-import hydrograph.engine.testing.wrapper.Fields
+import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
+import org.junit.{Assert, Test}
 
+import scala.collection.JavaConverters.seqAsJavaListConverter
+/**
+  * The Class LimitComponentTest.
+  *
+  * @author Bitwise
+  *
+  */
 class LimitComponentTest{
   
   @Test

@@ -21,7 +21,10 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.junit.{Assert, Test}
 
 /**
-  * Created by bitwise on 12/28/2016.
+  * The Class InputFileMixedSchemeComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class InputFileMixedSchemeComponentTest {
 

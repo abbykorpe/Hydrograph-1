@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ihiveparquet;
@@ -42,22 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionFieldBasicType }
-     * 
-     */
-    public PartitionFieldBasicType createPartitionFieldBasicType() {
-        return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputDelimitedOutSocket }
-     * 
-     */
-    public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
-        return new TypeInputDelimitedOutSocket();
-    }
-
-    /**
      * Create an instance of {@link HivePartitionFieldsType }
      * 
      */
@@ -74,11 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionColumn }
+     * Create an instance of {@link TypeInputDelimitedOutSocket }
      * 
      */
-    public PartitionColumn createPartitionColumn() {
-        return new PartitionColumn();
+    public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
+        return new TypeInputDelimitedOutSocket();
     }
 
     /**
@@ -90,14 +74,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HivePartitionFilterType }
-     * 
-     */
-    public HivePartitionFilterType createHivePartitionFilterType() {
-        return new HivePartitionFilterType();
-    }
-
-    /**
      * Create an instance of {@link FieldBasicType }
      * 
      */
@@ -106,11 +82,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link HivePartitionFilterType }
+     * 
+     */
+    public HivePartitionFilterType createHivePartitionFilterType() {
+        return new HivePartitionFilterType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionColumn }
+     * 
+     */
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
+    }
+
+    /**
      * Create an instance of {@link HiveType }
      * 
      */
     public HiveType createHiveType() {
         return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
     }
 
 }

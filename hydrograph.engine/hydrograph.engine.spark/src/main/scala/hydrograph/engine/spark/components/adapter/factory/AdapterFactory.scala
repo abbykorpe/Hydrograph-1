@@ -25,7 +25,10 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable
 
 /**
-  * Created by gurdits on 10/26/2016.
+  * The Class AdapterFactory.
+  *
+  * @author Bitwise
+  *
   */
 class AdapterFactory(graph: Graph) {
 

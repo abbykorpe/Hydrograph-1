@@ -22,7 +22,10 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 
 /**
-  * Created by bitwise on 1/12/2017.
+  * The Class OutputFileXMLComponent.
+  *
+  * @author Bitwise
+  *
   */
 class OutputFileXMLComponent (outputFileXMLEntity: OutputFileXMLEntity, cp:
 BaseComponentParams) extends SparkFlow with Serializable {

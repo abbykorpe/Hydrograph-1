@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.filter;
@@ -42,14 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterOperation }
-     * 
-     */
-    public TypeFilterOperation createTypeFilterOperation() {
-        return new TypeFilterOperation();
-    }
-
-    /**
      * Create an instance of {@link TypeFilterInSocket }
      * 
      */
@@ -58,19 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterOperationInputFields }
+     * Create an instance of {@link TypeFilterOperation }
      * 
      */
-    public TypeFilterOperationInputFields createTypeFilterOperationInputFields() {
-        return new TypeFilterOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeFilterOperationInputField }
-     * 
-     */
-    public TypeFilterOperationInputField createTypeFilterOperationInputField() {
-        return new TypeFilterOperationInputField();
+    public TypeFilterOperation createTypeFilterOperation() {
+        return new TypeFilterOperation();
     }
 
     /**
@@ -82,11 +66,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeFilterOperationInputField }
+     * 
+     */
+    public TypeFilterOperationInputField createTypeFilterOperationInputField() {
+        return new TypeFilterOperationInputField();
+    }
+
+    /**
      * Create an instance of {@link TypeFilterOutSocket }
      * 
      */
     public TypeFilterOutSocket createTypeFilterOutSocket() {
         return new TypeFilterOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeFilterOperationInputFields }
+     * 
+     */
+    public TypeFilterOperationInputFields createTypeFilterOperationInputFields() {
+        return new TypeFilterOperationInputFields();
     }
 
 }

@@ -20,7 +20,10 @@ import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**
-  * Created by santlalg on 1/19/2017.
+  * The Class OutputJdbcUpdateAdapter.
+  *
+  * @author Bitwise
+  *
   */
 class OutputJdbcUpdateAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase {
 

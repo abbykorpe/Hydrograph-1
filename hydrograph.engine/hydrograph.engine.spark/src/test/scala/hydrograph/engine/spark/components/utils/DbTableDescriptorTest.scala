@@ -15,9 +15,11 @@ package hydrograph.engine.spark.components.utils
 import org.junit.{Assert, Test}
 
 /**
-  * Created by santlalg on 12/20/2016.
+  * The Class DbTableDescriptorTest.
+  *
+  * @author Bitwise
+  *
   */
-
 class DbTableDescriptorTest {
 
   @Test

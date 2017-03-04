@@ -12,13 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils;
 
-/**
- * Created by santlalg on 12/12/2016.
- */
-
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * The Enum JavaToSQLTypeMapping .
+ *
+ * @author Bitwise
+ *
+ */
 public enum JavaToSQLTypeMapping {
     MySQL() {
         @Override

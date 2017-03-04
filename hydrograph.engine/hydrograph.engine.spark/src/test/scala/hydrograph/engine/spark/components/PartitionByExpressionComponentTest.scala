@@ -23,7 +23,10 @@ import junit.framework.Assert
 import org.junit.Test
 
 /**
-  * Created by santlalg on 12/15/2016.
+  * The Class PartitionByExpressionComponentTest.
+  *
+  * @author Bitwise
+  *
   */
 class PartitionByExpressionComponentTest {
 

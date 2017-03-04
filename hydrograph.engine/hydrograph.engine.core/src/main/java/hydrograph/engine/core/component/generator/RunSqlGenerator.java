@@ -56,7 +56,7 @@ public class RunSqlGenerator extends CommandComponentGeneratorBase {
         runSqlEntity.setComponentName(runSQL.getName());
         runSqlEntity.setDatabaseConnectionName(runSQL.getDatabaseConnectionName().getDatabaseConnectionName());
         runSqlEntity.setDatabaseName(runSQL.getDatabaseName().getDatabaseName());
-        runSqlEntity.setDbPassword(runSQL.getDbPassword().getPassword());
+        runSqlEntity.setDbPwd(runSQL.getDbPassword().getPassword());
         runSqlEntity.setPortNumber(runSQL.getPortNumber() != null ? runSQL.getPortNumber().getPortNumber() : "");
         runSqlEntity.setDbUserName(runSQL.getDbUserName().getUserName());
         runSqlEntity.setQueryCommand(runSQL.getQueryCommand().getQuery());

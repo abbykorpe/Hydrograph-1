@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.limit;
@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeLimitInSocket }
      * 
      */
     public TypeLimitInSocket createTypeLimitInSocket() {
         return new TypeLimitInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
     }
 
     /**
@@ -66,19 +66,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeLimitOutSocket }
      * 
      */
     public TypeLimitOutSocket createTypeLimitOutSocket() {
         return new TypeLimitOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * 
+     */
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
     }
 
 }

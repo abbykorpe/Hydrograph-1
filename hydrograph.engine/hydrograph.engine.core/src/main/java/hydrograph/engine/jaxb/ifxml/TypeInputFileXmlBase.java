@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ifxml;
@@ -32,6 +32,7 @@ import hydrograph.engine.jaxb.inputtypes.XmlFile;
  *     &lt;restriction base="{hydrograph/engine/jaxb/commontypes}type-input-component">
  *       &lt;sequence>
  *         &lt;element name="outSocket" type="{hydrograph/engine/jaxb/ifxml}type-input-xml-out-socket"/>
+ *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

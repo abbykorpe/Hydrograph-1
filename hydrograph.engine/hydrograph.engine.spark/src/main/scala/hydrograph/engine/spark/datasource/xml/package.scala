@@ -15,13 +15,18 @@
  */
 package hydrograph.engine.spark.datasource
 
+import hydrograph.engine.spark.datasource.xml.util.XmlFile
+import org.apache.hadoop.io.compress.CompressionCodec
+import org.apache.spark.sql.{DataFrame, SQLContext}
+
 import scala.collection.Map
 
-import org.apache.hadoop.io.compress.CompressionCodec
-
-import org.apache.spark.sql.{DataFrame, SQLContext}
-import hydrograph.engine.spark.datasource.xml.util.XmlFile
-
+/**
+  * The Package Object xml.
+  *
+  * @author Bitwise
+  *
+  */
 package object xml {
   /**
    * Adds a method, `xmlFile`, to [[SQLContext]] that allows reading XML data.

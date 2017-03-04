@@ -21,7 +21,10 @@ import org.apache.spark.sql.sources.{BaseRelation, CreatableRelationProvider}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by santlal and amiya on 14-01-2017.
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
   */
 class DefaultSource extends CreatableRelationProvider with Serializable {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[DefaultSource])

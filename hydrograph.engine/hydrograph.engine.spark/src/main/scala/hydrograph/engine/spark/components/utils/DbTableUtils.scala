@@ -14,14 +14,18 @@ package hydrograph.engine.spark.components.utils
 
 import java.util
 
-import hydrograph.engine.core.component.entity.{OutputJdbcUpdateEntity, OutputRDBMSEntity}
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.component.entity.{OutputJdbcUpdateEntity, OutputRDBMSEntity}
 import hydrograph.engine.jaxb.commontypes.TypeFieldName
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 
 /**
-  * Created by santlalg on 12/12/2016.
+  * The Class DbTableUtils.
+  *
+  * @author Bitwise
+  *
   */
 case class DbTableUtils() {
 

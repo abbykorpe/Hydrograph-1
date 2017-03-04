@@ -21,11 +21,12 @@ import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 
-
 /**
- * Provides access to XML data from pure SQL statements (i.e. for users of the
- * JDBC server).
- */
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
 class DefaultSource
   extends RelationProvider with SchemaRelationProvider with CreatableRelationProvider {
 

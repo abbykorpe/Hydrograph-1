@@ -159,7 +159,18 @@ public class Messages extends NLS {
 	public static String COMBO_LOG_LEVELS;
 	public static String OPEN_SUBJOB_THROUGH_TRACK_SUBJOB;
   	public static String RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB;
+
+
+	public static String FILE_NAME_ERROR;
+	public static String PROPERTY_FILE_ERROR;
 	
+  	public static String HYDROGRAPH_CONSOLE_PREFERANCE_PAGE_GROUP_NAME;
+  	public static String PREFERANCE_CONSOLE_BUFFER_SIZE;
+  	public static String PREFERANCE_PAGE_NOTE;
+  	public static String UI_PERFORMANCE_NOTE_IN_CASE_OF_CHANGE_IN_BUFFER_SIZE;
+  	public static String PREFERANCE_ERROR_INVALID_CONSOLE_BUFFER_INPUT;
+  	public static String PREFERANCE_ERROR_EMPTY_CONSOLE_BUFFER_FIELD;
+  	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

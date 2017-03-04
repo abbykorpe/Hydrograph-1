@@ -19,8 +19,11 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 10/11/2016.
- */
+  * The Class RowHelper.
+  *
+  * @author Bitwise
+  *
+  */
 object RowHelper {
 
   def extractPassthroughFields(passthroughFieldsPos: Array[Int], row: Row): Array[Any] = {

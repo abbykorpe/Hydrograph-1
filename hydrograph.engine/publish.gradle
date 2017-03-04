@@ -14,9 +14,9 @@
 	apply plugin: 'com.jfrog.artifactory'
     apply plugin: 'maven-publish'
     artifactory {
-        contextUrl = "http://10.30.127.67:9091/artifactory"
+        contextUrl = ""
         publish {
-         contextUrl = "http://10.30.127.67:9091/artifactory"
+         contextUrl = ""
             repository {
             repoKey = 'hydrograph-for-spark'
             username = "${repoUserName}" 

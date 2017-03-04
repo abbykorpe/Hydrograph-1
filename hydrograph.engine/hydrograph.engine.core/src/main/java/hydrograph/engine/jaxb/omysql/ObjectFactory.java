@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.omysql;
@@ -42,14 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeMysqlRecord }
-     * 
-     */
-    public TypeMysqlRecord createTypeMysqlRecord() {
-        return new TypeMysqlRecord();
-    }
-
-    /**
      * Create an instance of {@link TypePrimaryKeys }
      * 
      */
@@ -58,27 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputMysqlBase }
+     * Create an instance of {@link TypeMysqlRecord }
      * 
      */
-    public TypeOutputMysqlBase createTypeOutputMysqlBase() {
-        return new TypeOutputMysqlBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeUpdateKeys }
-     * 
-     */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeLoadChoice }
-     * 
-     */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
+    public TypeMysqlRecord createTypeMysqlRecord() {
+        return new TypeMysqlRecord();
     }
 
     /**
@@ -90,11 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputMysqlOutSocket }
+     * Create an instance of {@link TypeOutputMysqlBase }
      * 
      */
-    public TypeOutputMysqlOutSocket createTypeOutputMysqlOutSocket() {
-        return new TypeOutputMysqlOutSocket();
+    public TypeOutputMysqlBase createTypeOutputMysqlBase() {
+        return new TypeOutputMysqlBase();
     }
 
     /**
@@ -103,6 +79,30 @@ public class ObjectFactory {
      */
     public TypeMysqlField createTypeMysqlField() {
         return new TypeMysqlField();
+    }
+
+    /**
+     * Create an instance of {@link TypeLoadChoice }
+     * 
+     */
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
+    }
+
+    /**
+     * Create an instance of {@link TypeUpdateKeys }
+     * 
+     */
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputMysqlOutSocket }
+     * 
+     */
+    public TypeOutputMysqlOutSocket createTypeOutputMysqlOutSocket() {
+        return new TypeOutputMysqlOutSocket();
     }
 
 }

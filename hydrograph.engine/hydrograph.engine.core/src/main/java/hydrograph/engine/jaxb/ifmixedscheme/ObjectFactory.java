@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ifmixedscheme;
@@ -50,6 +50,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeMixedRecord }
+     * 
+     */
+    public TypeMixedRecord createTypeMixedRecord() {
+        return new TypeMixedRecord();
+    }
+
+    /**
      * Create an instance of {@link TypeMixedField }
      * 
      */
@@ -63,14 +71,6 @@ public class ObjectFactory {
      */
     public TypeInputMixedOutSocket createTypeInputMixedOutSocket() {
         return new TypeInputMixedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeMixedRecord }
-     * 
-     */
-    public TypeMixedRecord createTypeMixedRecord() {
-        return new TypeMixedRecord();
     }
 
 }

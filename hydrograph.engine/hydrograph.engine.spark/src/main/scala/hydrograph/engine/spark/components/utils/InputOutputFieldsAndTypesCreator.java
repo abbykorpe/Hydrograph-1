@@ -18,7 +18,10 @@ import hydrograph.engine.core.component.entity.elements.SchemaField;
 import java.lang.reflect.Type;
 
 /**
- * Created by santlalg on 12/12/2016.
+ * The Class InputOutputFieldsAndTypesCreator.
+ *
+ * @author Bitwise
+ *
  */
 public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 

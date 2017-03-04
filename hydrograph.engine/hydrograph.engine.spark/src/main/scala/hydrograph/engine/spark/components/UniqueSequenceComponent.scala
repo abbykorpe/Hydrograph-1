@@ -7,11 +7,17 @@ import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.transformation.userfunctions.base.TransformBase
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{Column, DataFrame, Row}
+import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.LoggerFactory
+
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
-
+/**
+  * The Class UniqueSequenceComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class UniqueSequenceComponent(uniqueSequenceEntity: UniqueSequenceEntity, baseComponentParams: BaseComponentParams) extends OperationComponentBase with OperationHelper[TransformBase] with Serializable {
 
   val LOG = LoggerFactory.getLogger(classOf[UniqueSequenceComponent])

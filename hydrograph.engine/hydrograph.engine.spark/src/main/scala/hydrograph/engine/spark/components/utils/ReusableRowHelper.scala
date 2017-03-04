@@ -20,8 +20,11 @@ import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import scala.collection.mutable.ListBuffer
 
 /**
- * Created by gurdits on 10/20/2016.
- */
+  * The Class ReusableRowHelper.
+  *
+  * @author Bitwise
+  *
+  */
 class ReusableRowHelper(opr: Operation, fm: FieldManupulating) {
   def determineInputFieldPositionsForFilter(scheme: Seq[String]): ListBuffer[Int] ={
     val inputPos = new ListBuffer[Int]()

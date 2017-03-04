@@ -17,15 +17,18 @@ import java.sql.{Date, Timestamp}
 import java.text.{NumberFormat, SimpleDateFormat}
 import java.util.{Locale, TimeZone}
 
+import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
-import org.apache.spark.sql._
 
 import scala.collection.JavaConverters._
 import scala.util.Try
 
 /**
-  * Created by gurdits on 12/3/2016.
+  * The Class Bucket.
+  *
+  * @author Bitwise
+  *
   */
 
 case class Bucket(fields: Fields, dataFrame: DataFrame) {

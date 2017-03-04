@@ -12,23 +12,21 @@
   *******************************************************************************/
 package hydrograph.engine.spark.components
 
-import java.util
-
 import hydrograph.engine.core.component.entity.JoinEntity
 import hydrograph.engine.core.component.entity.elements._
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
-import org.apache.spark.sql._
+import org.apache.spark.sql.{DataFrame, _}
 import org.junit.{Assert, Ignore, Test}
-import org.apache.spark.sql.{Column, DataFrame, Row}
-
 
 import scala.collection.JavaConverters._
 
 /**
-  * Created by shivarajn on 1/6/2017.
+  * The Class JoinComponentTest.
+  *
+  * @author Bitwise
+  *
   */
-
   @Ignore
 class JoinComponentTest {
 

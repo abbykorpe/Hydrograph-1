@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
 
 
@@ -32,7 +31,6 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
  *   &lt;complexContent>
  *     &lt;extension base="{hydrograph/engine/jaxb/igr}type-generate-record-base">
  *       &lt;sequence>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *         &lt;element name="recordCount">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -52,40 +50,14 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "generateRecord", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
-    "runtimeProperties",
     "recordCount"
 })
 public class GenerateRecord
     extends TypeGenerateRecordBase
 {
 
-    protected TypeProperties runtimeProperties;
     @XmlElement(required = true)
     protected GenerateRecord.RecordCount recordCount;
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
-    }
 
     /**
      * Gets the value of the recordCount property.

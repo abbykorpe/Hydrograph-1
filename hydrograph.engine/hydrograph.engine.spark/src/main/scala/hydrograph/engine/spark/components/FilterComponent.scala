@@ -23,9 +23,11 @@ import org.apache.spark.sql.{DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
-
 /**
-  * Created by vaijnathp on 12/12/2016.
+  * The Class FilterComponent.
+  *
+  * @author Bitwise
+  *
   */
 class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[FilterBase] with Serializable {

@@ -19,11 +19,12 @@ import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.hadoop.mapred.TextInputFormat
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-
 /**
- * Utility class to read text file 
- *
- */
+  * The Object TextFile .
+  *
+  * @author Bitwise
+  *
+  */
 object TextFile {
 
   val DEFAULT_CHARSET = Charset.forName("UTF-8")

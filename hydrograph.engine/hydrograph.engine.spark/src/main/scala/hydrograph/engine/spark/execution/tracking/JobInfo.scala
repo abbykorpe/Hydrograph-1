@@ -16,7 +16,6 @@ import hydrograph.engine.execution.tracking
 import hydrograph.engine.execution.tracking.ComponentInfo
 import hydrograph.engine.spark.executiontracking.plugin.Component
 import org.apache.spark.scheduler._
-import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
 import scala.collection.immutable.HashMap
@@ -24,7 +23,10 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by Aniketmo on 12/22/2016.
+  * The Class JobInfo.
+  *
+  * @author Bitwise
+  *
   */
 class JobInfo(listOfComponents: mutable.ListBuffer[Component]) {
 

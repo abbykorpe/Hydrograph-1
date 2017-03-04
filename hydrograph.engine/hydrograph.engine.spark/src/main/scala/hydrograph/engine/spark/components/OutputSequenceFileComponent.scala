@@ -19,7 +19,10 @@ import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by gurdits on 12/28/2016.
+  * The Class OutputSequenceFileComponent.
+  *
+  * @author Bitwise
+  *
   */
 class OutputSequenceFileComponent(outputSequenceEntity: OutputFileSequenceFormatEntity, baseComponentParams:
 BaseComponentParams) extends SparkFlow {

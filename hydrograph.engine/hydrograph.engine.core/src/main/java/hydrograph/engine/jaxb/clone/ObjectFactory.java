@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.clone;
@@ -50,19 +50,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeCloneInSocket }
-     * 
-     */
-    public TypeCloneInSocket createTypeCloneInSocket() {
-        return new TypeCloneInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
     public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
         return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeCloneInSocket }
+     * 
+     */
+    public TypeCloneInSocket createTypeCloneInSocket() {
+        return new TypeCloneInSocket();
     }
 
 }

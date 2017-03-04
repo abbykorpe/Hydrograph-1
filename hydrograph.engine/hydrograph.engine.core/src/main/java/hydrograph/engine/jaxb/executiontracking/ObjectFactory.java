@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.executiontracking;
@@ -58,19 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeExecutiontrackingOperationInputFields }
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
-    public TypeExecutiontrackingOperationInputFields createTypeExecutiontrackingOperationInputFields() {
-        return new TypeExecutiontrackingOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeExecutiontrackingOperationInputField }
-     * 
-     */
-    public TypeExecutiontrackingOperationInputField createTypeExecutiontrackingOperationInputField() {
-        return new TypeExecutiontrackingOperationInputField();
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
     }
 
     /**
@@ -82,11 +74,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * Create an instance of {@link TypeExecutiontrackingOperationInputField }
      * 
      */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
+    public TypeExecutiontrackingOperationInputField createTypeExecutiontrackingOperationInputField() {
+        return new TypeExecutiontrackingOperationInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeExecutiontrackingOperationInputFields }
+     * 
+     */
+    public TypeExecutiontrackingOperationInputFields createTypeExecutiontrackingOperationInputFields() {
+        return new TypeExecutiontrackingOperationInputFields();
     }
 
 }

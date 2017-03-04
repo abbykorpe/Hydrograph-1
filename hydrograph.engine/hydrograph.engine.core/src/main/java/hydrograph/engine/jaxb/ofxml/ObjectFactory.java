@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.ofxml;
@@ -42,22 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputXmlInSocket }
-     * 
-     */
-    public TypeOutputXmlInSocket createTypeOutputXmlInSocket() {
-        return new TypeOutputXmlInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputFileXmlBase }
-     * 
-     */
-    public TypeOutputFileXmlBase createTypeOutputFileXmlBase() {
-        return new TypeOutputFileXmlBase();
-    }
-
-    /**
      * Create an instance of {@link TypeXmlRecord }
      * 
      */
@@ -71,6 +55,22 @@ public class ObjectFactory {
      */
     public TypeXmlField createTypeXmlField() {
         return new TypeXmlField();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputFileXmlBase }
+     * 
+     */
+    public TypeOutputFileXmlBase createTypeOutputFileXmlBase() {
+        return new TypeOutputFileXmlBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputXmlInSocket }
+     * 
+     */
+    public TypeOutputXmlInSocket createTypeOutputXmlInSocket() {
+        return new TypeOutputXmlInSocket();
     }
 
 }

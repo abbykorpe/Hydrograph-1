@@ -27,7 +27,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-@SuppressWarnings("unused")
+/**
+ * The Class DelimitedAndFixedWidthRecordReader.
+ *
+ * @author Bitwise
+ *
+ */
 public class DelimitedAndFixedWidthRecordReader implements
 		RecordReader<LongWritable, Text> {
 

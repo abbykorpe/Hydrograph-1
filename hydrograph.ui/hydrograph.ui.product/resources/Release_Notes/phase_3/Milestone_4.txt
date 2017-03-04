@@ -11,7 +11,7 @@ Sr.No. <date> - [developer names] - description
 7.<07-Feb-17> - [Prateem Tadas] - Logging level added for console log.
 8.<07-Feb-17> - [Ashika Holkar] - Added Component Search and Place on Canvas functionality
 9.<16-Feb-17> - [Sonia Raheja] -User is unable to view data within subjob.
-
+10.<01-Mar-17> - [Shrirang Kumbhar] - Added preference page to limit console logs
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -79,3 +79,6 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 62.#698 - [shashank karnik]- Tool logs folder is missing from config/logger/tool_logs folder if tool gets launched through toolbar on windows.
 63.#739 - [shashank karnik]- Import job: Unique sequence component: Schema propagation issue.
 64.#714 - [Sonia Raheja] - On import of job tool show error symbol.
+65.#700 - [Sonia Raheja] - Error Message is getting displayed while deleting the job.
+66.#744 - [Vibhor Tyagi] - Need to add logger if user kill job successfully on MAC
+67.#743 - [shashank karnik]-When launch the tool from new toolbar, Execution tracking is not getting dispalyed due to Connection refused on host.

@@ -27,7 +27,10 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 /**
-  * Created by gurdits on 10/21/2016.
+  * The Class ComponentParameterBuilder.
+  *
+  * @author Bitwise
+  *
   */
 object ComponentParameterBuilder {
 

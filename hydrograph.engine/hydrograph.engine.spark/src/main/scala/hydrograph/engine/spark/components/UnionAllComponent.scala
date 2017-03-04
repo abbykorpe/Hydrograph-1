@@ -11,6 +11,12 @@ import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ListBuffer
 
+/**
+  * The Class UnionAllComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class UnionAllComponent(unionAllEntity: UnionAllEntity, componentsParams: BaseComponentParams)
   extends StraightPullComponentBase {
   val LOG = LoggerFactory.getLogger(classOf[UnionAllComponent])

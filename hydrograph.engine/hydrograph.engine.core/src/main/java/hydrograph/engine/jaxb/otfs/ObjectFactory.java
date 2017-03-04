@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.otfs;
@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputFileSequenceBase }
-     * 
-     */
-    public TypeOutputFileSequenceBase createTypeOutputFileSequenceBase() {
-        return new TypeOutputFileSequenceBase();
-    }
-
-    /**
      * Create an instance of {@link TypeOutputSequenceInSocket }
      * 
      */
     public TypeOutputSequenceInSocket createTypeOutputSequenceInSocket() {
         return new TypeOutputSequenceInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputFileSequenceBase }
+     * 
+     */
+    public TypeOutputFileSequenceBase createTypeOutputFileSequenceBase() {
+        return new TypeOutputFileSequenceBase();
     }
 
 }

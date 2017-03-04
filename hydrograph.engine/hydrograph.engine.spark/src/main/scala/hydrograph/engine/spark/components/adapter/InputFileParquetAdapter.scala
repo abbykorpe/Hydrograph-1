@@ -18,7 +18,12 @@ import hydrograph.engine.spark.components.InputFileParquetComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-
+/**
+  * The Class InputFileParquetAdapter.
+  *
+  * @author Bitwise
+  *
+  */
 class InputFileParquetAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase {
 
   private var inputFileParquet: InputFileParquetEntityGenerator = null

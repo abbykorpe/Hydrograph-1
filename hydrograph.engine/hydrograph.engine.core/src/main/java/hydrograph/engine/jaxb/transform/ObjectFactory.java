@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.transform;
@@ -42,6 +42,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeTransformOutSocket }
+     * 
+     */
+    public TypeTransformOutSocket createTypeTransformOutSocket() {
+        return new TypeTransformOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeTransformOperation }
      * 
      */
@@ -50,19 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformOperationInputField }
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
-    public TypeTransformOperationInputField createTypeTransformOperationInputField() {
-        return new TypeTransformOperationInputField();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformOutSocket }
-     * 
-     */
-    public TypeTransformOutSocket createTypeTransformOutSocket() {
-        return new TypeTransformOutSocket();
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
     }
 
     /**
@@ -74,11 +74,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * Create an instance of {@link TypeTransformOperationInputField }
      * 
      */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
+    public TypeTransformOperationInputField createTypeTransformOperationInputField() {
+        return new TypeTransformOperationInputField();
     }
 
     /**

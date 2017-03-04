@@ -14,7 +14,8 @@
 package hydrograph.engine.spark.datasource.delimited
 
 import java.text.SimpleDateFormat
-import java.util.{TimeZone, Locale}
+
+import java.util.{Locale, TimeZone}
 
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.hadoop.fs.{FileSystem, Path}
@@ -22,8 +23,15 @@ import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
-import scala.collection.JavaConversions._
+import org.apache.commons.lang3.time.FastDateFormat
 
+import scala.collection.JavaConversions._
+/**
+  * The Class DefaultSource.
+  *
+  * @author Bitwise
+  *
+  */
 class DefaultSource extends RelationProvider
   with SchemaRelationProvider with CreatableRelationProvider with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[DefaultSource])
@@ -36,18 +44,19 @@ class DefaultSource extends RelationProvider
     createRelation(sqlContext, parameters, null)
   }
 
-  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
-    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
-    date.setLenient(false)
-    date.setTimeZone(TimeZone.getDefault)
+  private def fastDateFormat(dateFormat: String): FastDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+      val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+//    val date = new FastDateFormat(dateFormat, Locale.getDefault)
+//    date.setLenient(false)
+//    date.setTimeZone(TimeZone.getDefault)
     date
   } else null
 
-  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map{ e =>
+  private def getDateFormats(dateFormats: List[String]): List[FastDateFormat] = dateFormats.map{ e =>
     if (e.equals("null")){
       null
     } else {
-      simpleDateFormat(e)
+      fastDateFormat(e)
     }
   }
 
@@ -72,7 +81,7 @@ class DefaultSource extends RelationProvider
       throw new RuntimeException("Delimited Input File path cannot be null or empty")
     }
 
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
     val delimitedParser = new HydrographDelimitedParser(
       delimiter,
@@ -140,7 +149,7 @@ class DefaultSource extends RelationProvider
     val generateHeader: Boolean = parameters.getOrElse("header", "true").toBoolean
     val schema: StructType = dataFrame.schema
 
-    val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
+    val dateFormat: List[FastDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
 
     val header: String = if (generateHeader) {
       dataFrame.columns.mkString(delimiter)

@@ -8,7 +8,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  *******************************************************************************/
 
 package hydrograph.engine.jaxb.sort;
@@ -42,35 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFields }
+     * Create an instance of {@link TypeSecondaryKeyFields }
      * 
      */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
-    }
-
-    /**
-     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
-     * 
-     */
-    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
-        return new TypePrimaryKeyFieldsAttributes();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
-     * 
-     */
-    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
-        return new TypeSecondayKeyFieldsAttributes();
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
     /**
@@ -82,6 +58,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * 
+     */
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
      * Create an instance of {@link TypeSortBase }
      * 
      */
@@ -90,11 +74,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
+     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
+    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
+        return new TypeSecondayKeyFieldsAttributes();
+    }
+
+    /**
+     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
+     * 
+     */
+    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
+        return new TypePrimaryKeyFieldsAttributes();
+    }
+
+    /**
+     * Create an instance of {@link TypePrimaryKeyFields }
+     * 
+     */
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
 }

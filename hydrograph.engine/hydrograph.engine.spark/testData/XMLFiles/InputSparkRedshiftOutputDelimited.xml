@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License
+ -->
+
+<p:graph name="SparkRedshiftInputAndDelimitedOutput" xmlns:p="hydrograph/engine/jaxb/main"
+         xmlns:it="hydrograph/engine/jaxb/inputtypes" xmlns:ot="hydrograph/engine/jaxb/outputtypes"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd">
+
+    <inputs id="inputSparkRedshift" batch="0" xsi:type="it:sparkredshift">
+        <outSocket id="out0">
+            <schema name="schema1">
+                <field name="f1" type="java.lang.String" />
+                <field name="f2" type="java.lang.Boolean" />
+                <field name="f3" type="java.lang.Long" />
+                <field name="f4" type="java.lang.Integer" />
+                <field name="f5" type="java.lang.Double" />
+                <field name="f6" type="java.lang.Short" />
+                <field name="f7" type="java.lang.Float" />
+                <field name="f8" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="f9" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="f10" type="java.math.BigDecimal" scale="3"
+                       precision="7" scaleType="explicit" />
+            </schema>
+        </outSocket>
+        <databaseName value="dev"/>
+
+        <hostName value="redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com"/>
+        <port value="5439"/>
+
+        <userName value="awsuser"/>
+        <password value="1qaz2wsxA#5"/>
+        <temps3dir value="s3n://ge.demo.bitwiseglobal/redshiftTemp/tempdir" />
+
+        <tableName value="allType15"/>
+       <!-- <selectQuery value="select * from allType15"/>-->
+    </inputs>
+
+    <outputs id="output1" xsi:type="ot:textFileDelimited">
+        <inSocket  fromComponentId="inputSparkRedshift" fromSocketId="out0" id="in0">
+            <schema name="outSchema">
+                <field name="f1" type="java.lang.String" />
+                <field name="f2" type="java.lang.Boolean" />
+                <field name="f3" type="java.lang.Long" />
+                <field name="f4" type="java.lang.Integer" />
+                <field name="f5" type="java.lang.Double" />
+                <field name="f6" type="java.lang.Short" />
+                <field name="f7" type="java.lang.Float" />
+                <field name="f8" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="f9" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="f10" type="java.math.BigDecimal" scale="3"
+                       precision="7" scaleType="explicit" />
+            </schema>
+        </inSocket>
+        <overWrite value="true"/>
+        <path uri="hydrograph.engine.spark/testData/output/sparkRedshift" />
+        <delimiter value="," />
+        <hasHeader value="false" />
+        <charset value="ISO-8859-1" />
+    </outputs>
+</p:graph>
