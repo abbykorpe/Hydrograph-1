@@ -22,13 +22,13 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
- lib/csvjdbc-1.0-29.jar,
  lib/opencsv-3.7.jar,
- lib/gson-2.7.jar
+ lib/gson-2.7.jar,
+ lib/csvjdbc-1.0.29.jar
 Export-Package: hydrograph.ui.dataviewer.adapters,
  hydrograph.ui.dataviewer.constants,
  hydrograph.ui.dataviewer.filter,
  hydrograph.ui.dataviewer.utilities,
  hydrograph.ui.dataviewer.window
 Import-Package: com.jcraft.jsch
-Bundle-Vendor: BITWISE
+Bundle-Vendor: Bitwise

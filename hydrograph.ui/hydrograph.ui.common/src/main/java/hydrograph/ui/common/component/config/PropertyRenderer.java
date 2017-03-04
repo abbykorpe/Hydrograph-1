@@ -112,6 +112,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="DB_UPDATE_PASSWORD_WIDGET"/>
  *     &lt;enumeration value="RUN_SQL_QUERY_WIDGET"/>
  *     &lt;enumeration value="DATABASE_LIST_WIDGET"/>
+ *     &lt;enumeration value="TEMPORARY_DIR_NAME_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -201,7 +202,8 @@ public enum PropertyRenderer {
 	SELECT_BY_KEYS_WIDGET,
 	DB_UPDATE_PASSWORD_WIDGET,
 	RUN_SQL_QUERY_WIDGET,
-    DATABASE_LIST_WIDGET;
+    DATABASE_LIST_WIDGET,
+    TEMPORARY_DIR_NAME_WIDGET;
 
     public String value() {
         return name();

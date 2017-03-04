@@ -10,3 +10,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.css.swt.theme;bundle-version="0.10.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Bitwise

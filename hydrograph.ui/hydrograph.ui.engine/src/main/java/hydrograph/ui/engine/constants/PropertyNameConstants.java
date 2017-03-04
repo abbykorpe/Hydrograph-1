@@ -61,7 +61,8 @@ public enum PropertyNameConstants {
 		RUN_SQL_QUERY("runsqlquery"),
 		SELECT_UPDATE_KEYS("update"),
 		URL("url"),
-		JDBC_DB_DRIVER("jdbcDriverClass");
+		JDBC_DB_DRIVER("jdbcDriverClass"),
+		TEMPORARY_DIRECTORY_NAME("temporaryDirectory");
 	
 		private final String value;
 

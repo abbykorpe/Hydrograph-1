@@ -935,7 +935,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(input, this);
-			container = genrateContainerData.getContainerData();
+			if(StringUtils.equals(this.getJobName()+Messages.JOBEXTENSION, input.getName()) || StringUtils.equals(this.getJobName(), Messages.ELT_GRAPHICAL_EDITOR)){
+				container = genrateContainerData.getContainerData();
+			}else{
+				this.setPartName(input.getName());
+			}
 			super.setInput(input);
 		} catch (CoreException | IOException ce) {
 			logger.error("Exception while setting input", ce);
@@ -1162,6 +1166,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 */
 	public void saveJob(IFile file, boolean isSaveAsJob) {
 		ByteArrayOutputStream out =null;
+		
 		try {
 			if(getContainer().getUniqueJobId() == null || isSaveAsJob==true){
 				generateUniqueJobId();
@@ -1171,6 +1176,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else
 				ConverterUtil.INSTANCE.convertToXML(this.container, true, null, null);		
+			
+			
 			if(file!=null){
 				out = new ByteArrayOutputStream();
 				createOutputStream(out);
@@ -1184,6 +1191,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				setInput(new FileEditorInput(file));
 				initializeGraphicalViewer();
 				genrateTargetXml(file,null,null);
+				
+				String fileName = file.getFullPath().segment(file.getFullPath().segments().length-1);
+				IPath paramFilePath = new Path("/" + file.getFullPath().segment(0) + "/param/" + fileName.replace(Messages.JOBEXTENSION,Messages.PROPERTIES_EXTENSION));
+				file= ResourcesPlugin.getWorkspace().getRoot().getFile(paramFilePath);
+				Map<String, String> currentParameterMap = getCurrentParameterMap();
+				copyParameterFile(currentParameterMap, file);
+				
 				getCommandStack().markSaveLocation();
 				setDirty(false);
 			}
@@ -1222,12 +1236,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if (obj.getReturnCode() == 0) {
 			validateLengthOfJobName(obj);
 		}
-		if(obj.getResult()!=null&&obj.getReturnCode()!=1)
-		{
+		if(obj.getResult()!=null&&obj.getReturnCode()!=1) {
 			IPath filePath = obj.getResult().removeFileExtension().addFileExtension("job");
 			file= ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 		}
-
+		
 		return file;
 	}
 
@@ -1833,6 +1846,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 		TrackingDisplayUtils.INSTANCE.clearTrackingStatusForEditor(this);
 	}
+	
 	/**
 	 * Remove temp tracking subjob file after tool close, rerun and modification. 
 	 */

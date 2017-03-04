@@ -130,6 +130,8 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
  * 
  */
 public class MultiParameterFileDialog extends Dialog {
+	
+
 	private static final String FILE_NAME_VALIDATION_EXPRESSION = "[\\w]*";
 
 	private static final int PROPERTY_VALUE_COLUMN_INDEX = 1;
@@ -236,6 +238,9 @@ public class MultiParameterFileDialog extends Dialog {
 
 		createParameterSearchBox(childSashForm);
 		mainSashForm.setWeights(new int[] {260, 214});
+		
+		Label lblNewLabel = new Label(container_1, SWT.NONE);
+		lblNewLabel.setText(Messages.NOTE_FOR_SAME_PARAMETERS_DEFINED_IN_MULTIPLE_PARAMETER_FILES_THE_LOWERMOST_FILE_WILL_BE_GIVEN_PRECEDENCE_OVER_OTHERS);
 		return container_1;
 	}
 
@@ -653,6 +658,7 @@ public class MultiParameterFileDialog extends Dialog {
 			}
 		});
 		btnDown.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
+		new Label(composite_8, SWT.NONE);
 
         Composite composite_1 = new Composite(composite_4, SWT.NONE);
 		composite_1.setLayout(new GridLayout(1, false));
@@ -1313,13 +1319,34 @@ public class MultiParameterFileDialog extends Dialog {
 		return fileDialog;
 	}
 	
-	private boolean importParamterFileToProject(String[] listOfFilesToBeImported, String source,String destination) {
+	private boolean importParamterFileToProject(String[] listOfFilesToBeImported, String source,String destination, ParamterFileTypes paramterFileTypes) {
 
 		for (String fileName : listOfFilesToBeImported) {
 			String absoluteFileName = source + fileName;
+			IPath destinationIPath=new Path(destination);
+			destinationIPath=destinationIPath.append(fileName);
+			File destinationFile=destinationIPath.toFile();
 			try {
-				FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+				if (!ifDuplicate(listOfFilesToBeImported, paramterFileTypes)) {
+					if (StringUtils.equalsIgnoreCase(absoluteFileName, destinationFile.toString())) {
+						return true;
+					} else if (destinationFile.exists()) {
+						int returnCode = doUserConfirmsToOverRide();
+						if (returnCode == SWT.YES) {
+							FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+						} else if (returnCode == SWT.NO) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+					}
+				}
 			} catch (IOException e1) {
+				if(StringUtils.endsWithIgnoreCase(e1.getMessage(), ErrorMessages.IO_EXCEPTION_MESSAGE_FOR_SAME_FILE)){
+					return true;
+				}
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 				messageBox.setText(MessageType.ERROR.messageType());
 				messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + " " + e1.getMessage());
@@ -1330,6 +1357,15 @@ public class MultiParameterFileDialog extends Dialog {
 		}
 		return true;
 	}
+	
+	
+	private int doUserConfirmsToOverRide() {
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO|SWT.CANCEL);
+		messageBox.setMessage("File already exists in project, do you want to overwrite?");
+		return messageBox.open();
+	}
+
+	
 	
 	private boolean isParamterFileNameExistInFileGrid(String[] listOfFilesToBeImported, ParamterFileTypes paramterFileTypes) {
 		if (ifDuplicate(listOfFilesToBeImported, paramterFileTypes)) {
@@ -1344,7 +1380,7 @@ public class MultiParameterFileDialog extends Dialog {
 	
 	private String getFileLocation(String importedParamterFile) {
 		IPath iPath = new Path(importedParamterFile);
-		String importedFileLocation = iPath.removeLastSegments(1).toOSString() + "\\";
+		String importedFileLocation = iPath.removeLastSegments(1).toOSString() + File.separator;
 		return importedFileLocation;
 	}
 	
@@ -1407,7 +1443,7 @@ public class MultiParameterFileDialog extends Dialog {
 		
 		String locationOfFilesToBeImported = getFileLocation(fileToBeImport);
 		
-		if(!importParamterFileToProject(listOfFilesToBeImported, locationOfFilesToBeImported,importLocation)){
+		if(!importParamterFileToProject(listOfFilesToBeImported, locationOfFilesToBeImported,importLocation,paramterFileTypes)){
 			return;
 		}
 		

@@ -104,7 +104,8 @@ openFile
             winMediumHigh="icons/32x32.bmp"
             winMediumLow="icons/32x32_8bit.bmp"
             winLargeHigh="icons/48x48.bmp"
-            winLargeLow="icons/48x48_8bit.bmp"/>
+            winLargeLow="icons/48x48_8bit.bmp"
+            winExtraLargeHigh="icons/256x256.bmp"/>
       </win>
    </launcher>
 

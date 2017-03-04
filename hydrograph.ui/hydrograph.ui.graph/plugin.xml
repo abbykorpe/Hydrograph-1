@@ -383,6 +383,7 @@
  <extension
        point="org.eclipse.ui.newWizards">
     <wizard
+          category="hydrograph.ui.project.structure.category"
           class="hydrograph.ui.graph.handler.JobCreationWizard"
           icon="resources/icons/new_file_o.png"
           id="hydrograph.ui.graph.job.wizard"
