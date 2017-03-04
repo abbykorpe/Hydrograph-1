@@ -156,6 +156,13 @@ public class RunSQLQueryWidget extends AbstractWidget{
 	@Override
 	public void addModifyListener(Property property,ArrayList<AbstractWidget> widgetList) {
 		widgets=widgetList;
+		styledText.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Utils.INSTANCE.addMouseMoveListener(styledText, cursor);
+			}
+		});
 	}
 
 }
