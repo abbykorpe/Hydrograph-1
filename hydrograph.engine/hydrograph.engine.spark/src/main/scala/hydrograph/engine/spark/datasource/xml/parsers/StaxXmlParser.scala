@@ -51,14 +51,19 @@ private[xml] object StaxXmlParser {
       } else if (options.dropMalformed) {
         logger.warn(s"Dropping malformed line: ${record.replaceAll("\n", "")}")
         None
-      } else {
-        val row = new Array[Any](schema.length)
-        val nameToIndex = schema.map(_.name).zipWithIndex.toMap
-        nameToIndex.get(options.columnNameOfCorruptRecord).foreach { corruptIndex =>
-          require(schema(corruptIndex).dataType == StringType)
-          row.update(corruptIndex, record)
-        }
-        Some(Row.fromSeq(row))
+      }
+      else {
+//        below code is commented as it doesn't works as expected
+//
+//        val row = new Array[Any](schema.length)
+//        val nameToIndex = schema.map(_.name).zipWithIndex.toMap
+//        nameToIndex.get(options.columnNameOfCorruptRecord).foreach { corruptIndex =>
+//          require(schema(corruptIndex).dataType == StringType)
+//          row.update(corruptIndex, record)
+//        }
+
+        None
+//        Some(Row.fromSeq(row))
       }
     }
 
