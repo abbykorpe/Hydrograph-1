@@ -96,6 +96,8 @@ public class RunSQLQueryWidget extends AbstractWidget{
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		
+		Utils.INSTANCE.loadProperties();
+		cursor = container.getContainerControl().getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 		populateWidget();
 		
 		styledText.addModifyListener(new ModifyListener() {
@@ -111,12 +113,7 @@ public class RunSQLQueryWidget extends AbstractWidget{
 			}
 		});
 		
-		Utils.INSTANCE.loadProperties();
-		cursor = container.getContainerControl().getDisplay().getSystemCursor(SWT.CURSOR_HAND);
-		String property = propertyValue;
-		if(StringUtils.isNotBlank(property) ){
-			Utils.INSTANCE.addMouseMoveListener(styledText, cursor);
-		}
+	
 	}
 
 	
@@ -141,6 +138,7 @@ public class RunSQLQueryWidget extends AbstractWidget{
 		if(StringUtils.isNotBlank(propertyValue) ){
 			styledText.setText(propertyValue);
 			txtDecorator.hide();
+			Utils.INSTANCE.addMouseMoveListener(styledText, cursor);
 		}
 		else{
 			styledText.setText("");
