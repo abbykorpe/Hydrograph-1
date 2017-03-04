@@ -43,11 +43,11 @@ private[xml] object StaxXmlParser {
       xml: RDD[String],
       schema: StructType,
       options: XmlOptions): RDD[Row] = {
-    def failedRecord(record: String): Option[Row] = {
+    def failedRecord(record: String,errorMessage:String): Option[Row] = {
       // create a row even if no corrupt record column is present
       if (options.failFast) {
-        throw new RuntimeException(
-          s"Malformed line in FAILFAST mode: ${record.replaceAll("\n", "")}")
+        throw new RuntimeException("Error in Input File XML Component: "+options.componentId+" . "+errorMessage+"\n"+
+          s" Following is the Malformed line in FAILFAST mode: ${record.replaceAll("\n", "")}")
       } else if (options.dropMalformed) {
         logger.warn(s"Dropping malformed line: ${record.replaceAll("\n", "")}")
         None
@@ -84,14 +84,16 @@ private[xml] object StaxXmlParser {
           val rootAttributes =
             rootEvent.asStartElement.getAttributes.map(_.asInstanceOf[Attribute]).toArray
           Some(convertObject(parser, schema, options, rootAttributes))
-            .orElse(failedRecord(xml))
+            .orElse(failedRecord(xml,""))
         } catch {
-          case _: java.lang.NumberFormatException =>
-            failedRecord(xml)
+          case e: java.lang.NumberFormatException =>
+            failedRecord(xml,"Caused by :"+e.getMessage+".")
+//          case e: IllegalArgumentException =>
+//            failedRecord(xml,"Caused by :"+e.getMessage+".")
           case _: java.text.ParseException | _: IllegalArgumentException =>
-            failedRecord(xml)
-          case _: XMLStreamException =>
-            failedRecord(xml)
+            failedRecord(xml,"Caused by :"+"illegal"+".")//e.getMessage
+          case e: XMLStreamException =>
+            failedRecord(xml,"Caused by :"+e.getMessage+".")
         }
       }
     }
