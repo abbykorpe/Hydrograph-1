@@ -31,6 +31,7 @@ private[xml] class XmlOptions(
   extends Serializable{
   private val logger = LoggerFactory.getLogger(XmlRelation.getClass)
 
+  val componentId=parameters("componentId")
   var dateFormat=XmlOptions.DEFAULT_DATE_FORMAT
   val charset = parameters.getOrElse("charset", XmlOptions.DEFAULT_CHARSET)
   val codec = parameters.get("compression").orElse(parameters.get("codec")).orNull
@@ -66,6 +67,8 @@ private[xml] class XmlOptions(
     formats.split(delimiter).map(format=>(format,new SimpleDateFormat(format))).toMap
   }
 
+
+
   // Parse mode flags
   if (!ParseModes.isValidMode(parseMode)) {
     logger.warn(s"$parseMode is not a valid parse mode. Using ${ParseModes.DEFAULT}.")
@@ -74,6 +77,10 @@ private[xml] class XmlOptions(
   val failFast = ParseModes.isFailFastMode(parseMode)
   val dropMalformed = ParseModes.isDropMalformedMode(parseMode)
   val permissive = ParseModes.isPermissiveMode(parseMode)
+
+  //If parse mode is FAILFAST then set parsing of dates as strict. By default parsing of date is Lenient
+  if(failFast)
+    dateFormatMap.foreach(date=>date._2.setLenient(false))
 
   require(rowTag.nonEmpty, "'rowTag' option should not be empty string.")
   require(attributePrefix.nonEmpty, "'attributePrefix' option should not be empty string.")
