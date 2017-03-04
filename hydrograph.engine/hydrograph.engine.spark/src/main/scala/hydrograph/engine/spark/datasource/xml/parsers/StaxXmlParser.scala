@@ -93,8 +93,8 @@ private[xml] object StaxXmlParser {
         } catch {
           case e: java.lang.NumberFormatException =>
             failedRecord(xml,"Caused by :"+e.getMessage+".")
-//          case e: IllegalArgumentException =>
-//            failedRecord(xml,"Caused by :"+e.getMessage+".")
+          case e: IllegalArgumentException =>
+            failedRecord(xml,"Caused by :"+e.getMessage+".")
           case _: java.text.ParseException | _: IllegalArgumentException =>
             failedRecord(xml,"Caused by :"+"illegal"+".")//e.getMessage
           case e: XMLStreamException =>
