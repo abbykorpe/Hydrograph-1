@@ -68,6 +68,7 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
         .option("charset", iFileXMLEntity.getCharset)
         .option("rowTag", iFileXMLEntity.getRowTag)
         .option("rootTag", iFileXMLEntity.getRootTag)
+        .option("componentId",iFileXMLEntity.getComponentId)
         .option("mode", writeMode)
         .option("dateFormats", schemaCreator.getDateFormats)
         .schema(schemaCreator.makeSchema)

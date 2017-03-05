@@ -32,6 +32,7 @@ public class Expression implements Serializable{
 	
 	private String operationId;
 	private String expression;
+	private String mergeExpression;
 	private String[] operationInputFields;
 	private String operationOutputFields;
 	private Properties operationProperties;
@@ -51,8 +52,23 @@ public class Expression implements Serializable{
 	 * @param expression
 	 *            the setExpression to set
 	 */
-	public void setExpression(String operationClass) {
-		this.expression = operationClass;
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+
+	/**
+	 * @return the mergeExpression
+	 */
+	public String getMergeExpression() {
+		return mergeExpression;
+	}
+
+	/**
+	 * @param mergeExpression
+	 *            the mergeExpression to set
+	 */
+	public void setMergeExpression(String mergeExpression) {
+		this.mergeExpression = mergeExpression;
 	}
 
 	/**

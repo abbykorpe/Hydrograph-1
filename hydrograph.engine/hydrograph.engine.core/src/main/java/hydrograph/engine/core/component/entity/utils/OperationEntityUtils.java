@@ -77,7 +77,10 @@ public class OperationEntityUtils implements Serializable{
 						((TypeTransformExpression) typeTransformOperation).getInputFields()));
 				operation.setOperationOutputFields( extractExpressionOutputFields(
 						((TypeTransformExpression) typeTransformOperation).getOutputFields()));
+				operation.setOperationFields(extractOperationFields(
+						((TypeTransformExpression) typeTransformOperation).getOutputFields()));
 				operation.setExpression(addSemiColonIfNotPresent(((TypeTransformExpression) typeTransformOperation).getExpr()));
+				operation.setMergeExpression(addSemiColonIfNotPresent(((TypeTransformExpression) typeTransformOperation).getMergeExpr()));
 				operation.setAccumulatorInitialValue(addQuotes(((TypeTransformExpression) typeTransformOperation).getAccumulatorInitalValue()));
 				operation.setOperationClass(null);
 				operation.setExpressionPresent(true);
@@ -245,6 +248,36 @@ public class OperationEntityUtils implements Serializable{
 			return null;
 		}
 		List<TypeBaseField> typeOutputFieldList = typeOperationOutputFields.getField();
+		OperationOutputField[] outputFields = new OperationOutputField[typeOutputFieldList.size()];
+		int i = 0;
+		for (TypeBaseField outputField : typeOutputFieldList) {
+			outputFields[i++] = new OperationOutputField(outputField.getName(), outputField.getType().value(), outputField.getFormat()!=null?outputField.getFormat():"yyyy-MM-dd", outputField.getScale()!=null?outputField.getScale():38, outputField.getPrecision()!=null?outputField.getPrecision():38);
+		}
+		return outputFields;
+
+	}
+
+	/**
+	 * Extracts the operation output fields from the
+	 * {@link TypeOperationOutputFields} object passed as a parameter
+	 * <p>
+	 * The method returns {@code null} if the {@code typeOperationOutputFields}
+	 * parameter is null
+	 *
+	 * @param typeOperationOutputFields
+	 *            the object of {@link TypeOperationOutputFields} which contain
+	 *            information of operation output fields for the component
+	 * @return a array OperationOutputField containing  the output fields for an operation
+	 */
+	private static OperationOutputField[] extractOperationFields(TypeExpressionOutputFields typeOperationOutputFields) {
+
+		if (typeOperationOutputFields == null) {
+			return null;
+		} else if (typeOperationOutputFields.getField() == null) {
+			return null;
+		}
+		List<TypeBaseField> typeOutputFieldList = new ArrayList<TypeBaseField>();
+		typeOutputFieldList.add(typeOperationOutputFields.getField());
 		OperationOutputField[] outputFields = new OperationOutputField[typeOutputFieldList.size()];
 		int i = 0;
 		for (TypeBaseField outputField : typeOutputFieldList) {
@@ -749,6 +782,42 @@ public class OperationEntityUtils implements Serializable{
 	 */
 	public static KeyField[] extractKeyFields(
 			hydrograph.engine.jaxb.aggregate.TypePrimaryKeyFields typePrimaryKeyFields) {
+		if (typePrimaryKeyFields == null) {
+			return null;
+		} else if (typePrimaryKeyFields.getNone() != null) {
+			return null;
+		} else if (typePrimaryKeyFields.getField() == null) {
+			return null;
+		}
+		KeyField[] keyFields = new KeyField[typePrimaryKeyFields.getField().size()];
+		int i = 0;
+		for (TypeFieldName eachTypeFieldName : typePrimaryKeyFields.getField()) {
+			KeyField eachKeyField = new KeyField();
+			eachKeyField.setName(eachTypeFieldName.getName());
+			// eachKeyField.setSortOrder(eachTypeFieldName.getOrder().value());
+			keyFields[i] = eachKeyField;
+			i++;
+		}
+		return keyFields;
+	}
+
+	/**
+	 * Extracts the key fields from the
+	 * {@link hydrograph.engine.jaxb.groupcombine.TypePrimaryKeyFields} object
+	 * passed as a parameter
+	 * <p>
+	 * TypePrimaryKeyFields The method returns {@code null} if the
+	 * {@code typePrimaryKeyFields} parameter is null
+	 *
+	 * @param typePrimaryKeyFields
+	 *            the object of
+	 *            {@link hydrograph.engine.jaxb.groupcombine.TypePrimaryKeyFields}
+	 *            which contain information of key fields for the component
+	 * @return an array of {@link KeyField} containing the key fields for an
+	 *         operation
+	 */
+	public static KeyField[] extractKeyFields(
+			hydrograph.engine.jaxb.groupcombine.TypePrimaryKeyFields typePrimaryKeyFields) {
 		if (typePrimaryKeyFields == null) {
 			return null;
 		} else if (typePrimaryKeyFields.getNone() != null) {

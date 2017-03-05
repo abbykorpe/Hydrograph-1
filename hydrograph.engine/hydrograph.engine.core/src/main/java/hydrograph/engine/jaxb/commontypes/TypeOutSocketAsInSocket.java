@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -51,6 +52,7 @@ import javax.xml.namespace.QName;
     hydrograph.engine.jaxb.sort.TypeOutSocketAsInSocketIn0 .class,
     hydrograph.engine.jaxb.transform.TypeOutSocketAsInSocketIn0 .class,
     hydrograph.engine.jaxb.aggregate.TypeOutSocketAsInSocketIn0 .class,
+    hydrograph.engine.jaxb.groupcombine.TypeOutSocketAsInSocketIn0 .class,
     hydrograph.engine.jaxb.filter.TypeOutSocketAsInSocketIn0 .class,
     hydrograph.engine.jaxb.executiontracking.TypeOutSocketAsInSocketIn0 .class
 })
