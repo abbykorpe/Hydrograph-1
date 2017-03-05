@@ -1,15 +1,15 @@
 /*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.InputFileXMLEntity
@@ -34,7 +34,7 @@ import scala.collection.mutable
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
-  
+
   private val LOG:Logger = LoggerFactory.getLogger(classOf[SchemaCreator[T]])
 
   /** Creates a List of StructField by recursively traversing TreeNode.
@@ -70,14 +70,14 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
     * @return
     *         List[(String,String)]
     *         each pair of list contains xpath and respsective field to read
-  */
+    */
 
   def extractXPathWithFieldName():List[(String,String)] = {
 
     def extract(schemaFieldList:List[SchemaField],relativeXPath:List[(String,String)]):List[(String,String)] ={
       if(schemaFieldList.isEmpty)relativeXPath
       else
-      extract(schemaFieldList.tail,(getRelativePath(schemaFieldList.head.getAbsoluteOrRelativeXPath),schemaFieldList.head.getFieldName)+:relativeXPath)
+        extract(schemaFieldList.tail,(getRelativePath(schemaFieldList.head.getAbsoluteOrRelativeXPath),schemaFieldList.head.getFieldName)+:relativeXPath)
 
     }
 
@@ -110,8 +110,8 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
     val xmlTree: XMLTree = XMLTree(fcMap(rowTag))// add rowTag as root of tree to be used as parent of fields
 
     relativeXPathWithFieldName.foreach { xpathAndFieldPair=>{// iterating on list of field and its XPath's pair
-       if (!xpathAndFieldPair._1.contains('/'))
-         xmlTree.addChild(rowTag, FieldContext(xpathAndFieldPair._1, rowTag + "/" + xpathAndFieldPair._1, fcMap(xpathAndFieldPair._2).datatype, safe, fcMap(xpathAndFieldPair._2).format))// add field as child of root if its XPath doesnt contains "/"
+      if (!xpathAndFieldPair._1.contains('/'))
+        xmlTree.addChild(rowTag, FieldContext(xpathAndFieldPair._1, rowTag + "/" + xpathAndFieldPair._1, fcMap(xpathAndFieldPair._2).datatype, safe, fcMap(xpathAndFieldPair._2).format))// add field as child of root if its XPath doesnt contains "/"
       else  {
         var parentTag = rowTag
         var xpath = rowTag + "/"
@@ -155,9 +155,9 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
       case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(schemaField.getFieldPrecision),schemaField.getFieldScale)
     }
   }
-  
-  
-  
+
+
+
   def checkPrecision(precision:Int):Int={
     if(precision== -999) 38 else precision
   }
@@ -173,8 +173,8 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
     LOG.debug("Array of StructField created from schema is : " + structFields.mkString)
     structFields
   }
-  
- 
+
+
 
   def createSchema(): Array[Column] ={
     LOG.trace("In method createSchema()")
@@ -186,8 +186,14 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
   def getDateFormats(): String = {
     LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
     var dateFormats: String = ""
-    for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
-      dateFormats += inputOutputEntityBase.getFieldsList.get(i).getFieldFormat + "\t"
+    val fields = inputOutputEntityBase.getFieldsList
+    for (i <- 0 until fields.size()) {
+      if (fields.get(i).getFieldDataType.equals("java.util.Date")){
+        dateFormats += fields.get(i).getFieldFormat + "\t"
+      }else {
+        dateFormats += "null" + "\t"
+      }
+
     }
     LOG.debug("Date Formats for Date fields : " + dateFormats)
     dateFormats

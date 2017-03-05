@@ -80,8 +80,8 @@ object TypeCast {
   def outputValue(value: Any, castType: DataType, dateFormat: FastDateFormat) : AnyRef= {
 
     castType match {
-      case _: TimestampType => if (value == null) "" else if (!dateFormat.equals("null")) dateFormat.format(new Date(value.asInstanceOf[Timestamp].getTime)) else value.toString
-      case _: DateType => if (value == null) "" else if (!dateFormat.equals("null")) dateFormat.format(value) else value.toString
+      case _: TimestampType => if (value == null) "" else if (dateFormat != null && !dateFormat.equals("null")) dateFormat.format(new Date(value.asInstanceOf[Timestamp].getTime)) else value.toString
+      case _: DateType => if (value == null) "" else if (dateFormat != null && !dateFormat.equals("null")) dateFormat.format(value) else value.toString
       case _ => value.asInstanceOf[AnyRef]
     }
   }
