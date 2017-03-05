@@ -13,11 +13,14 @@
 
 package hydrograph.engine.spark.components
 
+import java.util.Properties
+
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{DbTableUtils, SchemaCreator, SchemaMismatchException}
-import org.apache.spark.sql.DataFrame
+import org.apache.hadoop.conf.Configuration
+import org.apache.spark.sql.{DataFrame, DataFrameReader, SparkSession}
 import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -32,6 +35,7 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
 
     val sparkSession = iComponentsParams.getSparkSession()
 
+    val properties = inputRDBMSEntity.getRuntimeProperties;
     LOG.info("Created Input Spark Redshift Component '" + inputRDBMSEntity.getComponentId
       + "' in Batch " + inputRDBMSEntity.getBatch
       + " with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
@@ -42,7 +46,6 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
     else {
       DbTableUtils().getSelectQuery(inputRDBMSEntity.getFieldsList.asScala.toList, inputRDBMSEntity.getTableName)
     }
-
     LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
       + "' in Batch " + inputRDBMSEntity.getBatch
       + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
@@ -54,12 +57,14 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
     LOG.info("Connection  url for input Spark Redshift  component: " + connectionURL)
 
     try {
-      val df = sparkSession.read
+      val dataFrameReader = sparkSession.read
         .format("com.databricks.spark.redshift")
         .option("url", connectionURL)
         .option("query", selectQuery)
         .option("tempdir", inputRDBMSEntity.getTemps3dir)
-        .load()
+
+      val df = getDataFrameReader(sparkSession.sparkContext.hadoopConfiguration,dataFrameReader, properties).load
+
       compareSchema(getMappedSchema(schemaField), df.schema.toList)
 
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
@@ -69,6 +74,28 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
         LOG.error("Error in Input Spark Redshift component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
         throw new RuntimeException("Error in Spark Input Redshift Component " + inputRDBMSEntity.getComponentId, e)
     }
+  }
+
+  def getDataFrameReader(hadoopConfiguration:Configuration, dataFrameReader : DataFrameReader, properties:Properties) : DataFrameReader = {
+    if (properties.getProperty("aws_iam_role") != null && !properties.getProperty("aws_iam_role").equals("")) {
+      dataFrameReader.option("aws_iam_role", properties.getProperty("aws_iam_role"))
+      LOG.debug("aws_iam_role for input spark redshift component '" + properties.getProperty("aws_iam_role") + "'")
+
+    }
+    if (properties.getProperty("forward_spark_s3_credentials") != null && !properties.getProperty("forward_spark_s3_credentials").equals("")) {
+      // discover the credentials that Spark is using to connect to S3 and will forward those credentials to Redshift over JDBC
+      dataFrameReader.option("forward_spark_s3_credentials", properties.getProperty("forward_spark_s3_credentials").toBoolean)
+      LOG.debug("forward_spark_s3_credentials for input spark redshift component ''" + properties.getProperty("forward_spark_s3_credentials") + "'")
+    }
+    if ((properties.getProperty("fs.s3n.awsAccessKeyId") != null && !properties.getProperty("fs.s3n.awsAccessKeyId").equals("")) &&
+      (properties.getProperty("fs.s3n.awsSecretAccessKey") != null && !properties.getProperty("fs.s3n.awsSecretAccessKey").equals(""))) {
+      hadoopConfiguration.set("fs.s3n.awsAccessKeyId", properties.getProperty("fs.s3n.awsAccessKeyId"))
+      hadoopConfiguration.set("fs.s3n.awsSecretAccessKey", properties.getProperty("fs.s3n.awsSecretAccessKey"))
+      LOG.debug("fs.s3n.awsAccessKeyId '" + properties.getProperty("fs.s3n.awsAccessKeyId") + "' and "
+        + "fs.s3n.awsSecretAccessKey  '" + properties.getProperty("fs.s3n.awsSecretAccessKey") + "' "
+        + "for input spark redshift component")
+    }
+    dataFrameReader
   }
 
   def getMappedSchema(schema: StructType): List[StructField] = schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType)))

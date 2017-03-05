@@ -33,7 +33,7 @@
                        precision="10" scaleType="explicit"/>
             </schema>
         </outSocket>
-        <path uri="hydrograph.engine.spark\testData\inputFiles\RedshiftData.txt"/>
+        <path uri="C:\Users\santlalg\IdeaProjects\Hydrograph_GitHub\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\RedshiftData.txt"/>
         <delimiter value=","/>
         <hasHeader value="false"/>
     </inputs>
@@ -41,37 +41,40 @@
     <outputs id="out Redshift" batch="0" xsi:type="ot:sparkredshift">
         <inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
             <schema name="schema1">
+
                 <field name="aa" type="java.lang.Integer"/>
                 <field name="bb" type="java.lang.Boolean"/>
                 <field name="cc" type="java.lang.Long"/>
                 <field name="dd" type="java.lang.Float"/>
-                <!--<field name="ee" type="java.lang.Integer"/>-->
-                <!--<field name="gg" type="java.lang.String"/>-->
-                <!--<field name="ff" type="java.lang.Double"/>-->
-                <!--<field name="hh" type="java.util.Date" format="yyyy/MM/dd"/>-->
-                <!--<field name="ii" type="java.util.Date" format="yyyy/MM/dd HH:mm:ss"/>-->
-                <!--<field name="jj" type="java.math.BigDecimal" scale="2"-->
-                       <!--precision="10" scaleType="explicit"/>-->
-
+                <field name="ee" type="java.lang.Integer"/>
+                <field name="gg" type="java.lang.String"/>
+                <field name="ff" type="java.lang.Double"/>
+                <field name="hh" type="java.util.Date" format="yyyy/MM/dd"/>
+                <field name="ii" type="java.util.Date" format="yyyy/MM/dd HH:mm:ss"/>
+                <field name="jj" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit"/>
             </schema>
         </inSocket>
         <databaseName value="dev"/>
         <hostName value="redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com"/>
         <port value="5439"/>
-      <!--  <jdbcDriver value="JDBC 4.2"/>-->
-        <tableName value="testingalltypesbatchsize16"/>
-        <userName value="awsuser"/>
-        <password value="1qaz2wsxA#5"/>
-        <temps3dir value="s3n://ge.demo.bitwiseglobal/redshiftTemp/tempdir" />
+        <tableName value="testingalltypesbatchsize150"/>
+        <userName value="@{user}"/>
+        <password value="@{password}"/>
+        <temps3dir value="@{temps3dir}" />
         <loadType>
-            <!--<newTable>
-                <primaryKeys>
-                    <field name="aa"/>
-                </primaryKeys>
-            </newTable>-->
-            <truncateLoad/>
-            <!--<Insert/>-->
+            <!--<newTable/>-->
+            <Insert/>
+            <!--<truncateLoad/>-->
         </loadType>
 
+        <runtimeProperties>
+            <property name="forward_spark_s3_credentials" value="@{forward_spark_s3_credentials}" />
+            <property name="aws_iam_role" value="@{aws_iam_role}" />
+            <property name="fs.s3n.awsAccessKeyId" value="@{awsAccessKeyId}" />
+            <property name="fs.s3n.awsSecretAccessKey" value="@{awsSecretAccessKey}" />
+            <property name="extracopyoptions" value="@{extraOption}"/>
+        </runtimeProperties>
     </outputs>
+
 </p:graph>
