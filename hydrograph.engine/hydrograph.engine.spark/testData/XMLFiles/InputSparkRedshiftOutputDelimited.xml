@@ -20,17 +20,17 @@
     <inputs id="inputSparkRedshift" batch="0" xsi:type="it:sparkredshift">
         <outSocket id="out0">
             <schema name="schema1">
-                <field name="f1" type="java.lang.String" />
-                <field name="f2" type="java.lang.Boolean" />
-                <field name="f3" type="java.lang.Long" />
-                <field name="f4" type="java.lang.Integer" />
-                <field name="f5" type="java.lang.Double" />
-                <field name="f6" type="java.lang.Short" />
-                <field name="f7" type="java.lang.Float" />
-                <field name="f8" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="f9" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="f10" type="java.math.BigDecimal" scale="3"
-                       precision="7" scaleType="explicit" />
+                <field name="aa" type="java.lang.Integer"/>
+                <field name="bb" type="java.lang.Boolean"/>
+                <field name="cc" type="java.lang.Long"/>
+                <field name="dd" type="java.lang.Float"/>
+                <field name="ee" type="java.lang.Integer"/>
+                <field name="gg" type="java.lang.String"/>
+                <field name="ff" type="java.lang.Double"/>
+                <field name="hh" type="java.util.Date" format="yyyy/MM/dd"/>
+                <field name="ii" type="java.util.Date" format="yyyy/MM/dd HH:mm:ss"/>
+                <field name="jj" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit"/>
             </schema>
         </outSocket>
         <databaseName value="dev"/>
@@ -38,28 +38,35 @@
         <hostName value="redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com"/>
         <port value="5439"/>
 
-        <userName value="awsuser"/>
-        <password value="1qaz2wsxA#5"/>
-        <temps3dir value="s3n://ge.demo.bitwiseglobal/redshiftTemp/tempdir" />
+        <userName value="@{user}"/>
+        <password value="@{password}"/>
+        <temps3dir value="@{temps3dir}" />
 
-        <tableName value="allType15"/>
+        <tableName value="testingalltypesbatchsize140"/>
        <!-- <selectQuery value="select * from allType15"/>-->
+
+        <runtimeProperties>
+            <property name="forward_spark_s3_credentials" value="@{forward_spark_s3_credentials}" />
+            <property name="aws_iam_role" value="@{aws_iam_role}" />
+            <property name="fs.s3n.awsAccessKeyId" value="@{awsAccessKeyId}" />
+            <property name="fs.s3n.awsSecretAccessKey" value="@{awsSecretAccessKey}" />
+        </runtimeProperties>
     </inputs>
 
     <outputs id="output1" xsi:type="ot:textFileDelimited">
         <inSocket  fromComponentId="inputSparkRedshift" fromSocketId="out0" id="in0">
             <schema name="outSchema">
-                <field name="f1" type="java.lang.String" />
-                <field name="f2" type="java.lang.Boolean" />
-                <field name="f3" type="java.lang.Long" />
-                <field name="f4" type="java.lang.Integer" />
-                <field name="f5" type="java.lang.Double" />
-                <field name="f6" type="java.lang.Short" />
-                <field name="f7" type="java.lang.Float" />
-                <field name="f8" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="f9" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="f10" type="java.math.BigDecimal" scale="3"
-                       precision="7" scaleType="explicit" />
+                <field name="aa" type="java.lang.Integer"/>
+                <field name="bb" type="java.lang.Boolean"/>
+                <field name="cc" type="java.lang.Long"/>
+                <field name="dd" type="java.lang.Float"/>
+                <field name="ee" type="java.lang.Integer"/>
+                <field name="gg" type="java.lang.String"/>
+                <field name="ff" type="java.lang.Double"/>
+                <field name="hh" type="java.util.Date" format="yyyy/MM/dd"/>
+                <field name="ii" type="java.util.Date" format="yyyy/MM/dd HH:mm:ss"/>
+                <field name="jj" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit"/>
             </schema>
         </inSocket>
         <overWrite value="true"/>
