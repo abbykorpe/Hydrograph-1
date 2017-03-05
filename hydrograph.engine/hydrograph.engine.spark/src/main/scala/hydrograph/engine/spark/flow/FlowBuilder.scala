@@ -150,12 +150,20 @@ flow
         if(tp.getValue.contains(splitter)) {
           val storageType = tp.getValue.trim.substring(tp.getValue.trim.lastIndexOf(splitter) + 1, tp.getValue.trim.length)
           val outSocketId = tp.getValue.trim.substring(0, tp.getValue.trim.lastIndexOf(splitter))
-          if(storageType.equalsIgnoreCase("disk"))
-            dataFrameMap(outSocketId).persist(StorageLevel.DISK_ONLY)
-          else if(storageType.equalsIgnoreCase("memory"))
-            dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_ONLY_SER)
-          else if(storageType.equalsIgnoreCase("memory_and_disk"))
-            dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_AND_DISK_SER)
+
+          storageType match {
+            case s if s.equalsIgnoreCase("disk_only") => dataFrameMap(outSocketId).persist(StorageLevel.DISK_ONLY)
+            case s if s.equalsIgnoreCase("disk_only_2") => dataFrameMap(outSocketId).persist(StorageLevel.DISK_ONLY_2)
+            case s if s.equalsIgnoreCase("memory_only") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_ONLY)
+            case s if s.equalsIgnoreCase("memory_only_2") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_ONLY_2)
+            case s if s.equalsIgnoreCase("memory_only_ser") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_ONLY_SER)
+            case s if s.equalsIgnoreCase("memory_only_ser_2") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_ONLY_SER_2)
+            case s if s.equalsIgnoreCase("memory_and_disk") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_AND_DISK)
+            case s if s.equalsIgnoreCase("memory_and_disk_2") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_AND_DISK_2)
+            case s if s.equalsIgnoreCase("memory_and_disk_ser") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_AND_DISK_SER)
+            case s if s.equalsIgnoreCase("memory_and_disk_ser_2") => dataFrameMap(outSocketId).persist(StorageLevel.MEMORY_AND_DISK_SER_2)
+          }
+
         }
         else{
           throw new RuntimeException("Cache Property value should be in proper format eg: outSocketID : One of \"disk,memory,memory_and_disk\", But user provides: "+ tp.getValue)
