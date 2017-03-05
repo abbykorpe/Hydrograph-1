@@ -231,7 +231,24 @@ public class Utils {
 			return getResult(param);
 		}
 			return PARAMETER_NOT_FOUND;
-	}		
+	}	
+	 
+		public String getParamValueForRunSql(String parameterValue) {
+			Optional<String> optional = Optional.of(parameterValue);
+			if (jobProps != null && !jobProps.isEmpty() && optional.isPresent() && parameterValue.contains("@{")) {
+				Enumeration<?> properties = jobProps.propertyNames();
+				while (properties.hasMoreElements()) {
+					String key = (String) properties.nextElement();
+					String value = jobProps.getProperty(key);
+					if (parameterValue.contains(key)) {
+						parameterValue = parameterValue.replace("@{" + key + "}", value);
+					}
+				}
+
+				return parameterValue;
+			}
+			return PARAMETER_NOT_FOUND;
+		}
 	 
 	 /**
 	  * The function will remove last char of string.
@@ -281,22 +298,9 @@ public class Utils {
 		 * @param extSchemaPathText
 		 * @return the file Path according to the Parameter value
 		 */
-	 public String getParamFilePath(String extSchemaPath, String paramValue, StyledText extSchemaPathText){
-			String remainingString = "";
-		    if( checkParameterValue(extSchemaPath)){
-		    	if(StringUtils.isNotEmpty(paramValue)){
-		    		extSchemaPathText.setToolTipText(paramValue+remainingString);
-		    	}else{
-		    		extSchemaPathText.setToolTipText(PARAMETER_NOT_FOUND);
-		    	}
-		    }else if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND)){
-		    	extSchemaPathText.setToolTipText(remainingString);
-		    }else{
-		    	remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+1, extSchemaPath.length());
-		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
-		   		}
-		    	
-			return paramValue+remainingString;
+	 public String getParamFilePath(String paramValue, StyledText extSchemaPathText){
+		  extSchemaPathText.setToolTipText(paramValue);
+			return paramValue;
 		}
 	 
 	 private boolean checkParameterValue(String value){
@@ -329,7 +333,7 @@ public class Utils {
 			}
 	 }		
 	 public void addMouseMoveListener(StyledText extSchemaPathText , Cursor cursor){
-		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')||ParameterUtil.containsParameter(extSchemaPathText.getText(),'\\')){
+		 if(extSchemaPathText.getText().contains("@{")){
 				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255));	
 				extSchemaPathText.setCursor(cursor);
 				extSchemaPathText.addMouseMoveListener(getMouseListner(extSchemaPathText));
@@ -408,12 +412,8 @@ public class Utils {
 				
 				@Override
 				public void mouseMove(MouseEvent e) {
-					String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
-				    finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
-				    while(ParameterUtil.containsParameter(finalParamPath, '/')){
-				    	paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
-				    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
-			    		}
+					String paramValue = Utils.INSTANCE.getParamValueForRunSql(extSchemaPathText.getText());
+					finalParamPath = Utils.INSTANCE.getParamFilePath(paramValue, extSchemaPathText);
 					}
 				};
 			return listner;
