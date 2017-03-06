@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -24,6 +25,7 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeOutputJdbcupdateOutSocket;
 import hydrograph.engine.jaxb.omysql.TypeOutputMysqlOutSocket;
 import hydrograph.engine.jaxb.ooracle.TypeOutputOracleInSocket;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
+import hydrograph.engine.jaxb.osparkredshift.TypeOutputSparkredshiftInSocket;
 import hydrograph.engine.jaxb.otdiscard.TypeOutputInSocketIno;
 import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataOutSocket;
 import hydrograph.engine.jaxb.otffw.TypeOutputFixedwidthInSocket;
@@ -66,6 +68,7 @@ import hydrograph.engine.jaxb.otfs.TypeOutputSequenceInSocket;
     hydrograph.engine.jaxb.ofsubjob.TypeOutputDelimitedInSocket.class,
     TypeOutputMysqlOutSocket.class,
     TypeOutputRedshiftInSocket.class,
+    TypeOutputSparkredshiftInSocket.class,
     TypeOutputOracleInSocket.class,
     TypeOutputTeradataOutSocket.class,
     TypeOutputXmlInSocket.class,

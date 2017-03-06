@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -22,11 +23,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.exceltype.TypeExcelRecord;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
 import hydrograph.engine.jaxb.ojdbcupdate.TypeJdbcupdateRecord;
 import hydrograph.engine.jaxb.omysql.TypeMysqlRecord;
 import hydrograph.engine.jaxb.ooracle.TypeOracleRecord;
 import hydrograph.engine.jaxb.oredshift.TypeRedshiftRecord;
+import hydrograph.engine.jaxb.osparkredshift.TypeSparkredshiftRecord;
 import hydrograph.engine.jaxb.oteradata.TypeTeradataRecord;
 
 
@@ -65,8 +68,10 @@ import hydrograph.engine.jaxb.oteradata.TypeTeradataRecord;
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedRecord.class,
     TypeMysqlRecord.class,
     TypeRedshiftRecord.class,
+    TypeSparkredshiftRecord.class,
     TypeOracleRecord.class,
     TypeTeradataRecord.class,
+    TypeExcelRecord.class,
     hydrograph.engine.jaxb.ofxml.TypeXmlRecord.class,
     TypeJdbcupdateRecord.class
 })

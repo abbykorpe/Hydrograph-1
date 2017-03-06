@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -19,7 +20,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
 import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ojdbcupdate.TypeOutputJdbcupdateBase;
 import hydrograph.engine.jaxb.ojdbcupdate.TypeUpdateKeys;
 
@@ -41,7 +41,6 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeUpdateKeys;
  *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *         &lt;element name="update" type="{hydrograph/engine/jaxb/ojdbcupdate}type-update-keys"/>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -58,8 +57,7 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeUpdateKeys;
     "batchSize",
     "userName",
     "password",
-    "update",
-    "runtimeProperties"
+    "update"
 })
 public class JdbcUpdate
     extends TypeOutputJdbcupdateBase
@@ -76,7 +74,6 @@ public class JdbcUpdate
     protected ElementValueStringType password;
     @XmlElement(required = true)
     protected TypeUpdateKeys update;
-    protected TypeProperties runtimeProperties;
 
     /**
      * Gets the value of the url property.
@@ -244,30 +241,6 @@ public class JdbcUpdate
      */
     public void setUpdate(TypeUpdateKeys value) {
         this.update = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
 }
