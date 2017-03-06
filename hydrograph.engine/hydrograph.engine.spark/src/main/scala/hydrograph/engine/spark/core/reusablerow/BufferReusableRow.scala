@@ -12,7 +12,7 @@
   *******************************************************************************/
 package hydrograph.engine.spark.core.reusablerow
 
-import java.util.LinkedHashSet
+import java.util.{Date, LinkedHashSet}
 
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import org.apache.spark.sql.expressions.MutableAggregationBuffer
@@ -25,6 +25,21 @@ class BufferReusableRow(var inputMutableBuffer: MutableAggregationBuffer, fields
   def getFieldInternal(field: String) = inputMutableBuffer.get(fieldsIndexMap(field)).asInstanceOf[Comparable[_]]
   def setFieldInternal(index: Int, value: Comparable[_]) = { inputMutableBuffer.update(fieldsIndexList(index), value)}
   def setFieldInternal(field: String, value: Comparable[_]) = { inputMutableBuffer.update(fieldsIndexMap(field), value)}
+
+
+  override def setDate(fieldName: String, value: Comparable[_]): Unit = {
+    value match {
+      case date: Date => super.setField(fieldName, new java.sql.Date(date.getTime))
+      case _ => super.setField(fieldName, value)
+    }
+  }
+
+  override def setDate(index: Int, value: Comparable[_]): Unit = {
+    value match {
+      case date: Date => super.setField(index, new java.sql.Date(date.getTime))
+      case _ => super.setField(index, value)
+    }
+  }
 
 }
 
