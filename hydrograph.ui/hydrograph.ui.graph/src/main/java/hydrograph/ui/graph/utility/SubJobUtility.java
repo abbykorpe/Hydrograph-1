@@ -136,7 +136,7 @@ public class SubJobUtility {
 			ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 		
 			if (file != null) {
-				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
+				CanvasUtils.INSTANCE.fromObjectToXML(container,out);
 				
 				file.create(new ByteArrayInputStream(out.toByteArray()), true, null);
 				

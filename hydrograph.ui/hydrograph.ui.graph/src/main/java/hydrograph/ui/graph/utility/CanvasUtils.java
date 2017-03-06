@@ -15,10 +15,13 @@
 package hydrograph.ui.graph.utility;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.StringReader;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -99,42 +102,53 @@ public class CanvasUtils {
 	 *            the object
 	 * @return the string
 	 */
-	public String fromObjectToXML(Serializable object) {
+	public void fromObjectToXML(Serializable object,ByteArrayOutputStream outputStream) {
 
 		String str = "<!-- It is recommended to avoid changes to xml data -->\n\n";
 
 		XStream xs = new XStream();
 		xs.autodetectAnnotations(true);
 		try {
-			str = str + xs.toXML(object);
+			xs.toXML(object, outputStream);
 			logger.debug( "Sucessfully converted XML from JAVA Object");
 		} catch (Exception e) {
 			logger.error("Failed to convert from Object to XML", e);
 		}
 
-		return unformatXMLString(str);
+				unformatXMLString(outputStream);
 	}
 	 
-	private static String unformatXMLString(String input) {
-		BufferedReader reader = new BufferedReader(new StringReader(input));
-		StringBuffer result = new StringBuffer();
+	private static void unformatXMLString(ByteArrayOutputStream arrayOutputStream) {
+		byte[] bytes = arrayOutputStream.toByteArray();
+		InputStream inputStream = new ByteArrayInputStream(bytes);
+		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+		BufferedReader reader = new BufferedReader(inputStreamReader);
 		try {
+			arrayOutputStream.reset();
 			String line;
 			while ((line = reader.readLine()) != null){
-				result.append(line.trim() + "\n");
+				arrayOutputStream.write((line.trim() + "\n").getBytes());
 			}
-			
-			return result.toString();
 		} catch (IOException e) {
 			logger.warn("Unable to remove formatting while saving UI XML string",e);
 		}finally{
 			try {
 				reader.close();
 			} catch (IOException e) {
-				logger.warn("Unable to close xml string reader",e);
+				logger.warn("Unable to close xml buffer reader",e);
+			}
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				logger.warn("Unable to close inputStream",e);
+			}
+			try {
+				inputStreamReader.close();
+			} catch (IOException e) {
+				logger.warn("Unable to close inputStreamReader",e);
 			}
 		}
-		return input;
+		
 	}
 
 }

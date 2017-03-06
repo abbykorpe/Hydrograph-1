@@ -1117,9 +1117,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public void createOutputStream(OutputStream out) throws IOException {
-
-		out.write(CanvasUtils.INSTANCE.fromObjectToXML(getContainer()).getBytes());
+	public void createOutputStream(ByteArrayOutputStream out) throws IOException {
+		CanvasUtils.INSTANCE.fromObjectToXML(getContainer(),out);
 	}
 
 	/**
