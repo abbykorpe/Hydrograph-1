@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
+import hydrograph.engine.transformation.schema.Schema;
+
 import java.io.Serializable;
 
 /**
@@ -31,7 +33,7 @@ public interface GroupCombineTransformBase extends Serializable {
 //    public void prepare(Properties props, ArrayList<String> inputFields, ArrayList<String> outputFields,
 //                        ArrayList<String> keyFields);
 
-    public BufferSchema initBufferSchema();
+    public Schema initBufferSchema(Schema inputSchema,Schema outputSchema );
 
     public void initialize(ReusableRow bufferRow);
 

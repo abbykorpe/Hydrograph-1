@@ -93,7 +93,7 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
     }
     )
 
-    val passthroughList = passthroughFields.map(field => first(field).as(field)).toList
+    val passthroughList = passthroughFields.diff(keyFields).map(field => first(field).as(field)).toList
     val mapList = mapFields.map(field => first(field.getSourceName).as(field.getName)).toList
 
     val finalList = aggUdafList ++ passthroughList ++ mapList
@@ -107,6 +107,10 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
       })
       groupCombineEntity.getOperationsList.asScala.foreach(operation => {
         aggregatedDf = aggregatedDf.drop(col(compID + operation.getOperationId + "_agg"))
+      })
+
+      keyFields.filter(key => !passthroughFields.contains(key)).foreach(key => {
+        aggregatedDf = aggregatedDf.drop(col(key))
       })
 
       Map(key -> aggregatedDf)

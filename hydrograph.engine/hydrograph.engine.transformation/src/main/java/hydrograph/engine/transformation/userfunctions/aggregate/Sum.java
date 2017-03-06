@@ -77,7 +77,7 @@ public class Sum implements AggregateTransformBase {
 
 	}
 
-	public class AggregateSumException extends RuntimeException {
+	public static class AggregateSumException extends RuntimeException {
 
 		private static final long serialVersionUID = -2453456773673283979L;
 

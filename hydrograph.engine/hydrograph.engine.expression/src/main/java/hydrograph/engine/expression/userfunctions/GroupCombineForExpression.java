@@ -13,8 +13,9 @@
 package hydrograph.engine.expression.userfunctions;
 
 import hydrograph.engine.expression.utils.ExpressionWrapper;
-import hydrograph.engine.transformation.userfunctions.base.BufferField;
-import hydrograph.engine.transformation.userfunctions.base.BufferSchema;
+import hydrograph.engine.transformation.schema.DataType;
+import hydrograph.engine.transformation.schema.Field;
+import hydrograph.engine.transformation.schema.Schema;
 import hydrograph.engine.transformation.userfunctions.base.GroupCombineTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
@@ -68,13 +69,15 @@ public class GroupCombineForExpression implements GroupCombineTransformBase {
         expressionWrapperForMerge.getValidationAPI().init(new String[]{"_accumulator1", "_accumulator2"}, new String[]{bufferFieldType, bufferFieldType});
     }
 
+
+
     @Override
-    public BufferSchema initBufferSchema() {
-        BufferField _accumulator = new BufferField.Builder("_accumulator", bufferFieldType)
+    public Schema initBufferSchema(Schema inputSchema, Schema outputSchema) {
+        Field _accumulator = new Field.Builder("_accumulator", DataType.valueOf(bufferFieldType))
                 .addFormat(bufferFieldFormat).addPrecision(bufferFieldPrecision).addScale(bufferFieldScale).build();
-        BufferSchema bufferSchema = new BufferSchema();
-        bufferSchema.addField("_accumulator", _accumulator);
-        return bufferSchema;
+        Schema schema = new Schema();
+        schema.addField( _accumulator);
+        return schema;
     }
 
     @Override

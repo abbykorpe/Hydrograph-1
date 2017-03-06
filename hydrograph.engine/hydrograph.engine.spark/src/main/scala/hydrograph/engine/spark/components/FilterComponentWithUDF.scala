@@ -65,7 +65,7 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
       try {
         filterClass.isRemove(filterSparkOperations.inputRow.setRow(cols))
       }catch {
-        case e:Exception => throw new RuntimeException("Error in Filter Component:[\""+filterEntity.getComponentId+"\"] for "+e.getMessage)
+        case e:Exception => throw new RuntimeException("Error in Filter Component:[\""+filterEntity.getComponentId+"\"]" ,e)
       }
     }
     val UDFName=filterEntity.getComponentId+"UDF"

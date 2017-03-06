@@ -1,37 +1,38 @@
 package hydrograph.engine.transformation.userfunctions.groupcombine;
 
+import hydrograph.engine.transformation.schema.DataType;
 import hydrograph.engine.transformation.userfunctions.base.GroupCombineTransformBase;
-import hydrograph.engine.transformation.userfunctions.base.BufferField;
-import hydrograph.engine.transformation.userfunctions.base.BufferSchema;
+import hydrograph.engine.transformation.schema.Field;
+import hydrograph.engine.transformation.schema.Schema;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
 public class StringAppend implements GroupCombineTransformBase {
 
     @Override
-    public BufferSchema initBufferSchema() {
-        BufferField sum = new BufferField.Builder("stringAppend", "String").build();
-        BufferSchema bufferSchema = new BufferSchema();
-        bufferSchema.addField("stringAppend", sum);
-        return bufferSchema;
+    public Schema initBufferSchema(Schema inputSchema, Schema outputSchema) {
+        Field append = new Field.Builder("stringAppend", DataType.String).build();
+        Schema schema = new Schema();
+        schema.addField(append);
+        return schema;
     }
 
     @Override
     public void initialize(ReusableRow bufferRow) {
-        bufferRow.setField("stringAppend", 0L);
+        bufferRow.setField(0, "");
     }
 
     @Override
     public void update(ReusableRow bufferRow, ReusableRow inputRow) {
-        bufferRow.setField("stringAppend", ((Long) bufferRow.getField("stringAppend")) + inputRow.getLong("yearofApplying"));
+        bufferRow.setField(0,  bufferRow.getString(0) + inputRow.getString(0));
     }
 
     @Override
     public void merge(ReusableRow bufferRow1, ReusableRow bufferRow2) {
-        bufferRow1.setField("stringAppend", ((Long) bufferRow1.getField("stringAppend")) + ((Long) bufferRow2.getField("stringAppend")));
+        bufferRow1.setField(0,  bufferRow1.getString(0) + bufferRow2.getString(0));
     }
 
     @Override
     public void evaluate(ReusableRow bufferRow, ReusableRow outRow) {
-        outRow.setField("stringAppend", bufferRow.getField("stringAppend"));
+        outRow.setField(0, bufferRow.getField(0));
     }
 }

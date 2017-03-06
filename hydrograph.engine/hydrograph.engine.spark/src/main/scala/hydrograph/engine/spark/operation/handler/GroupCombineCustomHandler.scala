@@ -1,7 +1,9 @@
 package hydrograph.engine.spark.operation.handler
 
 import hydrograph.engine.spark.core.reusablerow._
-import hydrograph.engine.transformation.userfunctions.base.{BufferField, BufferSchema, GroupCombineTransformBase}
+import hydrograph.engine.transformation.schema
+import hydrograph.engine.transformation.schema.{Field, Schema}
+import hydrograph.engine.transformation.userfunctions.base.{GroupCombineTransformBase}
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
 import org.apache.spark.sql.types.{StructField, _}
@@ -16,19 +18,25 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
 
   def deterministic = isDeterministic
 
+
+
+  val bufferMapper = new RowToReusableMapper(bufSchemaVal, bufSchemaVal.fieldNames)
+  val outputMapper = new RowToReusableMapper(dataType.asInstanceOf[StructType], dataType.asInstanceOf[StructType].fieldNames)
+
   def initialize(buffer: MutableAggregationBuffer) = {
     try {
-      var brr = BufferReusableRow(buffer, new RowToReusableMapper(bufSchemaVal, bufSchemaVal.fieldNames))
+      var brr = BufferReusableRow(buffer, bufferMapper)
       groupCombineTransform.initialize(brr)
     } catch {
       case e: Exception => throw new RuntimeException("Exception in initialize() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer.toString() + "\"] error being:" + e.getMessage)
     }
   }
 
+
   def update(buffer: MutableAggregationBuffer, input: Row) = {
     try {
-      var brr = BufferReusableRow(buffer, new RowToReusableMapper(bufSchemaVal, bufSchemaVal.fieldNames))
-      groupCombineTransform.update(brr, InputReusableRow(input, new RowToReusableMapper(inSchema, inSchema.fieldNames)))
+      val brr = BufferReusableRow(buffer, bufferMapper)
+      groupCombineTransform.update(brr, InputReusableRow(input, bufferMapper))
     } catch {
       case e: Exception => throw new RuntimeException("Exception in update() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + input.toString() + "\"] error being:" + e.getMessage)
     }
@@ -36,8 +44,8 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
 
   def merge(buffer1: MutableAggregationBuffer, buffer2: Row) = {
     try {
-      val brr = BufferReusableRow(buffer1, new RowToReusableMapper(bufSchemaVal, bufSchemaVal.fieldNames))
-      val irr = InputReusableRow(buffer2, new RowToReusableMapper(bufSchemaVal, bufSchemaVal.fieldNames))
+      val brr = BufferReusableRow(buffer1, bufferMapper)
+      val irr = InputReusableRow(buffer2, bufferMapper)
       groupCombineTransform.merge(brr, irr)
     } catch {
       case e: Exception => throw new RuntimeException("Exception in merge() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer1.toString() + "\"] error being:" + e.getMessage)
@@ -47,8 +55,8 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
   def evaluate(buffer: Row) = {
     val output = new Array[Any](outSchema.size)
     try {
-      val orr: OutputReusableRow = OutputReusableRow(output, new RowToReusableMapper(dataType.asInstanceOf[StructType], dataType.asInstanceOf[StructType].fieldNames))
-      val irr = InputReusableRow(buffer, new RowToReusableMapper(bufferSchema, bufferSchema.fieldNames))
+      val orr: OutputReusableRow = OutputReusableRow(output, outputMapper)
+      val irr = InputReusableRow(buffer, bufferMapper)
       groupCombineTransform.evaluate(irr, orr)
     } catch {
       case e: Exception => throw new RuntimeException("Exception in evaluate() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer.toString() + "\"] error being:" + e.getMessage)
@@ -59,21 +67,40 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
   def bufferSchema = createBufferSchema(groupCombineTransform)
 
   def createBufferSchema(aggregatorTransformBase: GroupCombineTransformBase): StructType = {
-    val bufferSchema: BufferSchema = aggregatorTransformBase.initBufferSchema()
-    var bufferFieldMap: Map[String, BufferField] = Map()
+    val inputSchema:Schema=new Schema
+    inSchema.foreach(sf=>inputSchema.addField(new Field.Builder(sf.name,getJavaDataType(sf.dataType)).build()))
+
+    val outputSchema:Schema=new Schema
+    outSchema.foreach(sf=>outputSchema.addField(new Field.Builder(sf.name,getJavaDataType(sf.dataType)).build()))
+
+    val bufferSchema: Schema = aggregatorTransformBase.initBufferSchema(inputSchema,outputSchema)
+    var bufferFieldMap: Map[String, Field] = Map()
     for (bufferField <- bufferSchema.getSchema) {
       bufferFieldMap += bufferField._1 -> bufferField._2
     }
-    bufferFieldMap
 
     val array: Array[StructField] = new Array[StructField](bufferFieldMap.size())
     var i: Int = 0
     for (bs <- bufferFieldMap.values) {
-      array(i) = new StructField(bs.getFieldName, getSparkDataType(bs.getFieldType, bs.getFieldFormat, bs.getFieldPrecision, bs.getFieldScale))
+      array(i) = new StructField(bs.getFieldName, getSparkDataType(bs.getFieldType.toString, bs.getFieldFormat, bs.getFieldPrecision, bs.getFieldScale))
       i = i + 1
     }
     StructType(array)
   }
+
+  def getJavaDataType(structType: DataType): schema.DataType = structType match {
+    case _:IntegerType=> schema.DataType.Integer
+    case _:StringType=>schema.DataType.String
+    case _:LongType=> schema.DataType.Long
+    case _:ShortType=> schema.DataType.Short
+    case _:BooleanType=> schema.DataType.Boolean
+    case _:FloatType=> schema.DataType.Float
+    case _:DoubleType=> schema.DataType.Double
+    case _:TimestampType=> schema.DataType.Date
+    case _:DateType=> schema.DataType.Date
+    case _:DecimalType=> schema.DataType.BigDecimal
+  }
+
 
   def getSparkDataType(dataType: String, format: String, precision: Int, scale: Int): DataType = dataType match {
     case "Integer" => DataTypes.IntegerType
