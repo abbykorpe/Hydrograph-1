@@ -28,7 +28,6 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.Loader;
-
 /**
  * A factory for creating Logger objects.
  * <p>
@@ -63,6 +62,7 @@ public class LogFactory {
 	private void writeLogsOnFileAndConsole() {
 		loggers.debug("****Configuring Logger****");
         try {
+        	if(Platform.isRunning()){
         	    System.setProperty(HYDROGRAPH_INSTALLATION_LOCATION, Platform.getInstallLocation().getURL().getPath());
 	            ClassLoader loader = new URLClassLoader(new URL[]
 	            		{new File(Platform.getInstallLocation().getURL().getPath() + LOG_DIR).toURI().toURL()});
@@ -74,11 +74,12 @@ public class LogFactory {
 	                lc.reset();
 	                configurator.doConfigure(url);
 	                lc.start();
-            }
-            loggers.debug("****Logger Configured Successfully****");
+	            }
+	            loggers.debug("****Logger Configured Successfully****");
+        	}
         } catch(MalformedURLException|JoranException exception){
         	loggers.error("Failed to configure the logger {}", exception);
-        }
+        } 
     }
 
 }
