@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -17,7 +18,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.ohiveparquet.HivePathType;
 import hydrograph.engine.jaxb.ohiveparquet.HiveType;
@@ -38,7 +38,6 @@ import hydrograph.engine.jaxb.ohiveparquet.TypeOutputFileDelimitedBase;
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/ohiveparquet}hive_type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/ohiveparquet}hive_type"/>
  *         &lt;element name="externalTablePath" type="{hydrograph/engine/jaxb/ohiveparquet}hive_path_type" minOccurs="0"/>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -52,8 +51,7 @@ import hydrograph.engine.jaxb.ohiveparquet.TypeOutputFileDelimitedBase;
     "partitionKeys",
     "databaseName",
     "tableName",
-    "externalTablePath",
-    "runtimeProperties"
+    "externalTablePath"
 })
 public class ParquetHiveFile
     extends TypeOutputFileDelimitedBase
@@ -65,7 +63,6 @@ public class ParquetHiveFile
     @XmlElement(required = true)
     protected HiveType tableName;
     protected HivePathType externalTablePath;
-    protected TypeProperties runtimeProperties;
 
     /**
      * Gets the value of the partitionKeys property.
@@ -161,30 +158,6 @@ public class ParquetHiveFile
      */
     public void setExternalTablePath(HivePathType value) {
         this.externalTablePath = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
 }

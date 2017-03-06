@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -22,12 +23,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+import hydrograph.engine.jaxb.exceltype.TypeExcelField;
 import hydrograph.engine.jaxb.generatesequence.TypeNameField;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordField;
 import hydrograph.engine.jaxb.ojdbcupdate.TypeJdbcupdateField;
 import hydrograph.engine.jaxb.omysql.TypeMysqlField;
 import hydrograph.engine.jaxb.ooracle.TypeOracleField;
 import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
+import hydrograph.engine.jaxb.osparkredshift.TypeSparkredshiftField;
 import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
 
 
@@ -60,8 +63,10 @@ import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedField.class,
     TypeMysqlField.class,
     TypeRedshiftField.class,
+    TypeSparkredshiftField.class,
     TypeOracleField.class,
     TypeTeradataField.class,
+    TypeExcelField.class,
     hydrograph.engine.jaxb.ofxml.TypeXmlField.class,
     TypeJdbcupdateField.class,
     TypeNameField.class

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -63,6 +64,14 @@ public class ObjectFactory {
      */
     public TextFileDelimited createTextFileDelimited() {
         return new TextFileDelimited();
+    }
+
+    /**
+     * Create an instance of {@link ExcelFile }
+     * 
+     */
+    public ExcelFile createExcelFile() {
+        return new ExcelFile();
     }
 
     /**
@@ -170,6 +179,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Sparkredshift }
+     * 
+     */
+    public Sparkredshift createSparkredshift() {
+        return new Sparkredshift();
+    }
+
+    /**
      * Create an instance of {@link SubjobOutput }
      * 
      */
@@ -231,6 +248,46 @@ public class ObjectFactory {
      */
     public TextFileDelimited.Quote createTextFileDelimitedQuote() {
         return new TextFileDelimited.Quote();
+    }
+
+    /**
+     * Create an instance of {@link ExcelFile.SourcePath }
+     * 
+     */
+    public ExcelFile.SourcePath createExcelFileSourcePath() {
+        return new ExcelFile.SourcePath();
+    }
+
+    /**
+     * Create an instance of {@link ExcelFile.TargetPath }
+     * 
+     */
+    public ExcelFile.TargetPath createExcelFileTargetPath() {
+        return new ExcelFile.TargetPath();
+    }
+
+    /**
+     * Create an instance of {@link ExcelFile.Delimiter }
+     * 
+     */
+    public ExcelFile.Delimiter createExcelFileDelimiter() {
+        return new ExcelFile.Delimiter();
+    }
+
+    /**
+     * Create an instance of {@link ExcelFile.TemplateExcelPath }
+     * 
+     */
+    public ExcelFile.TemplateExcelPath createExcelFileTemplateExcelPath() {
+        return new ExcelFile.TemplateExcelPath();
+    }
+
+    /**
+     * Create an instance of {@link ExcelFile.Charset }
+     * 
+     */
+    public ExcelFile.Charset createExcelFileCharset() {
+        return new ExcelFile.Charset();
     }
 
     /**

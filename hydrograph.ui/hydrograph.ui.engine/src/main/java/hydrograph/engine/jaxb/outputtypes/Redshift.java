@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -19,7 +20,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
 import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
 
@@ -44,7 +44,6 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
  *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oredshift}type-load-choice"/>
  *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
  *         &lt;element name="schemaName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
- *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -64,8 +63,7 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
     "password",
     "loadType",
     "chunkSize",
-    "schemaName",
-    "runtimeProperties"
+    "schemaName"
 })
 public class Redshift
     extends TypeOutputRedshiftBase
@@ -88,7 +86,6 @@ public class Redshift
     protected TypeLoadChoice loadType;
     protected ElementValueIntegerType chunkSize;
     protected ElementValueStringType schemaName;
-    protected TypeProperties runtimeProperties;
 
     /**
      * Gets the value of the databaseName property.
@@ -328,30 +325,6 @@ public class Redshift
      */
     public void setSchemaName(ElementValueStringType value) {
         this.schemaName = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
     }
 
 }
