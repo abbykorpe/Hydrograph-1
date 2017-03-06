@@ -78,8 +78,8 @@ openFile
 -XX:+UseStringDeduplication
 -Dosgi.requiredJavaVersion=1.8</argsX86_64>
       </programArgsWin>
-      <vmArgsMac>-Xms256m
--Xmx1024m
+      <vmArgsMac>-Xms2048m
+-Xmx4096m
 
 -XstartOnFirstThread
       </vmArgsMac>
