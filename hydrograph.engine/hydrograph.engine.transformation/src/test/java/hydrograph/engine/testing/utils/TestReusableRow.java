@@ -7,7 +7,7 @@ import java.util.Map;
 
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
-public class TestReusableRow extends ReusableRow implements Serializable{
+public class TestReusableRow extends ReusableRow implements Serializable, Cloneable{
 
 	private Object[] inputRow;
 	private Map<String,Integer> fieldMap;
@@ -19,6 +19,22 @@ public class TestReusableRow extends ReusableRow implements Serializable{
 		for(String field:fields){
 			fieldMap.put(field, index++);
 		}
+	}
+	
+	public TestReusableRow (TestReusableRow testReusableRow) {
+		super(new LinkedHashSet<String>(testReusableRow.getFieldNames()));
+		int index=0;
+		fieldMap=new HashMap<>();
+		for(String field:testReusableRow.getFieldNames()){
+			fieldMap.put(field, index++);
+		}
+		
+		inputRow = new  Object[testReusableRow.inputRow.length];
+		
+		for(int i=0; i< testReusableRow.inputRow.length; i++) {
+			inputRow[i] = testReusableRow.inputRow[i];
+		}
+		
 	}
 	
 	public void setRow(Object[] row){
@@ -43,6 +59,16 @@ public class TestReusableRow extends ReusableRow implements Serializable{
 	@Override
 	protected void setFieldInternal(String fieldName, Comparable value) {
 		inputRow[fieldMap.get(fieldName)]=value;
+	}
+	
+	@Override
+	public Object clone() {
+	    try {
+	        return super.clone();
+	    } catch (Exception e) {
+	        // either handle the exception or throw it
+	        return null;
+	    }
 	}
 
 }
