@@ -21,6 +21,7 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
 
 
   val bufferMapper = new RowToReusableMapper(bufSchemaVal, bufSchemaVal.fieldNames)
+  val inputMapper = new RowToReusableMapper(inSchema, inSchema.fieldNames)
   val outputMapper = new RowToReusableMapper(dataType.asInstanceOf[StructType], dataType.asInstanceOf[StructType].fieldNames)
 
   def initialize(buffer: MutableAggregationBuffer) = {
@@ -28,7 +29,7 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
       var brr = BufferReusableRow(buffer, bufferMapper)
       groupCombineTransform.initialize(brr)
     } catch {
-      case e: Exception => throw new RuntimeException("Exception in initialize() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer.toString() + "\"] error being:" + e.getMessage)
+      case e: Exception => throw new RuntimeException("Exception in initialize() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer.toString() + "\"] error being:" + e.getMessage,e)
     }
   }
 
@@ -36,9 +37,9 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
   def update(buffer: MutableAggregationBuffer, input: Row) = {
     try {
       val brr = BufferReusableRow(buffer, bufferMapper)
-      groupCombineTransform.update(brr, InputReusableRow(input, bufferMapper))
+      groupCombineTransform.update(brr, InputReusableRow(input, inputMapper))
     } catch {
-      case e: Exception => throw new RuntimeException("Exception in update() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + input.toString() + "\"] error being:" + e.getMessage)
+      case e: Exception => throw new RuntimeException("Exception in update() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + input.toString() + "\"] error being:" + e.getMessage,e)
     }
   }
 
@@ -48,7 +49,7 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
       val irr = InputReusableRow(buffer2, bufferMapper)
       groupCombineTransform.merge(brr, irr)
     } catch {
-      case e: Exception => throw new RuntimeException("Exception in merge() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer1.toString() + "\"] error being:" + e.getMessage)
+      case e: Exception => throw new RuntimeException("Exception in merge() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer1.toString() + "\"] error being:" + e.getMessage,e)
     }
   }
 
@@ -59,7 +60,7 @@ case class GroupCombineCustomHandler(groupCombineTransform: GroupCombineTransfor
       val irr = InputReusableRow(buffer, bufferMapper)
       groupCombineTransform.evaluate(irr, orr)
     } catch {
-      case e: Exception => throw new RuntimeException("Exception in evaluate() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer.toString() + "\"] error being:" + e.getMessage)
+      case e: Exception => throw new RuntimeException("Exception in evaluate() for Transform Class:[\"" + groupCombineTransform + "\"] for row:[\"" + buffer.toString() + "\"] error being:" + e.getMessage,e)
     }
     Row.fromSeq(output)
   }
