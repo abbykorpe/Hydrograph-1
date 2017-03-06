@@ -1,9 +1,9 @@
-package hydrograph.engine.transformation.userfunctions.base;
+package hydrograph.engine.transformation.schema;
 
-public class BufferField {
+public class Field {
 
     String fieldName;
-    String fieldType;
+    DataType fieldType;
     String fieldFormat;
     int fieldPrecision;
     int fieldScale;
@@ -12,7 +12,7 @@ public class BufferField {
         return fieldName;
     }
 
-    public String getFieldType() {
+    public DataType getFieldType() {
         return fieldType;
     }
 
@@ -28,7 +28,7 @@ public class BufferField {
         return fieldScale;
     }
 
-    private BufferField(Builder builder) {
+    private Field(Builder builder) {
         this.fieldName = builder.fieldName;
         this.fieldType = builder.fieldType;
         this.fieldFormat = builder.fieldFormat;
@@ -39,12 +39,12 @@ public class BufferField {
     public static class Builder {
 
         String fieldName;
-        String fieldType;
+        DataType fieldType;
         String fieldFormat = "";
         int    fieldPrecision;
         int    fieldScale;
 
-        public Builder(String fieldName, String fieldType){
+        public Builder(String fieldName, DataType fieldType){
             this.fieldName = fieldName;
             this.fieldType = fieldType;
         }
@@ -64,8 +64,8 @@ public class BufferField {
             return this;
         }
 
-        public BufferField build(){
-            return new BufferField(this);
+        public Field build(){
+            return new Field(this);
         }
     }
 }

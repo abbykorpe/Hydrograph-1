@@ -14,7 +14,8 @@ package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.component.utils.OperationOutputField
-import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
+import hydrograph.engine.transformation.schema
+import org.apache.spark.sql.types._
 
 import scala.collection.mutable.ListBuffer
 
@@ -104,4 +105,38 @@ object EncoderHelper {
   def apply(): EncoderHelper = {
     new EncoderHelper()
   }
+}
+
+
+object DataTypeConverter{
+
+  def getSparkDataType(dataType: String, format: String, precision: Int, scale: Int): DataType = dataType match {
+    case "Integer" => DataTypes.IntegerType
+    case "String" => DataTypes.StringType
+    case "Long" => DataTypes.LongType
+    case "Short" => DataTypes.ShortType
+    case "Boolean" => DataTypes.BooleanType
+    case "Float" => DataTypes.FloatType
+    case "Double" => DataTypes.DoubleType
+    case "Date" if format.matches(".*[H|m|s|S].*") => DataTypes.TimestampType
+    case "Date" => DataTypes.DateType
+    case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(precision), scale)
+  }
+
+  def checkPrecision(precision: Int): Int = if (precision == -999) 38 else precision
+
+  def getJavaDataType(structType: DataType): schema.DataType = structType match {
+    case _:IntegerType=> schema.DataType.Integer
+    case _:StringType=>schema.DataType.String
+    case _:LongType=> schema.DataType.Long
+    case _:ShortType=> schema.DataType.Short
+    case _:BooleanType=> schema.DataType.Boolean
+    case _:FloatType=> schema.DataType.Float
+    case _:DoubleType=> schema.DataType.Double
+    case _:TimestampType=> schema.DataType.Date
+    case _:DateType=> schema.DataType.Date
+    case _:DecimalType=> schema.DataType.BigDecimal
+  }
+
+
 }
