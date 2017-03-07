@@ -53,6 +53,10 @@ public class ExpressionCompositeFactory {
 	  {
 		return new AggregateCumulateExpressionComposite(parent, SWT.None, mappingSheetRow, component, widgetConfig);
 	  }
+	  else if(Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName()))
+		  {
+			return new GroupCombineExpressionComposite(parent, SWT.None, mappingSheetRow, component, widgetConfig);
+		  }
       return null;
    }
 

@@ -19,6 +19,7 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -86,8 +87,11 @@ public class FileStorageEditorContainer implements IGenrateContainerData {
 		logger.debug("storeEditorInput - Storing FileStorageEditor input into Ifile");
 		File file = new File(fileStorageEditorInput.getToolTipText());
 		FileOutputStream fsout = new FileOutputStream(file);
-		fsout.write(CanvasUtils.INSTANCE.fromObjectToXML(
-				eltGraphicalEditorInstance.getContainer()).getBytes());
+		ByteArrayOutputStream arrayOutputStream=new ByteArrayOutputStream();
+		CanvasUtils.INSTANCE.fromObjectToXML(
+				eltGraphicalEditorInstance.getContainer(),arrayOutputStream);
+		fsout.write(arrayOutputStream.toByteArray());
+		arrayOutputStream.close();
 		fsout.close();
 		eltGraphicalEditorInstance.getCommandStack().markSaveLocation();
 		eltGraphicalEditorInstance.setDirty(false);

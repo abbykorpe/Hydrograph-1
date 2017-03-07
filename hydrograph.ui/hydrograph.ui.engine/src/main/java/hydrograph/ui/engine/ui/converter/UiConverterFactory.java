@@ -30,6 +30,7 @@ import hydrograph.engine.jaxb.operationstypes.Aggregate;
 import hydrograph.engine.jaxb.operationstypes.Cumulate;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
+import hydrograph.engine.jaxb.operationstypes.Groupcombine;
 import hydrograph.engine.jaxb.operationstypes.Join;
 import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
@@ -48,6 +49,7 @@ import hydrograph.ui.engine.ui.converter.impl.CumulateUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.DiscardUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.FilterUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.GenerateRecordsUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.GroupCombineUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputComponentSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputFileDelimitedUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputFixedWidthUiConverter;
@@ -148,6 +150,9 @@ public class UiConverterFactory {
 		}
 		if ((Aggregate.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new AggregateUiConverter(typeBaseComponent, container);
+		}
+		if ((Groupcombine.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new GroupCombineUiConverter(typeBaseComponent, container);
 		}
 		if ((Transform.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new TransformComponentUiConverter(typeBaseComponent, container);

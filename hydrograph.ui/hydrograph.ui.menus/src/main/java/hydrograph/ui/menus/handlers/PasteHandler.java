@@ -116,7 +116,7 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 					InputStream inputStream=file.getContents()) {
 				Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inputStream);
 				container.setUniqueJobId(GenerateUniqueJobIdUtil.INSTANCE.generateUniqueJobId());
-				outStream.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
+			CanvasUtils.INSTANCE.fromObjectToXML(container,outStream);
 				file.setContents(new ByteArrayInputStream(outStream.toByteArray()), true, false, null);
 				
 

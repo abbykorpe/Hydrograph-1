@@ -154,7 +154,7 @@ public class WidgetFactory {
 		AGGREGATE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.AGGREGATE,Constants.AGGREGATE_DISPLAYNAME, Constants.AGGREGATE_WINDOW_TITLE)),
 		CUMULATE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.CUMULATE, Constants.CUMULATE_DISPLAYNAME, Constants.CUMULATE_WINDOW_TITLE)),
 		NORMALIZE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.NORMALIZE,Constants.NORMALIZE_DISPLAYNAME, Constants.NORMALIZE_WINDOW_TITLE)),		
-		
+		GROUP_COMBINE_WIDGET(TransformWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.GROUP_COMBINE,Constants.GROUP_COMBINE_DISPLAYNAME,Constants.GROUP_COMBINE_WINDOW_TITLE)),
 		XML_CONTENT_WIDGET(ELTXmlPropertiesContainer.class),
 		
 		JOIN_INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_INPUT_COUNT,2)),

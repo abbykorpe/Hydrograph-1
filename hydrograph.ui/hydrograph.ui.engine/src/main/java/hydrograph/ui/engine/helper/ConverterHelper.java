@@ -143,13 +143,20 @@ public class ConverterHelper {
             expression.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
             expression.setOutputFields(getExpressionOutputField(mappingSheetRow,schemaGridRows));
             if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())
-              ||Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()))
+              ||Constants.CUMULATE.equalsIgnoreCase(component.getComponentName())
+              )
             {	
             expression.setAccumulatorInitalValue(mappingSheetRow.getAccumulator());
             }
+            else if(Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())){
+            	 expression.setAccumulatorInitalValue(mappingSheetRow.getAccumulator());
+            	 if(StringUtils.isNotBlank(mappingSheetRow.getMergeExpressionDataForGroupCombine().getExpression())){
+            		 expression.setMergeExpr(mappingSheetRow.getMergeExpressionDataForGroupCombine().getExpression());
+            	 }
+            }
             if(StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
             {
-            expression.setExpr(mappingSheetRow.getExpressionEditorData().getExpression());
+            	expression.setExpr(mappingSheetRow.getExpressionEditorData().getExpression());
             }
             return expression;
             }	

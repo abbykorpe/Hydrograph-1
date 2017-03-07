@@ -47,11 +47,12 @@ public abstract class AbstractExpressionComposite extends Composite {
 	public static final String EXPRESSION_COMPOSITE_KEY = "expression-composite";
 	protected Text expressionIdTextBox;
 	protected Text expressionTextBox;
+	protected Text expression_text_1;
 	protected Text parameterTextBox;
 	protected Text outputFieldTextBox;
 	protected Table table;
 	protected TableViewer tableViewer;
-	protected Button addButton, deletButton, browseButton;
+	protected Button addButton, deletButton, browseButton,expressionbutton;
 	protected Button btnIsParam;
 	protected Button switchToClassButton;
 	protected Button switchToExpressionButton;
@@ -91,6 +92,10 @@ public abstract class AbstractExpressionComposite extends Composite {
 
 	public Text getExressionTextBox() {
 		return expressionTextBox;
+	}
+	
+	public Text getExressionTextBox2() {
+		return expression_text_1;
 	}
 
 	public Text getParameterTextBox() {
@@ -166,6 +171,7 @@ public abstract class AbstractExpressionComposite extends Composite {
 			isParam.setData(Constants.OUTPUT_FIELD_TEXT_BOX, outputFieldTextBox);
 			isParam.setData(Constants.PARAMETER_TEXT_BOX, parameterTextBox);
 			isParam.setData(Constants.EXPRESSION_TEXT_BOX, expressionTextBox);
+			
 		}
 	
 	/**
@@ -211,5 +217,30 @@ public abstract class AbstractExpressionComposite extends Composite {
 		}
 
 		return mappingSheetRow.getExpressionEditorData();
+	}
+	
+	/**
+	 * Creates data-structure for expression-editor.
+	 * 
+	 * @return
+	 */
+	public ExpressionEditorData createMergeExpressionEditorData() {
+		if (!mappingSheetRow.getInputFields().isEmpty()) {
+			List<String> inputFieldNames = new ArrayList<>();
+			for (FilterProperties filterProperties : mappingSheetRow.getInputFields()) {
+				inputFieldNames.add(filterProperties.getPropertyname());
+			}
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getfieldsUsedInExpression().clear();
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().clear();
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().putAll(
+					FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getfieldsUsedInExpression().addAll(inputFieldNames);
+
+		} else {
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().clear();
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getfieldsUsedInExpression().clear();
+		}
+
+		return mappingSheetRow.getMergeExpressionDataForGroupCombine();
 	}
 }

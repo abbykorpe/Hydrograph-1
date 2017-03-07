@@ -553,7 +553,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 			
 	 			mappingSheetRowForOperationClass = new MappingSheetRow(inputFieldListOperationClass, 
 	 					outputListOperationClass, operationId, Messages.CUSTOM, "",
-	 					nameValuePropertyOperationClass, false, "", false, "",false,null,false);	
+	 					nameValuePropertyOperationClass, false, "", false, "",false,null,null,false);	
 	 			transformMapping.getMappingSheetRows().add(mappingSheetRows.indexOf(mappingSheetRow),mappingSheetRowForOperationClass);
 	 		}
 	 		
@@ -561,9 +561,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 		{
 	 			operationId="Expression:"+n;
 	 			ExpressionEditorData expressionEditorData=new ExpressionEditorData("",component.getComponentName());
+	 			ExpressionEditorData mergeExpressionEditorDataForGroupCombine=new ExpressionEditorData("",component.getComponentName());
 	 	    	mappingSheetRowForExpression = new MappingSheetRow(inputFieldListOperationClass, outputListOperationClass, 
 	 	    			operationId, Messages.CUSTOM, "",
-	 	    			nameValuePropertyOperationClass, false, "", false, "",true,expressionEditorData,false);
+	 	    			nameValuePropertyOperationClass, false, "", false, "",true,expressionEditorData,mergeExpressionEditorDataForGroupCombine,false);
 	 	    	transformMapping.getMappingSheetRows().add(mappingSheetRows.indexOf(mappingSheetRow)+1,
 	 	    			mappingSheetRowForExpression);	
 	 		}
@@ -751,7 +752,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		if(OSValidator.isMac()){
 			middleSashForm.setWeights(new int[] {85, 58, 27});
 			}else if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())||
-					Constants.CUMULATE.equalsIgnoreCase(component.getComponentName())
+					Constants.CUMULATE.equalsIgnoreCase(component.getComponentName())||
+					Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())
 					){
 				middleSashForm.setWeights(new int[] {65, 54, 23});
 			}
@@ -964,9 +966,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			expandItem.setHeight(242);
 		}
 		else if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())||
-				Constants.CUMULATE.equalsIgnoreCase(component.getComponentName())
+				Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()) ||
+				Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())
 				){
-			expandItem.setHeight(289);
+//			expandItem.setHeight(289);
+			expandItem.setHeight(330);
 		}
 		else{
 			expandItem.setHeight(230);
@@ -1032,10 +1036,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
  					refreshOutputTable();
  					showHideValidationMessage();
  					if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())||
-  		    	     	   Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
+  		    	     	   Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName())||
+  		    	     	Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName()))
   		    	     	{
-  		    	     		expandItem.setHeight(289);
-  		    	     		middleSashForm.setWeights(new int[] {65, 54, 23});
+  		    	     		//expandItem.setHeight(289);
+ 							expandItem.setHeight(330);
+  		    	     		//middleSashForm.setWeights(new int[] {65, 54, 23});
+ 							middleSashForm.setWeights(new int[] {95, 34, 23});
   		    	     		scrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
   		    	     	}
  				}	
@@ -1071,7 +1078,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
  					refreshOutputTable();
  					showHideValidationMessage();
  					if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())||
- 		    	     	   Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
+ 		    	     	   Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()) ||
+ 		    	     	 Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName()))
  		    	     	{
  		    	     		expandItem.setHeight(220);
  		    	     		middleSashForm.setWeights(new int[] {54, 59, 25});
@@ -1094,7 +1102,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
      	OperationClassConfig configurationForTransformWidget;
      	configurationForTransformWidget = (OperationClassConfig) widgetConfig;
      	if (StringUtils.equalsIgnoreCase(Constants.AGGREGATE, configurationForTransformWidget.getComponentName())
-				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,configurationForTransformWidget.getComponentName())) {
+				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,configurationForTransformWidget.getComponentName())
+				|| StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE,configurationForTransformWidget.getComponentName())) {
      	addModifyListenerToComboDataTypes(expressionComposite.getComboDataTypes(),expressionComposite,mappingSheetRowForExpression);
      	addModifyListenerToAccumulator(expressionComposite.getTextAccumulator(),expressionComposite,mappingSheetRowForExpression);
      	addModifyListnerToAccumulatorIsParameter(expressionComposite.getIsParamAccumulator(),mappingSheetRowForExpression);
@@ -1103,6 +1112,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
      	}
      	addListenerForRowHighlighting(expressionComposite);
      	addModifyListenerToOperationClassAndExpressionTextBox(expressionComposite.getExressionTextBox());
+     	if(StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE,configurationForTransformWidget.getComponentName())){
+     	addModifyListenerToOperationClassAndExpressionTextBox(expressionComposite.getExressionTextBox2());
+     	}
      	attachModifyListenerToIdTextBox(mappingSheetRowForExpression, expressionComposite.getExpressionIdTextBox());
      	attachFocusListenerToIdTextBox(expressionComposite.getExpressionIdTextBox());
      	addIsParamSelectionListener(expressionComposite.getIsParamButton(), mappingSheetRowForExpression);
@@ -1590,6 +1602,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Text textAccumulator = (Text)isParam.getData("textAccumulator");
 				Button isParamAccumulator = (Button)isParam.getData("isParamAccumulator");
 				Combo comboDataTypes = (Combo)isParam.getData("comboDataTypes");
+				Text mergeExpressionTextBox=(Text)isParam.getData(Constants.EXPRESSION_TEXT_BOX1);
+				Button mergeExpressionBrowseButton=(Button)isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON1);
 				if(isParam.getSelection())
 				{
 					if (WidgetUtility.eltConfirmMessage(Messages.ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE)) 
@@ -1605,11 +1619,18 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 						expressionIdTextBox.setEnabled(false);
 						expressionTextBox.setText("");
 						browseButton.setEnabled(false);
+						if(Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())){
+							mergeExpressionBrowseButton.setEnabled(false);
+							mergeExpressionTextBox.setText("");
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().setExpression("");
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().clear();
+						}
 						outputFieldTextBox.setText("");
 						outputFieldTextBox.setEnabled(false);
 						textAccumulator.setEnabled(false);
 						isParamAccumulator.setEnabled(false);
 						comboDataTypes.setEnabled(false);
+						
 						mappingSheetRow.getInputFields().clear();
 						mappingSheetRow.getOutputList().clear();
 						refreshOutputTable();
@@ -1634,6 +1655,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					textAccumulator.setEnabled(true);
 					isParamAccumulator.setEnabled(true);
 					comboDataTypes.setEnabled(true);
+					if(Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())){
+						mergeExpressionBrowseButton.setEnabled(true);
+						mergeExpressionTextBox.setText("");
+					}
 				}	
 			}
 		});
@@ -1721,6 +1746,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		   setErrorMessageForInvalidMapFields();
 		   setErrorMessageForAccumulator();
 		   setErrorMessageIfExpressionIsNotValid();
+		   setErrorMessageIfMergeExpressionIsNotValid();
 		   Set<String> setToCheckDuplicates = showErrorIfOperationClassOrExpressionBlankOrOperationIDDuplicate(); 	
      	   errorTableViewer.getTable().setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 	       errorTableViewer.refresh();
@@ -1730,15 +1756,33 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 	}
     
+	private void setErrorMessageIfMergeExpressionIsNotValid() {
+		for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
+    	{	
+	   	if(mappingSheetRow.isActive()
+	   	   &&mappingSheetRow.isExpression()
+	   	   &&StringUtils.isNotBlank(mappingSheetRow.getMergeExpressionDataForGroupCombine().getExpression())
+	   	   &&!(mappingSheetRow.getMergeExpressionDataForGroupCombine().isValid())
+	       )
+	   		
+	   	{
+	   		errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+			errorLabel.setVisible(true);
+			errorLabel.setText(mappingSheetRow.getMergeExpressionDataForGroupCombine().getErrorMessage()+" for "+mappingSheetRow.getOperationID()); 
+			errorLabelList.add(errorLabel);
+	   	}	
+    	}
+		
+	}
+
 	private void setErrorMessageForAccumulator() {
 		OperationClassConfig configurationForTransformWidget;
 		configurationForTransformWidget = (OperationClassConfig) widgetConfig;
 		transformMapping.getMappingSheetRows().forEach(mappingSheetRow -> {
 			if (mappingSheetRow.isActive() && mappingSheetRow.isExpression()
-					&& (StringUtils.equalsIgnoreCase(Constants.AGGREGATE,
-							configurationForTransformWidget.getComponentName())
-							|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,
-									configurationForTransformWidget.getComponentName()))) {
+					&& (StringUtils.equalsIgnoreCase(Constants.AGGREGATE,configurationForTransformWidget.getComponentName())
+							|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,configurationForTransformWidget.getComponentName())
+							|| StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE, configurationForTransformWidget.getComponentName()))) {
 				boolean logError = true;
 				boolean isValidValue = validate(mappingSheetRow.getAccumulator(), mappingSheetRow.getComboDataType());
 				if (!isValidValue) {
@@ -2380,7 +2424,7 @@ private void operationInputTableAddButton(
 		List<NameValueProperty> nameValuePropertyOperationClass = new ArrayList<>();
 		mappingSheetRowForOperationClass = new MappingSheetRow(inputFieldListOperationClass, 
 				outputListOperationClass, operationID, Messages.CUSTOM, "",
-				nameValuePropertyOperationClass, false, "", false, "",false,null,setActiveMappingSheetForOperationClass());	
+				nameValuePropertyOperationClass, false, "", false, "",false,null,null,setActiveMappingSheetForOperationClass());	
 		transformMapping.getMappingSheetRows().add(mappingSheetRowForOperationClass);
 			
 		List<FilterProperties> inputFieldList = new ArrayList<>();
@@ -2394,8 +2438,9 @@ private void operationInputTableAddButton(
 		}
 		
 		ExpressionEditorData expressionEditorData=new ExpressionEditorData("",component.getComponentName());
+		ExpressionEditorData mergeExpressionEditorDataForGroupCombine=new ExpressionEditorData("",component.getComponentName());
     	mappingSheetRowForExpression = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
-				nameValueProperty, false, "", false, "",true,expressionEditorData,setActiveMappingSheetForExpression());
+				nameValueProperty, false, "", false, "",true,expressionEditorData,mergeExpressionEditorDataForGroupCombine,setActiveMappingSheetForExpression());
     	transformMapping.getMappingSheetRows().add(mappingSheetRowForExpression);
 		addExpandItem(scrolledComposite);
 	}

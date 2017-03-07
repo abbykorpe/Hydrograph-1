@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commandtypes;
 
@@ -58,6 +59,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RunSQL }
+     * 
+     */
+    public RunSQL createRunSQL() {
+        return new RunSQL();
+    }
+
+    /**
      * Create an instance of {@link RunProgram }
      * 
      */
@@ -103,6 +112,62 @@ public class ObjectFactory {
      */
     public Hplsql.Execute.Uri createHplsqlExecuteUri() {
         return new Hplsql.Execute.Uri();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DatabaseConnectionName }
+     * 
+     */
+    public RunSQL.DatabaseConnectionName createRunSQLDatabaseConnectionName() {
+        return new RunSQL.DatabaseConnectionName();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.ServerName }
+     * 
+     */
+    public RunSQL.ServerName createRunSQLServerName() {
+        return new RunSQL.ServerName();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.PortNumber }
+     * 
+     */
+    public RunSQL.PortNumber createRunSQLPortNumber() {
+        return new RunSQL.PortNumber();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DatabaseName }
+     * 
+     */
+    public RunSQL.DatabaseName createRunSQLDatabaseName() {
+        return new RunSQL.DatabaseName();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DbUserName }
+     * 
+     */
+    public RunSQL.DbUserName createRunSQLDbUserName() {
+        return new RunSQL.DbUserName();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.DbPassword }
+     * 
+     */
+    public RunSQL.DbPassword createRunSQLDbPassword() {
+        return new RunSQL.DbPassword();
+    }
+
+    /**
+     * Create an instance of {@link RunSQL.QueryCommand }
+     * 
+     */
+    public RunSQL.QueryCommand createRunSQLQueryCommand() {
+        return new RunSQL.QueryCommand();
     }
 
     /**

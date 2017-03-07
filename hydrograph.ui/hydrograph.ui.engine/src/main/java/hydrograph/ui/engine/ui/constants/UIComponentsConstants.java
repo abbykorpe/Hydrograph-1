@@ -36,6 +36,7 @@ public enum UIComponentsConstants {
 	REMOVE_DUPS("Remove Dups"),
 	TRANSFORM_CATEGORY("TRANSFORM"),
 	AGGREGATE("Aggregate"),
+	GROUP_COMBINE("Groupcombine"),
 	TRANSFORM("Transform"),
 	JOIN("Join"),
 	LOOKUP("Lookup"),

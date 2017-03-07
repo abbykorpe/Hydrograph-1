@@ -162,7 +162,8 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	private List<String> getPropagatedSchema() {
 		List<String> propogatedFields=new ArrayList<>();
 		if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE)
-				 ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.CUMULATE))
+				 ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.CUMULATE)
+				 || StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.GROUP_COMBINE) )
 				{
 					TransformWidget transformWidget = null;
 					for(AbstractWidget abstractWidget:widgets)

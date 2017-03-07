@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -18,13 +19,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.exceltype.TypeExcelOutSocket;
 import hydrograph.engine.jaxb.ifmixedscheme.TypeInputMixedOutSocket;
 import hydrograph.engine.jaxb.ifxml.TypeInputXmlOutSocket;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordOutSocket;
 import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextDelimitedOutSocket;
 import hydrograph.engine.jaxb.imysql.TypeInputMysqlOutSocket;
 import hydrograph.engine.jaxb.ioracle.TypeInputOracleOutSocket;
-import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket;
 import hydrograph.engine.jaxb.iteradata.TypeInputTeradataOutSocket;
 import hydrograph.engine.jaxb.itffw.TypeInputFixedwidthOutSocket;
 import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
@@ -65,10 +66,12 @@ import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
     TypeInputMixedOutSocket.class,
     hydrograph.engine.jaxb.ifsubjob.TypeInputDelimitedOutSocket.class,
     TypeInputMysqlOutSocket.class,
-    TypeInputRedshiftOutSocket.class,
+    hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket.class,
+    hydrograph.engine.jaxb.isparkredshift.TypeInputRedshiftOutSocket.class,
     TypeInputOracleOutSocket.class,
     TypeInputTeradataOutSocket.class,
-    TypeInputXmlOutSocket.class
+    TypeInputXmlOutSocket.class,
+    TypeExcelOutSocket.class
 })
 public class TypeInputOutSocket
     extends TypeBaseOutSocket

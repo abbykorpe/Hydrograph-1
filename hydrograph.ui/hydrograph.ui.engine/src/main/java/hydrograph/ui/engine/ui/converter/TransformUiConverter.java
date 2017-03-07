@@ -192,24 +192,36 @@ public abstract class TransformUiConverter extends UiConverter {
 				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformOperation),
 					getOutputFieldList(transformOperation),
 					getOperationClassName(transformOperation.getClazz()),transformOperation.getClazz(),
-					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null,true)
+					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null,null,true)
 				   );
              }
 			else if(item instanceof TypeTransformExpression)
 			{
 					
 				TypeTransformExpression transformExpression=(TypeTransformExpression)item;
-				MappingSheetRow mappingSheetRow=
-						new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
-						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,
-						getExpressionEditorData(transformExpression),
-						true);
+				MappingSheetRow mappingSheetRow;
+				if(Constants.GROUP_COMBINE.equalsIgnoreCase(uiComponent.getComponentName()))
+					{
+					mappingSheetRow=new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
+							null,null,false,transformExpression.getId(),getProperties(transformExpression),true,
+							getExpressionEditorData(transformExpression),
+							getMergeExpressionEditorData(transformExpression),true);
+				}
+				else{
+					 mappingSheetRow=new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
+								null,null,false,transformExpression.getId(),getProperties(transformExpression),true,
+								getExpressionEditorData(transformExpression),
+								null,true);
+				}
+				
 				if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName())){	
 				 mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants._INDEX,java.lang.Integer.class);
 				 atMapping.setExpression(true);
 				}
 				else if(Constants.AGGREGATE.equalsIgnoreCase(uiComponent.getComponentName())
-				  ||Constants.CUMULATE.equalsIgnoreCase(uiComponent.getComponentName()))
+				  ||Constants.CUMULATE.equalsIgnoreCase(uiComponent.getComponentName())
+				  ||Constants.GROUP_COMBINE.equalsIgnoreCase(uiComponent.getComponentName())
+				 )
 				{	
 					mappingSheetRow.setAccumulator(transformExpression.getAccumulatorInitalValue());
 					if(StringUtils.isBlank(transformExpression.getAccumulatorInitalValue()))
@@ -226,19 +238,63 @@ public abstract class TransformUiConverter extends UiConverter {
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
 					mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
 							java.lang.Integer.class);
+						if(mappingSheetRow.getMergeExpressionDataForGroupCombine()!=null){
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
+									java.lang.Integer.class);
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_1,
+									java.lang.Integer.class);
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_2,
+									java.lang.Integer.class);
+						}
 					}else if(validateBigDecimal(transformExpression.getAccumulatorInitalValue())){
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_BIGDECIMAL);
 					mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
 							java.math.BigDecimal.class);
+						if(mappingSheetRow.getMergeExpressionDataForGroupCombine()!=null){
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
+									java.math.BigDecimal.class);
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_1,
+									java.math.BigDecimal.class);
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_2,
+									java.math.BigDecimal.class);
+						
+						}
 					}else{
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_STRING);
 					mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
 							java.lang.String.class);
+						if(mappingSheetRow.getMergeExpressionDataForGroupCombine()!=null){
+						mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
+								java.lang.String.class);
+						mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_1,
+								java.lang.String.class);
+						mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_2,
+								java.lang.String.class);
+					
+						}
 					}
+					
 				}
 				mappingSheetRows.add(mappingSheetRow);
 			}	
 		}
+	}
+
+	private ExpressionEditorData getMergeExpressionEditorData(TypeTransformExpression typeTransformExpression) {
+		String expression;
+		if(StringUtils.isBlank(typeTransformExpression.getMergeExpr())){
+			expression="";
+		}
+		else{
+			expression=typeTransformExpression.getMergeExpr();
+		}
+		ExpressionEditorData editorData=new ExpressionEditorData(expression,uiComponent.getComponentName());
+		if(typeTransformExpression.getInputFields()!=null){
+		for(TypeInputField inputField:typeTransformExpression.getInputFields().getField()){
+			editorData.getfieldsUsedInExpression().add(inputField.getName());
+			}
+		}
+		return editorData;
 	}
 
 	private boolean validateBigDecimal(String value){
