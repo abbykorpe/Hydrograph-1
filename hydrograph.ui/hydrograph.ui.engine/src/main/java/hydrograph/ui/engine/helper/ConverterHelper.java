@@ -143,7 +143,8 @@ public class ConverterHelper {
             expression.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
             expression.setOutputFields(getExpressionOutputField(mappingSheetRow,schemaGridRows));
             if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())
-              ||Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()))
+              ||Constants.CUMULATE.equalsIgnoreCase(component.getComponentName())
+              ||Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName()))
             {	
             expression.setAccumulatorInitalValue(mappingSheetRow.getAccumulator());
             }

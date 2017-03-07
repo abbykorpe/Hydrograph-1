@@ -209,6 +209,7 @@ public class PropogateWidget extends AbstractWidget{
 				    else if(
 				    		StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE)
 				    		||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.CUMULATE)
+				    		||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.GROUP_COMBINE)
 				    		||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.NORMALIZE)
 				    		||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.TRANSFORM))
 					{

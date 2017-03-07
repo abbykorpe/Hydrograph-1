@@ -13,6 +13,16 @@
 
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -30,16 +40,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
 
 
 /**
@@ -138,6 +138,7 @@ public class SchemaSyncUtility {
 		return StringUtils.equalsIgnoreCase(Constants.TRANSFORM, componentName) || 
 			   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, componentName) ||
 			   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, componentName) ||
+			   StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE, componentName) ||
 			   StringUtils.equalsIgnoreCase(Constants.CUMULATE, componentName) ||
 			   StringUtils.equalsIgnoreCase(Constants.LOOKUP, componentName) ||
 			   StringUtils.equalsIgnoreCase(Constants.JOIN, componentName);
@@ -217,6 +218,7 @@ public class SchemaSyncUtility {
 		if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
 				   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
 				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName())||
+				   StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE, component.getComponentName())||
 				   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
 			pushSchemaToTransformMapping(component, schemaGridRowList);
 		}
@@ -258,6 +260,7 @@ public class SchemaSyncUtility {
 		}else if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
 				   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
 				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE, component.getComponentName()) ||
 				   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
 			TransformMapping transformMapping = (TransformMapping) component.getProperties().get(OPERATION);
 			outputFieldList = getOutputFieldsFromTransformMapping(transformMapping.getOutputFieldList());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+\ * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,7 +21,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -33,7 +32,6 @@ import org.eclipse.swt.widgets.Text;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -78,8 +76,8 @@ public class OperationClassComposite extends Composite {
 		setLayout(new GridLayout(3, false));
 		configurationForTransformWidget = (OperationClassConfig) widgetConfig;
 		if (StringUtils.equalsIgnoreCase(Constants.AGGREGATE, configurationForTransformWidget.getComponentName())
-				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,
-						configurationForTransformWidget.getComponentName())) {
+				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,configurationForTransformWidget.getComponentName())
+				|| StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE,configurationForTransformWidget.getComponentName())) {
 			isAggregateOrCumulate = true;
 		} else {
 			isAggregateOrCumulate = false;

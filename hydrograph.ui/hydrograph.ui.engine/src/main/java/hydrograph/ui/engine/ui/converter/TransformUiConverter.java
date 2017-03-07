@@ -192,7 +192,7 @@ public abstract class TransformUiConverter extends UiConverter {
 				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformOperation),
 					getOutputFieldList(transformOperation),
 					getOperationClassName(transformOperation.getClazz()),transformOperation.getClazz(),
-					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null,true)
+					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null,null,true)
 				   );
              }
 			else if(item instanceof TypeTransformExpression)
@@ -203,13 +203,14 @@ public abstract class TransformUiConverter extends UiConverter {
 						new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
 						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,
 						getExpressionEditorData(transformExpression),
-						true);
+						null,true);
 				if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName())){	
 				 mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants._INDEX,java.lang.Integer.class);
 				 atMapping.setExpression(true);
 				}
 				else if(Constants.AGGREGATE.equalsIgnoreCase(uiComponent.getComponentName())
-				  ||Constants.CUMULATE.equalsIgnoreCase(uiComponent.getComponentName()))
+				  ||Constants.CUMULATE.equalsIgnoreCase(uiComponent.getComponentName())
+				  || Constants.GROUP_COMBINE.equalsIgnoreCase(uiComponent.getComponentName()))
 				{	
 					mappingSheetRow.setAccumulator(transformExpression.getAccumulatorInitalValue());
 					if(StringUtils.isBlank(transformExpression.getAccumulatorInitalValue()))

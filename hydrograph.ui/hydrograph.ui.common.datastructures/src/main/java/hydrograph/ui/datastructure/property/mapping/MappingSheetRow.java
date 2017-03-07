@@ -15,17 +15,17 @@
  
 package hydrograph.ui.datastructure.property.mapping;
 
-import hydrograph.ui.common.cloneableinterface.IDataStructure;
-import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.OperationClassProperty;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
+import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.OperationClassProperty;
 
 
 /**
@@ -53,6 +53,7 @@ public class MappingSheetRow implements IDataStructure {
     private String comboDataType = "Integer";
     private String accumulator;
     private boolean isAccumulatorParameter;
+    private ExpressionEditorData mergeExpressionDataForGroupCombine;
     
 	/**
 	 * @return If accumulator is a parameter
@@ -151,6 +152,7 @@ public class MappingSheetRow implements IDataStructure {
 	 *            the is whole operation parameter
 	 * @param operationClassFullPath
 	 *            the operation class full path
+	 * @param mergeExpressionEditorDataForGroupCombine 
 	 */
 	public MappingSheetRow(List<FilterProperties> input,
 			List<FilterProperties> outputList,
@@ -164,7 +166,7 @@ public class MappingSheetRow implements IDataStructure {
 			String operationClassFullPath,
 			boolean isExpression,
 			ExpressionEditorData expressionEditorData,
-			boolean isActive
+			ExpressionEditorData mergeExpressionEditorDataForGroupCombine, boolean isActive
 			) {
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -178,6 +180,7 @@ public class MappingSheetRow implements IDataStructure {
 		this.operationClassFullPath=operationClassFullPath;
 		this.isExpression=isExpression;
 		this.expressionEditorData=expressionEditorData;
+		this.mergeExpressionDataForGroupCombine = mergeExpressionEditorDataForGroupCombine;
 		this.isActive=isActive;
     }
 	
@@ -200,7 +203,7 @@ public class MappingSheetRow implements IDataStructure {
 	 *            the name value property
 	 */
 	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
-			 List<NameValueProperty> nameValueProperty,boolean isExpression,ExpressionEditorData expressionEditorData,boolean isActive) 
+			 List<NameValueProperty> nameValueProperty,boolean isExpression,ExpressionEditorData expressionEditorData,ExpressionEditorData mergeExpressionEditorDataForGroupCombine,boolean isActive) 
 	{
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -211,6 +214,7 @@ public class MappingSheetRow implements IDataStructure {
 		this.setClassParameter(isClassParameter);
 		this.isExpression=isExpression;
 		this.expressionEditorData=expressionEditorData;
+		this.mergeExpressionDataForGroupCombine=mergeExpressionEditorDataForGroupCombine;
 		this.isActive=isActive;
 	}
 	
@@ -433,6 +437,14 @@ public class MappingSheetRow implements IDataStructure {
 		this.accumulator = accumulator;
 	}
 	
+	public ExpressionEditorData getMergeExpressionDataForGroupCombine() {
+		return mergeExpressionDataForGroupCombine;
+	}
+
+	public void setMergeExpressionDataForGroupCombine(ExpressionEditorData mergeExpressionDataForGroupCombine) {
+		this.mergeExpressionDataForGroupCombine = mergeExpressionDataForGroupCombine;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */
@@ -468,7 +480,7 @@ public class MappingSheetRow implements IDataStructure {
 		if (isExpression) {
 			mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationId, comboBoxvalue,
 					operationClasspath, nameValuePropertyList, isClassParamter, wholeOperationParameterValue,
-					isWholeOperationParameter, operationClassFullPath, isOperationClass, expressionEditorData.clone(),
+					isWholeOperationParameter, operationClassFullPath, isOperationClass, expressionEditorData.clone(),mergeExpressionDataForGroupCombine.clone(),
 					isActive);
 			if (StringUtils.isNotBlank(accumulator)) {
 				mappingSheetRow.setAccumulator(accumulator);
@@ -481,7 +493,7 @@ public class MappingSheetRow implements IDataStructure {
 		else
 		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,
 				nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,
-				isOperationClass,null,isActive);	
+				isOperationClass,null,null,isActive);	
 		return mappingSheetRow;
 	}
 	
@@ -510,6 +522,7 @@ public class MappingSheetRow implements IDataStructure {
 		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
 		result = prime * result + ((outputList == null) ? 0 : outputList.hashCode());
 		result = prime * result + ((expressionEditorData == null) ? 0 : expressionEditorData.hashCode());
+		result = prime * result + ((mergeExpressionDataForGroupCombine == null) ? 0 : mergeExpressionDataForGroupCombine.hashCode());
 		result = prime * result
 				+ ((wholeOperationParameterValue == null) ? 0 : wholeOperationParameterValue.hashCode());
 		return result;
@@ -567,6 +580,11 @@ public class MappingSheetRow implements IDataStructure {
 			if(other.expressionEditorData!=null)
 			return false;	
 		}else if(!expressionEditorData.equals(other.expressionEditorData))
+			return false;
+		if(mergeExpressionDataForGroupCombine==null){
+			if(other.mergeExpressionDataForGroupCombine!=null)
+			return false;	
+		}else if(!mergeExpressionDataForGroupCombine.equals(other.mergeExpressionDataForGroupCombine))
 			return false;
 		if(isActive!=other.isActive)
 		return false;	

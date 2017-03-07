@@ -81,8 +81,10 @@ public class Constants {
 	public static final String TRANSFORM = "TRANSFORM";
 	public static final String AGGREGATE = "AGGREGATE";
 	public static final String CUMULATE = "CUMULATE";
+	public static final String GROUP_COMBINE = "Groupcombine";
 	public static final String LOOKUP = "LOOKUP";
 	public static final String JOIN = "JOIN";
+	public static final String GROUP_COMBINE_DISPLAYNAME = "Group\nCombine";
 	public static final String AGGREGATE_DISPLAYNAME = "Aggregate";
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
 	public static final String CUMULATE_DISPLAYNAME = "Cumulate";
@@ -92,6 +94,7 @@ public class Constants {
 	public static final String TRANSFORM_WINDOW_TITLE = "Transform";
 	public static final String CUMULATE_WINDOW_TITLE= "Cumulate";
 	public static final String NORMALIZE_WINDOW_TITLE = "Normalize";
+	public static final String GROUP_COMBINE_WINDOW_TITLE = "Group Combine";
 	public static final String ISSUE_PROPERTY_NAME="Other Issues";
 	public static final String PARTITION_BY_EXPRESSION = "PartitionByExpression";
 	public static final String HASH = "#";
@@ -314,6 +317,8 @@ public class Constants {
 	public static final String FIRST_TOOLBAR_ID = "hydrograph.ui.graph.toolbar1";
 	public static final String REMOVE_WATCH_POINTS_TOOLITEM_ID = "hydrograph.ui.graph.command.removedebug";
 	public static final String ACCUMULATOR_VARIABLE = "_accumulator";
+	public static final String ACCUMULATOR_VARIABLE_1 = "_accumulator1";
+	public static final String ACCUMULATOR_VARIABLE_2 = "_accumulator2";
 	
 
 	// Oracle Component
@@ -338,9 +343,11 @@ public class Constants {
 	
 	//key fields name for expression or operation widget
 	public static final String EXPRESSION_TEXT_BOX = "expressionTextBox";
+	public static final String EXPRESSION_TEXT_BOX1 = "expression_text_1";
 	public static final String PARAMETER_TEXT_BOX = "parameterTextBox";
 	public static final String OUTPUT_FIELD_TEXT_BOX = "outputFieldTextBox";
 	public static final String EXPRESSION_EDITOR_BUTTON = "expressionEditorButton";
+	public static final String EXPRESSION_EDITOR_BUTTON1 = "expressionbutton";
 	public static final String EXPRESSION_ID_TEXT_BOX = "expressionIdTextBox";
 	public static final String DELETE_BUTTON = "deleteButton";
 	public static final String ADD_BUTTON = "addButton";

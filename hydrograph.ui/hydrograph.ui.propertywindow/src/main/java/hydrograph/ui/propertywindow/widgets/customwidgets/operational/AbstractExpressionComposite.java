@@ -47,11 +47,12 @@ public abstract class AbstractExpressionComposite extends Composite {
 	public static final String EXPRESSION_COMPOSITE_KEY = "expression-composite";
 	protected Text expressionIdTextBox;
 	protected Text expressionTextBox;
+	protected Text expression_text_1;
 	protected Text parameterTextBox;
 	protected Text outputFieldTextBox;
 	protected Table table;
 	protected TableViewer tableViewer;
-	protected Button addButton, deletButton, browseButton;
+	protected Button addButton, deletButton, browseButton,expressionbutton;
 	protected Button btnIsParam;
 	protected Button switchToClassButton;
 	protected Button switchToExpressionButton;
@@ -91,6 +92,10 @@ public abstract class AbstractExpressionComposite extends Composite {
 
 	public Text getExressionTextBox() {
 		return expressionTextBox;
+	}
+	
+	public Text getExressionTextBox2() {
+		return expression_text_1;
 	}
 
 	public Text getParameterTextBox() {
@@ -144,12 +149,14 @@ public abstract class AbstractExpressionComposite extends Composite {
 			Button deleteButton = (Button) isParam.getData(Constants.DELETE_BUTTON);
 			Text expressionIdTextBox = (Text) isParam.getData(Constants.EXPRESSION_ID_TEXT_BOX);
 			Button browseButton = (Button) isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON);
+			Button expressionbutton = (Button) isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON1);
 			Text outputFieldTextBox = (Text) isParam.getData(Constants.OUTPUT_FIELD_TEXT_BOX);
 			tableViewer.getTable().setEnabled(false);
 			addButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 			expressionIdTextBox.setEnabled(false);
 			browseButton.setEnabled(false);
+			expressionbutton.setEnabled(false);
 			outputFieldTextBox.setEnabled(false);
 		}
 	}
@@ -163,9 +170,11 @@ public abstract class AbstractExpressionComposite extends Composite {
 			isParam.setData(Constants.DELETE_BUTTON, deletButton);
 			isParam.setData(Constants.EXPRESSION_ID_TEXT_BOX, expressionIdTextBox);
 			isParam.setData(Constants.EXPRESSION_EDITOR_BUTTON, browseButton);
+			isParam.setData(Constants.EXPRESSION_EDITOR_BUTTON1, expressionbutton);
 			isParam.setData(Constants.OUTPUT_FIELD_TEXT_BOX, outputFieldTextBox);
 			isParam.setData(Constants.PARAMETER_TEXT_BOX, parameterTextBox);
 			isParam.setData(Constants.EXPRESSION_TEXT_BOX, expressionTextBox);
+			isParam.setData(Constants.EXPRESSION_TEXT_BOX1, expression_text_1);
 		}
 	
 	/**
