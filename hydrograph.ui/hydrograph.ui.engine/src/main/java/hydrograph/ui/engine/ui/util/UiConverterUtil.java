@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.thoughtworks.xstream.XStream;
@@ -393,17 +394,26 @@ public class UiConverterUtil {
 		Graph graph = null;
 		parseXML(inputFile);
 		String inputFileAsString = replaceParametersWithDefaultValues(inputFile);
+		
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 		builderFactory.setExpandEntityReferences(false);
 		builderFactory.setNamespaceAware(true);
+		builderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
+		
 		DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-		Document document = documentBuilder.parse(new ByteArrayInputStream(inputFileAsString.getBytes()));
+		ByteArrayInputStream byteStream = new ByteArrayInputStream(inputFileAsString.getBytes());
+		InputSource inputSource=new InputSource(byteStream);
+
+		Document document = documentBuilder.parse(inputSource);
 		jaxbContext = JAXBContext.newInstance(Graph.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		graph = (Graph) jaxbUnmarshaller.unmarshal(document);
 		if (graph != null){
 			componentRepo.genrateComponentRepo(graph);
 		}
+		
+		byteStream.close();
+		
 		return graph;
 	}
 
