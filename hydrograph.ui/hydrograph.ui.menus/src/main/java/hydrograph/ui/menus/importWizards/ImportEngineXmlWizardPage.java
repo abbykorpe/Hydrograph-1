@@ -14,14 +14,6 @@
  
 package hydrograph.ui.menus.importWizards;
 
-import hydrograph.ui.engine.exceptions.EngineException;
-import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
-import hydrograph.ui.engine.ui.repository.ImportedJobsRepository;
-import hydrograph.ui.engine.ui.util.UiConverterUtil;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.menus.Activator;
-import hydrograph.ui.menus.messages.Messages;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -54,6 +47,14 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
+
+import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
+import hydrograph.ui.engine.ui.repository.ImportedJobsRepository;
+import hydrograph.ui.engine.ui.util.UiConverterUtil;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.menus.Activator;
+import hydrograph.ui.menus.messages.Messages;
 
 
 /**
@@ -203,12 +204,16 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 				| NoSuchMethodException | SecurityException | EngineException  | IOException | ComponentNotFoundException exception) {
 
 			LOGGER.error("Error occurred while creating new files in workspace", exception);
-			showMessageBox(exception, Messages.EXCEPTION_OCCURED);
+			showMessageBox(exception.getMessage(), Messages.EXCEPTION_OCCURED);
 			return null;
 		} catch (JAXBException | ParserConfigurationException
 				| SAXException exception) {
 			LOGGER.error("Error occurred while creating new files in workspace", exception);
-			showMessageBox(exception, Messages.INVALID_TARGET_FILE_ERROR);
+			if(StringUtils.startsWithIgnoreCase(exception.getMessage(), "DOCTYPE is disallowed")){
+				showMessageBox(null, Messages.EXTERNAL_DTD_NOT_ALLOWED);
+			} else{
+			showMessageBox(exception.getMessage(), Messages.INVALID_TARGET_FILE_ERROR);
+			}
 			return null;
 		}
 		LOGGER.debug("Importing *xml file");
@@ -277,9 +282,13 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 	protected void createLinkTarget() {
 	}
 
-	private void showMessageBox(Exception exception, String message) {
+	private void showMessageBox(String exceptionMessage, String message) {
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
-		messageBox.setMessage(message + "\n" + exception.getMessage());
+		if(StringUtils.isNotBlank(exceptionMessage)){
+			messageBox.setMessage(message + "\n" + exceptionMessage);
+		} else{
+			messageBox.setMessage(message);
+		}
 		messageBox.open();
 	}
 }
