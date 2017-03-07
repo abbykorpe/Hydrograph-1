@@ -52,12 +52,12 @@ import org.slf4j.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.thoughtworks.xstream.XStream;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.ui.common.component.config.Config;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
@@ -392,6 +392,7 @@ public class UiConverterUtil {
 		LOGGER.debug("Un-Marshaling generated object into target XML");
 		JAXBContext jaxbContext;
 		Graph graph = null;
+		Document document =null;
 		parseXML(inputFile);
 		String inputFileAsString = replaceParametersWithDefaultValues(inputFile);
 		
@@ -404,16 +405,14 @@ public class UiConverterUtil {
 		ByteArrayInputStream byteStream = new ByteArrayInputStream(inputFileAsString.getBytes());
 		InputSource inputSource=new InputSource(byteStream);
 
-		Document document = documentBuilder.parse(inputSource);
+		document = documentBuilder.parse(inputSource);
 		jaxbContext = JAXBContext.newInstance(Graph.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		graph = (Graph) jaxbUnmarshaller.unmarshal(document);
-		if (graph != null){
+		if (graph != null) {
 			componentRepo.genrateComponentRepo(graph);
 		}
-		
 		byteStream.close();
-		
 		return graph;
 	}
 

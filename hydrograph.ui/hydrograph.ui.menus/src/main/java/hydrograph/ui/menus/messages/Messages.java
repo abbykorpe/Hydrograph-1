@@ -39,6 +39,7 @@ public class Messages extends NLS {
 	public static String INF_TRANFORM_BASE_CLASS;
 	public static String INF_CUMULATE_BASE_CLASS;
 	public static String INF_NORMALIZE_BASE_CLASS;
+	public static String EXTERNAL_DTD_NOT_ALLOWED;
 
 	
 	static {
