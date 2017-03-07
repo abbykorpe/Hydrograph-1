@@ -16,7 +16,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/aggregate_palette.png" canvasIconPath="/icons/aggregate_canvas.png"
-		name="GroupCombine" nameInPalette="GroupCombine" defaultNamePrefix="GroupCombine " 
+		name="GroupCombine" nameInPalette="GroupCombine" defaultNamePrefix="GroupCombine" 
 		description="Performs group aggregations on data specified in a java operation class."
 		helpFilePath="/hydrograph.ui.help/html/Components/Aggregate.html"
 		acronym="GrpCmb">

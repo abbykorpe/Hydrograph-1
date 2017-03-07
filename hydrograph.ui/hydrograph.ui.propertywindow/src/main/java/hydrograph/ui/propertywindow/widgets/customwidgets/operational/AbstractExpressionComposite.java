@@ -149,14 +149,12 @@ public abstract class AbstractExpressionComposite extends Composite {
 			Button deleteButton = (Button) isParam.getData(Constants.DELETE_BUTTON);
 			Text expressionIdTextBox = (Text) isParam.getData(Constants.EXPRESSION_ID_TEXT_BOX);
 			Button browseButton = (Button) isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON);
-			Button expressionbutton = (Button) isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON1);
 			Text outputFieldTextBox = (Text) isParam.getData(Constants.OUTPUT_FIELD_TEXT_BOX);
 			tableViewer.getTable().setEnabled(false);
 			addButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 			expressionIdTextBox.setEnabled(false);
 			browseButton.setEnabled(false);
-			expressionbutton.setEnabled(false);
 			outputFieldTextBox.setEnabled(false);
 		}
 	}
@@ -170,11 +168,10 @@ public abstract class AbstractExpressionComposite extends Composite {
 			isParam.setData(Constants.DELETE_BUTTON, deletButton);
 			isParam.setData(Constants.EXPRESSION_ID_TEXT_BOX, expressionIdTextBox);
 			isParam.setData(Constants.EXPRESSION_EDITOR_BUTTON, browseButton);
-			isParam.setData(Constants.EXPRESSION_EDITOR_BUTTON1, expressionbutton);
 			isParam.setData(Constants.OUTPUT_FIELD_TEXT_BOX, outputFieldTextBox);
 			isParam.setData(Constants.PARAMETER_TEXT_BOX, parameterTextBox);
 			isParam.setData(Constants.EXPRESSION_TEXT_BOX, expressionTextBox);
-			isParam.setData(Constants.EXPRESSION_TEXT_BOX1, expression_text_1);
+			
 		}
 	
 	/**
@@ -220,5 +217,30 @@ public abstract class AbstractExpressionComposite extends Composite {
 		}
 
 		return mappingSheetRow.getExpressionEditorData();
+	}
+	
+	/**
+	 * Creates data-structure for expression-editor.
+	 * 
+	 * @return
+	 */
+	public ExpressionEditorData createMergeExpressionEditorData() {
+		if (!mappingSheetRow.getInputFields().isEmpty()) {
+			List<String> inputFieldNames = new ArrayList<>();
+			for (FilterProperties filterProperties : mappingSheetRow.getInputFields()) {
+				inputFieldNames.add(filterProperties.getPropertyname());
+			}
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getfieldsUsedInExpression().clear();
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().clear();
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().putAll(
+					FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getfieldsUsedInExpression().addAll(inputFieldNames);
+
+		} else {
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().clear();
+			mappingSheetRow.getMergeExpressionDataForGroupCombine().getfieldsUsedInExpression().clear();
+		}
+
+		return mappingSheetRow.getMergeExpressionDataForGroupCombine();
 	}
 }

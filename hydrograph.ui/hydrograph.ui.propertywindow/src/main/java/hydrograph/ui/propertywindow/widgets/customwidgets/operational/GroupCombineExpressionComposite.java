@@ -266,13 +266,16 @@ public class GroupCombineExpressionComposite extends AbstractExpressionComposite
 		new Label(composite, SWT.NONE);
 		
 		Label lblExpression_1 = new Label(composite, SWT.NONE);
+		GridData gridDataForExpression1Label = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gridDataForExpression1Label.minimumWidth = 100;
+		lblExpression_1.setLayoutData(gridDataForExpression1Label);
 		lblExpression_1.setText(Messages.EXPRESSION);
 		
 		expression_text_1 = new Text(composite, SWT.BORDER);
 		expression_text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		expression_text_1.setEditable(false);
 		
-		Button expressionbutton = new Button(composite, SWT.NONE);
+		expressionbutton = new Button(composite, SWT.NONE);
 		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_button.widthHint = 28;
 		gd_button.horizontalIndent = 11;
@@ -319,7 +322,7 @@ public class GroupCombineExpressionComposite extends AbstractExpressionComposite
 
 									@Override
 									public void widgetSelected(SelectionEvent e) {
-										createExpressionEditorDataForMergeExpression();
+										createMergeExpressionEditorData();
 
 										LaunchExpressionEditor launchExpressionEditor = new LaunchExpressionEditor();
 										launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getMergeExpressionDataForGroupCombine(),
@@ -447,6 +450,8 @@ public class GroupCombineExpressionComposite extends AbstractExpressionComposite
 			Text textAccumulator = (Text) isParam.getData(Messages.TEXT_ACCUMULATOR);
 			Button isParamAccumulator = (Button) isParam.getData(Messages.ISPARAM_ACCUMULATOR);
 			Combo comboDataTypes = (Combo) isParam.getData(Messages.COMBODATATYPES);
+			Button button =(Button) isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON1);
+		    button.setEnabled(false);
 			textAccumulator.setEnabled(false);
 			isParamAccumulator.setEnabled(false);
 			comboDataTypes.setEnabled(false);
@@ -462,6 +467,8 @@ public class GroupCombineExpressionComposite extends AbstractExpressionComposite
 		isParam.setData(Messages.COMBODATATYPES, comboDataTypes);
 		isParam.setData(Messages.TEXT_ACCUMULATOR, textAccumulator);
 		isParam.setData(Messages.ISPARAM_ACCUMULATOR, isParamAccumulator);
+		isParam.setData(Constants.EXPRESSION_TEXT_BOX1, expression_text_1);
+		isParam.setData(Constants.EXPRESSION_EDITOR_BUTTON1, expressionbutton);
 		super.setAllWidgetsOnIsParamButton(isParam);
 	}
 
@@ -496,8 +503,8 @@ public class GroupCombineExpressionComposite extends AbstractExpressionComposite
 		return super.createExpressionEditorData();
 	}
 	
-	
-	public ExpressionEditorData createExpressionEditorDataForMergeExpression() {
+	@Override
+	public ExpressionEditorData createMergeExpressionEditorData() {
 		mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().clear();
 		mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
 				DataTypes.getDataTypeClassfromString(mappingSheetRow.getComboDataType()));
@@ -505,7 +512,7 @@ public class GroupCombineExpressionComposite extends AbstractExpressionComposite
 				DataTypes.getDataTypeClassfromString(mappingSheetRow.getComboDataType()));
 		mappingSheetRow.getMergeExpressionDataForGroupCombine().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE_2,
 				DataTypes.getDataTypeClassfromString(mappingSheetRow.getComboDataType()));
-		return super.createExpressionEditorData();
+		return super.createMergeExpressionEditorData();
 	}
 
 }

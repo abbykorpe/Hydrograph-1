@@ -1602,6 +1602,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Text textAccumulator = (Text)isParam.getData("textAccumulator");
 				Button isParamAccumulator = (Button)isParam.getData("isParamAccumulator");
 				Combo comboDataTypes = (Combo)isParam.getData("comboDataTypes");
+				Text mergeExpressionTextBox=(Text)isParam.getData(Constants.EXPRESSION_TEXT_BOX1);
+				Button mergeExpressionBrowseButton=(Button)isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON1);
 				if(isParam.getSelection())
 				{
 					if (WidgetUtility.eltConfirmMessage(Messages.ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE)) 
@@ -1617,11 +1619,18 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 						expressionIdTextBox.setEnabled(false);
 						expressionTextBox.setText("");
 						browseButton.setEnabled(false);
+						if(Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())){
+							mergeExpressionBrowseButton.setEnabled(false);
+							mergeExpressionTextBox.setText("");
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().setExpression("");
+							mappingSheetRow.getMergeExpressionDataForGroupCombine().getSelectedInputFieldsForExpression().clear();
+						}
 						outputFieldTextBox.setText("");
 						outputFieldTextBox.setEnabled(false);
 						textAccumulator.setEnabled(false);
 						isParamAccumulator.setEnabled(false);
 						comboDataTypes.setEnabled(false);
+						
 						mappingSheetRow.getInputFields().clear();
 						mappingSheetRow.getOutputList().clear();
 						refreshOutputTable();
@@ -1646,6 +1655,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					textAccumulator.setEnabled(true);
 					isParamAccumulator.setEnabled(true);
 					comboDataTypes.setEnabled(true);
+					if(Constants.GROUP_COMBINE.equalsIgnoreCase(component.getComponentName())){
+						mergeExpressionBrowseButton.setEnabled(true);
+						mergeExpressionTextBox.setText("");
+					}
 				}	
 			}
 		});
