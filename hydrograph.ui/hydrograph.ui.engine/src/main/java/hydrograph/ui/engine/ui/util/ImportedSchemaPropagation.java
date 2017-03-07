@@ -121,6 +121,7 @@ public class ImportedSchemaPropagation {
 					if (StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName())
 							|| StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName())
 							|| StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName())
+							||StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE, component.getComponentName())
 							|| StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())) {
 						if ((TransformMapping) component.getProperties().get(Constants.OPERATION) != null) {
 							TransformMapping transformMapping = (TransformMapping) component.getProperties()

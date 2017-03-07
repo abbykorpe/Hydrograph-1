@@ -141,6 +141,7 @@ public class Utils {
 		}else if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, componentName) ||
 				   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, componentName) ||
 				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, componentName) ||
+				   StringUtils.equalsIgnoreCase(Constants.GROUP_COMBINE, componentName) ||
 				   StringUtils.equalsIgnoreCase(Constants.CUMULATE, componentName)){
 			TransformMapping transformMapping = (TransformMapping) componentProperties.get(OPERATION);
 			if(transformMapping == null){

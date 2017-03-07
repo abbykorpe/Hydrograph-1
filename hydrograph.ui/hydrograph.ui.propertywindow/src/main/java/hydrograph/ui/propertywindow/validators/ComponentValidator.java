@@ -13,16 +13,16 @@
 
 package hydrograph.ui.propertywindow.validators;
 
-import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.Component;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+
+import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.model.Component;
 
 /**
  * 
@@ -58,6 +58,9 @@ public class ComponentValidator {
 		
 		componentValidators.put(Constants.AGGREGATE, new ArrayList<IComponentValidator>());
 		componentValidators.get(Constants.AGGREGATE).add(new ComponentSchemaMapValidator());
+		
+		componentValidators.put(Constants.GROUP_COMBINE, new ArrayList<IComponentValidator>());
+		componentValidators.get(Constants.GROUP_COMBINE).add(new ComponentSchemaMapValidator());
 		
 		componentValidators.put(Constants.CUMULATE, new ArrayList<IComponentValidator>());
 		componentValidators.get(Constants.CUMULATE).add(new ComponentSchemaMapValidator());

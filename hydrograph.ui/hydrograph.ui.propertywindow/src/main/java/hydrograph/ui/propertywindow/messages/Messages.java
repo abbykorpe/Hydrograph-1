@@ -346,6 +346,7 @@ public class Messages extends NLS {
 
 	public static String SWITCH_TO;
 	public static String EXPRESSION;
+	public static String MERGE_EXPRESSION;
 	public static String PARAMETER;
 	public static String TEXT_ACCUMULATOR;
 	public static String ISPARAM_ACCUMULATOR;
