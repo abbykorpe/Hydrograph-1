@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory
   *
   */
 private[xml] class XmlOptions(
-    @transient private val parameters: Map[String, String])
+                               @transient private val parameters: Map[String, String])
   extends Serializable{
   private val logger = LoggerFactory.getLogger(XmlRelation.getClass)
 
@@ -57,6 +57,7 @@ private[xml] class XmlOptions(
   }
 
 
+
   var dateFormatMap=getDateFormats(parameters.get("dateFormats").getOrElse({
     logger.debug("No date formats provided. XmlOption.dateFormatMap map created with default 'yyyy-MM-dd' format")
     "yyyy-MM-dd"
@@ -64,10 +65,11 @@ private[xml] class XmlOptions(
 
 
   def getDateFormats(formats: String,delimiter:String):Map[String, SimpleDateFormat] = {
-    formats.split(delimiter).map(format=>(format,new SimpleDateFormat(format))).toMap
+    val dateFormats=formats.split(delimiter).filter(format=>format!="null")
+
+    dateFormats.map(format=>(format,new SimpleDateFormat(format))).toMap
+
   }
-
-
 
   // Parse mode flags
   if (!ParseModes.isValidMode(parseMode)) {
@@ -79,8 +81,8 @@ private[xml] class XmlOptions(
   val permissive = ParseModes.isPermissiveMode(parseMode)
 
   //If parse mode is FAILFAST then set parsing of dates as strict. By default parsing of date is Lenient
-  if(failFast)
-    dateFormatMap.foreach(date=>date._2.setLenient(false))
+  //  if(failFast)
+  dateFormatMap.foreach(date=>date._2.setLenient(false))
 
   require(rowTag.nonEmpty, "'rowTag' option should not be empty string.")
   require(attributePrefix.nonEmpty, "'attributePrefix' option should not be empty string.")

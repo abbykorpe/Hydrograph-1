@@ -12,7 +12,7 @@ class ValidationAPIWrapper(expression:String,fieldNames:Array[String],fieldTypes
     try{
       expressionEvaluator.evaluate(data)
     } catch {
-      case e:Exception => throw new RuntimeException(e.getMessage)
+      case e:Exception => throw new RuntimeException(e)
     }
 
   }
