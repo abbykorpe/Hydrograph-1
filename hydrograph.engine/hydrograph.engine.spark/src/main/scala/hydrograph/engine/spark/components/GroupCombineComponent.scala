@@ -22,6 +22,7 @@ import hydrograph.engine.spark.components.handler.{OperationHelper, SparkOperati
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import hydrograph.engine.spark.operation.handler.GroupCombineCustomHandler
+import hydrograph.engine.transformation.standardfunctions.StringFunctions
 import hydrograph.engine.transformation.userfunctions.base.GroupCombineTransformBase
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
@@ -73,7 +74,7 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
       sparkOperation.baseClassInstance match {
         //For Expression Editor call extra methods
         case a: GroupCombineForExpression => {
-          LOG.info("Expressions present in GroupCombine component:[\""+groupCombineEntity.getComponentId+"\"].")
+          LOG.info("Expressions present in GroupCombine component:[\"" + groupCombineEntity.getComponentId + "\"].")
           a.setValidationAPIForUpateExpression(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
           a.setValidationAPIForMergeExpression(new ExpressionWrapper(new ValidationAPI(sparkOperation.operationEntity.getMergeExpression, "")))
           a.init(sparkOperation.operationEntity.getOperationFields.head.getDataType, sparkOperation.operationEntity.getOperationFields.head.getFormat,
@@ -105,9 +106,10 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
       outSocketEntity.getOperationFieldList.asScala.foreach(operationField => {
         aggregatedDf = aggregatedDf.withColumn(operationField.getName, col(compID + operationField.getOperationId + "_agg." + operationField.getName))
       })
-      groupCombineEntity.getOperationsList.asScala.foreach(operation => {
-        aggregatedDf = aggregatedDf.drop(col(compID + operation.getOperationId + "_agg"))
-      })
+      if (groupCombineEntity.getOperationsList != null)
+        groupCombineEntity.getOperationsList.asScala.foreach(operation => {
+          aggregatedDf = aggregatedDf.drop(col(compID + operation.getOperationId + "_agg"))
+        })
 
       keyFields.filter(key => !passthroughFields.contains(key)).foreach(key => {
         aggregatedDf = aggregatedDf.drop(col(key))
@@ -115,7 +117,7 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
 
       Map(key -> aggregatedDf)
     } catch {
-      case e: Exception => throw new RuntimeException("Exception in GroupCombine component:[\"" + groupCombineEntity.getComponentId + "\"] where exception being: " + e.getMessage)
+      case e: Exception => throw new RuntimeException("Exception in GroupCombine component:[\"" + groupCombineEntity.getComponentId + "\"] where exception ", e)
     }
   }
 

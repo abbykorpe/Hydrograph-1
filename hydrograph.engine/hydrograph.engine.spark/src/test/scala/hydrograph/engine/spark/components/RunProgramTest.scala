@@ -44,7 +44,7 @@ class RunProgramTest {
     val runProgramEntity = new RunProgramEntity
     runProgramEntity.setComponentId("run-program")
     runProgramEntity.setBatch("0")
-    runProgramEntity.setCommand("dir")
+    runProgramEntity.setCommand("cd")
     try {
       runProgram = new RunProgramComponent(runProgramEntity)
     }
