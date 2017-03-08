@@ -19,6 +19,11 @@ import hydrograph.engine.transformation.schema.Schema;
 import hydrograph.engine.transformation.userfunctions.base.GroupCombineTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import static javafx.scene.input.KeyCode.T;
+
 @SuppressWarnings("rawtypes")
 public class GroupCombineForExpression implements GroupCombineTransformBase {
 
@@ -48,13 +53,23 @@ public class GroupCombineForExpression implements GroupCombineTransformBase {
         this.bufferFieldPrecision = bufferFieldPrecision;
         try {
             expressionWrapperForUpdate.getValidationAPI().init(expressionWrapperForUpdate.getIntialValueExpression());
-            accumulatorInitialValue = (Comparable) (expressionWrapperForUpdate.getValidationAPI().exec(new Object[]{}));
+            accumulatorInitialValue = (Comparable) (valueOf(bufferFieldType,expressionWrapperForUpdate.getValidationAPI().exec(new Object[]{})));
         } catch (Exception e) {
             throw new RuntimeException(
                     "Exception in aggregate initial value expression: "
                             + expressionWrapperForUpdate.getIntialValueExpression() + ".", e);
         }
     }
+
+    private Object valueOf(String className,Object value){
+        try {
+            Class clazz = Class.forName(className);
+            return clazz.cast(value);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void callPrepare(String[] inputFieldNames, String[] inputFieldTypes) {
         String fieldNames[] = new String[inputFieldNames.length + 1];
@@ -68,6 +83,7 @@ public class GroupCombineForExpression implements GroupCombineTransformBase {
         expressionWrapperForUpdate.getValidationAPI().init(fieldNames, fieldTypes);
         expressionWrapperForMerge.getValidationAPI().init(new String[]{"_accumulator1", "_accumulator2"}, new String[]{bufferFieldType, bufferFieldType});
     }
+
 
 
 
