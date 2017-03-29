@@ -13,6 +13,9 @@
 package hydrograph.engine.core.schemapropagation;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.custom.exceptions.DependantComponentNotFoundException;
+import hydrograph.engine.core.custom.exceptions.RequiredTagNotFoundException;
+import hydrograph.engine.core.custom.exceptions.SchemaMismatchException;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.*;
 
@@ -46,20 +49,25 @@ public class SchemaFieldHandler implements Serializable {
 			TypeBaseComponent baseComponent = componentMap.get(componentId);
 			OperationHandler operationHandler = new OperationHandler(baseComponent, schemaFields);
 
-			if (baseComponent instanceof TypeInputComponent) {
-				schemaFields.putAll(operationHandler.getInputFields());
-
-			} else if (baseComponent instanceof TypeOutputComponent) {
-				schemaFields.putAll(operationHandler.getOutputFields());
-
-			} else if (baseComponent instanceof TypeStraightPullComponent) {
-				schemaFields.putAll(operationHandler.getStraightPullSchemaFields());
-			} else if (baseComponent instanceof TypeOperationsComponent) {
-
-				schemaFields.putAll(operationHandler.getOperation());
-			} /*else if (baseComponent instanceof TypeCommandComponent) {
+			try {
+				if (baseComponent instanceof TypeInputComponent) {
+					schemaFields.putAll(operationHandler.getInputFields());
+				} else if (baseComponent instanceof TypeOutputComponent) {
+					schemaFields.putAll(operationHandler.getOutputFields());
+				} else if (baseComponent instanceof TypeStraightPullComponent) {
+					schemaFields.putAll(operationHandler.getStraightPullSchemaFields());
+				} else if (baseComponent instanceof TypeOperationsComponent) {
+					schemaFields.putAll(operationHandler.getOperation());
+				} /*else if (baseComponent instanceof TypeCommandComponent) {
 				// no need of schema fields
 			}*/
+			} catch(SchemaMismatchException e) {
+				String componentType = baseComponent.getClass().getCanonicalName()
+						.split("\\.")[baseComponent.getClass().getCanonicalName().split("\\.").length - 1];
+				throw new SchemaMismatchException("\nExcpetion in " + componentType + " Component -\nComponentId:[\""
+						+ baseComponent.getId() + "\"]" + "\nComponentName:[\"" + baseComponent.getName() +
+						"\"]\nBatch:[\"" + baseComponent.getBatch() + "\"]" + e.getMessage());
+			}
 		}
 	}
 
@@ -127,7 +135,6 @@ public class SchemaFieldHandler implements Serializable {
 			for (String componentID : componentDependencies.keySet()) {
 				components = components + ",  " + componentID;
 			}
-
 			throw new RuntimeException("Unable to include following components in traversal" + components
 					+ ". This may be due to circular dependecies or unlinked components. Please inspect and remove circular dependencies.");
 		}
@@ -143,8 +150,8 @@ public class SchemaFieldHandler implements Serializable {
 					return component.getId();
 			}
 		}
-		throw new RuntimeException("Dependent component not found for component with id '" + componentID
-				+ "' and socket id '" + socketId + "'");
+		throw new DependantComponentNotFoundException("Exception in extracting dependant component for -\nComponentId:[\"" + componentID
+				+ "\"]\nSocketId:[\"" + socketId + "\"]");
 	}
 
 }

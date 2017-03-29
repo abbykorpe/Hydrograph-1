@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileDelimitedEntity
+import hydrograph.engine.core.custom.exceptions.DelimiterNotFoundException
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -62,10 +63,9 @@ class InputFileCsvWithDateFormatsComponent(iFileDelimitedEntity: InputFileDelimi
         + " at Path: " + iFileDelimitedEntity.getPath)
       Map(key -> df)
     } catch {
-
       case e : Exception =>
-        LOG.error(" Error in Input File Delimited Component for delimiter "+ iFileDelimitedEntity.getComponentId)
-        throw new DelimiterNotFoundException(" Error in Input File Delimited Component for delimiter "+ iFileDelimitedEntity.getComponentId,e)
+        throw new DelimiterNotFoundException("\nException in Filter Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage())
     }
 
   }
@@ -83,5 +83,4 @@ class InputFileCsvWithDateFormatsComponent(iFileDelimitedEntity: InputFileDelimi
 */
 }
 
-class DelimiterNotFoundException private[components](val message: String, val e: Throwable) extends RuntimeException(message) {
-}
+

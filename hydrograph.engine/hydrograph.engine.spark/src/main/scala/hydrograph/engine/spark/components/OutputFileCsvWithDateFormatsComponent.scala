@@ -49,16 +49,12 @@ BaseComponentParams) extends SparkFlow with Serializable {
         .format("hydrograph.engine.spark.datasource.csv")
         .save(outputFileDelimitedEntity.getPath)
     } catch {
-      /* case e: AnalysisException if (e.getMessage().matches("(.*)cannot resolve(.*)given input columns(.*)"))=>
-         LOG.error("Error in Output File Delimited Component "+ outputFileDelimitedEntity.getComponentId, e)
-         throw new RuntimeException("Error in Output File Delimited Component '"
-           + outputFileDelimitedEntity.getComponentId+"' ",e )*/
-      case e: Exception =>
+      case e: AnalysisException => throw new SchemaMisMatchException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]\nError being: " + e.message)
         val inputFields = cp.getDataFrame().schema.fieldNames
         val outputFields = schemaCreator.makeSchema().fieldNames
         val unexpected = outputFields.filterNot(inputFields.toSet)
         LOG.error("Error in Output File Delimited Component " + outputFileDelimitedEntity.getComponentId , e)
-        throw new SchemaMisMatchException("Error in Output File Delimited Component " + outputFileDelimitedEntity.getComponentId, e)
     }
     LOG.info("Created Output File Delimited Component " + outputFileDelimitedEntity.getComponentId
       + " in Batch " + outputFileDelimitedEntity.getBatch + " with path " + outputFileDelimitedEntity.getPath)

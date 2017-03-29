@@ -15,6 +15,7 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.CumulateEntity
 import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.core.component.utils.OperationUtils
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.userfunctions.CumulateForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.base.OperationComponentBase
@@ -45,7 +46,14 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   val inputSchema: StructType = componentsParams.getDataFrame().schema
   val outputFields = OperationUtils.getAllFields(cumulateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala.toList
   val fieldsForOperation = OperationUtils.getAllFieldsWithOperationFields(cumulateEntity, outputFields.asJava)
-  val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
+  var operationSchema: StructType=null
+  try {
+    operationSchema= EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
+  } catch {
+    case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+      "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+  }
+
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = cumulateEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -55,11 +63,18 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
   val keyFields = if (cumulateEntity.getKeyFields == null) Array[String]()
   else cumulateEntity.getKeyFields.map(_.getName)
-  val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
+  var keyFieldsIndexes: Array[(Int, Int)] = null
+  try
+  {
+    keyFieldsIndexes = getIndexes(inputSchema, keyFields)
+  }catch {
+    case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+      "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+  }
+
 
 
   override def createComponent(): Map[String, DataFrame] = {
-
     if (LOG.isTraceEnabled) LOG.trace(cumulateEntity.toString)
 
     for (outSocket <- cumulateEntity.getOutSocketList().asScala) {
@@ -77,82 +92,80 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
     val sortedDf = repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
 
     LOG.info("Cumulate Operation Started....")
+    var outputDf :Dataset[Row] = null
+    try {
+      outputDf = sortedDf.mapPartitions(itr => {
+        var cumulateList: List[SparkOperation[CumulateTransformBase]] = null
+        try {
+          cumulateList = initializeOperationList[CumulateForExpression](cumulateEntity.getOperationsList, inputSchema, operationSchema)
+        } catch {
+          case e: Exception => throw new UserFunctionClassNotFoundException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+        }
 
-    val outputDf = sortedDf.mapPartitions(itr => {
-      val cumulateList: List[SparkOperation[CumulateTransformBase]] = initializeOperationList[CumulateForExpression](cumulateEntity.getOperationsList,
-        inputSchema, operationSchema)
-
-      cumulateList.foreach(sparkOperation => {
-        sparkOperation.baseClassInstance match {
-          case a: CumulateForExpression =>
-            a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
-            try {
+        cumulateList.foreach(sparkOperation => {
+          sparkOperation.baseClassInstance match {
+            case a: CumulateForExpression =>
+              a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
               a.init()
-            } catch {
-              case e: Exception =>
-                LOG.error("Exception in init method of : " + a.getClass + " " + e.getMessage, e)
-                throw new InitializationException("Error in Cumulate Component for intialization :[\"" + cumulateEntity.getComponentId + "\"] for ", e)
-            }
-            a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
-          case a: CumulateTransformBase =>
-            try {
+              a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
+            case a: CumulateTransformBase =>
+
               a.prepare(sparkOperation.operationEntity.getOperationProperties,
                 sparkOperation.operationEntity.getOperationInputFields,
                 sparkOperation.operationEntity.getOperationOutputFields, keyFields)
-            }
-            catch {
-              case e: Exception =>
-                LOG.error("Exception in prepare method of : " + a.getClass + " " + e.getMessage, e)
-                throw new SchemaMisMatchException("Exception in Cumulate Component for field mis match :[\"" + cumulateEntity.getComponentId + "\"] for ",e)
-            }
-
-        }
-      })
-
-      var prevKeysArray: Array[Any] = null
-      var isFirstRow = false
-
-      def isPrevKeyDifferent(currKeysArray: Array[Any]): Boolean = {
-        if (prevKeysArray == null) {
-          prevKeysArray = currKeysArray
-          isFirstRow = true
-          true
-        }
-        else if (!prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2)) {
-          prevKeysArray = currKeysArray
-          isFirstRow = false
-          true
-        } else false
-      }
-
-      itr.map {
-        row => {
-          val outRow = new Array[Any](operationSchema.size)
-          val currKeysArray: Array[Any] = new Array[Any](primaryKeys.size)
-          copyFields(row, currKeysArray, keyFieldsIndexes)
-
-          if ((isPrevKeyDifferent(currKeysArray) && !isFirstRow)) {
-            cumulateList.foreach(cmt => {
-              cmt.baseClassInstance.onCompleteGroup()
-            })
           }
+        })
 
-          copyFields(row, outRow, mapFieldIndexes)
-          copyFields(row, outRow, passthroughIndexes)
+        var prevKeysArray: Array[Any] = null
+        var isFirstRow = false
 
-          cumulateList.foreach(cmt => {
-            cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
-          })
-
-          if (itr.isEmpty) {
-            cumulateList.foreach(cmt => {
-              cmt.baseClassInstance.onCompleteGroup()
-            })
+        def isPrevKeyDifferent(currKeysArray: Array[Any]): Boolean = {
+          if (prevKeysArray == null) {
+            prevKeysArray = currKeysArray
+            isFirstRow = true
+            true
           }
-          Row.fromSeq(outRow)
+          else if (!prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2)) {
+            prevKeysArray = currKeysArray
+            isFirstRow = false
+            true
+          } else false
         }
-      }
-    })(RowEncoder(outputSchema))
+
+        itr.map {
+          row => {
+            val outRow = new Array[Any](operationSchema.size)
+            val currKeysArray: Array[Any] = new Array[Any](primaryKeys.size)
+            copyFields(row, currKeysArray, keyFieldsIndexes)
+
+            if ((isPrevKeyDifferent(currKeysArray) && !isFirstRow)) {
+              cumulateList.foreach(cmt => {
+                cmt.baseClassInstance.onCompleteGroup()
+              })
+            }
+
+            copyFields(row, outRow, mapFieldIndexes)
+            copyFields(row, outRow, passthroughIndexes)
+
+            cumulateList.foreach(cmt => {
+              cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+            })
+
+            if (itr.isEmpty) {
+              cumulateList.foreach(cmt => {
+                cmt.baseClassInstance.onCompleteGroup()
+              })
+            }
+            Row.fromSeq(outRow)
+          }
+        }
+      })(RowEncoder(outputSchema))
+    }catch{
+      case e:Exception=> throw new FieldNotFoundException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+    }
+
     Map(key -> outputDf)
   }
 

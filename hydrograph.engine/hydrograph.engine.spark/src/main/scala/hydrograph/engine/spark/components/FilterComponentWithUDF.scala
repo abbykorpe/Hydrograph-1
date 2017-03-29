@@ -13,9 +13,10 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.FilterEntity
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.userfunctions.FilterForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
-import hydrograph.engine.spark.components.handler.OperationHelper
+import hydrograph.engine.spark.components.handler.{OperationHelper, SparkOperation}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.EncoderHelper
 import hydrograph.engine.transformation.userfunctions.base.FilterBase
@@ -39,7 +40,16 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
 
     LOG.info("Filter Component Called with input Schema [in the form of(Column_name,DataType,IsNullable)]: {}", componentsParams.getDataFrame().schema)
     val inputSchema: StructType = componentsParams.getDataFrame().schema
-    val operationSchema: StructType = EncoderHelper().getEncoder(filterEntity.getOperation.getOperationInputFields.toList, componentsParams.getSchemaFields())
+    var operationSchema:StructType=null
+    try{
+      operationSchema = EncoderHelper().getEncoder(filterEntity.getOperation.getOperationInputFields.toList, componentsParams.getSchemaFields())
+    }catch{
+      case e: Exception => throw new FieldNotFoundException(
+        "\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage())
+    }
+
+
     val outputSchema = inputSchema
     val filterDF = componentsParams.getDataFrame()
     val sparkSession = componentsParams.getSparkSession()
@@ -47,8 +57,13 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
     filterDF.createOrReplaceTempView(viewName)
 
     var map: Map[String, DataFrame] = Map()
-    val filterSparkOperations = initializeOperationList[FilterForExpression](filterEntity.getOperationsList,
-      operationSchema, outputSchema).head
+    var filterSparkOperations:SparkOperation[FilterBase]=null
+    try{
+      filterSparkOperations = initializeOperationList[FilterForExpression](filterEntity.getOperationsList,operationSchema, outputSchema).head
+    } catch {
+      case e: Exception => throw new UserFunctionClassNotFoundException("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage())
+    }
     val filterClass = filterSparkOperations.baseClassInstance
 
 

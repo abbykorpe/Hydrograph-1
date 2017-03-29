@@ -15,6 +15,7 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.AggregateEntity
 import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.core.component.utils.OperationUtils
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.userfunctions.AggregateForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.base.OperationComponentBase
@@ -44,8 +45,13 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val outputFields = OperationUtils.getAllFields(aggregateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
   val fieldsForOPeration = OperationUtils.getAllFieldsWithOperationFields(aggregateEntity, outputFields.toList.asJava)
-  val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
+  try {
+    operationSchema = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
+  } catch {
+    case e: Exception => throw new SchemaMisMatchException("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+  }
   val inSocketId: String = aggregateEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
   val passthroughFields: Array[String] = OperationUtils.getPassThrougFields(outSocketEntity.getPassThroughFieldsList,
@@ -56,10 +62,16 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
   val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]() else aggregateEntity.getKeyFields.map(_
     .getName)
-  val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
-
   private val LOG: Logger = LoggerFactory.getLogger(classOf[AggregateComponent])
-
+  var operationSchema: StructType = null
+  try {
+    keyFieldsIndexes = getIndexes(inputSchema, keyFields)
+  }
+  catch {
+    case e: Exception => throw new SchemaMisMatchException("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+  }
+  var keyFieldsIndexes: Array[(Int, Int)] = null
 
   override def createComponent(): Map[String, DataFrame] = {
 
@@ -83,14 +95,23 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
     val intermediateDf = sortedDf.mapPartitions(itr => {
 
       def compare(row: Row, previousRow: Row): Boolean = {
-        keyFieldsIndexes.forall(i => row(i._1).equals(previousRow(i._1))
-        )
+        keyFieldsIndexes.forall(i => row(i._1).equals(previousRow(i._1)))
       }
 
-      val aggregateList: List[SparkOperation[AggregateTransformBase]] = initializeOperationList[AggregateForExpression](aggregateEntity
-        .getOperationsList,
-        inputSchema,
-        operationSchema)
+      var aggregateList: List[SparkOperation[AggregateTransformBase]] = null
+      try {
+        aggregateList = initializeOperationList[AggregateForExpression](aggregateEntity
+          .getOperationsList, inputSchema, operationSchema)
+      }
+      catch {
+        case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+          "\nException in Transform Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+
+        case e: FieldNotFoundException => throw new FieldNotFoundException(
+          "\nException in Transform Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+      }
 
       aggregateList.foreach(sparkOperation => {
         sparkOperation.baseClassInstance match {

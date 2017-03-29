@@ -18,6 +18,7 @@ import hydrograph.engine.core.component.entity.JoinEntity
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
+import org.apache.spark.sql
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Column, DataFrame, Row}
@@ -88,7 +89,18 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
       val rhsModified = getJoinOpWithPrefixAdded(rhs, rhs.inSocketId)
 
       val lhsDF = lhs.dataFrame.select((lhs.keyFields ++ lhs.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
-      val rhsDF = rhsModified.dataFrame.select((rhsModified.keyFields ++ rhsModified.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+
+      var rhsDF:DataFrame=null
+
+      try{
+        rhsDF = rhsModified.dataFrame.select((rhsModified.keyFields ++ rhsModified.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+      }
+      catch {
+        case e: Exception => throw new SchemaMisMatchException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" )
+      }
+
+
       val lhsKeys = lhs.keyFields
       val rhsKeys = rhsModified.keyFields
 

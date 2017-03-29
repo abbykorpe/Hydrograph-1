@@ -14,6 +14,7 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.GroupCombineEntity
 import hydrograph.engine.core.component.utils.OperationUtils
+import hydrograph.engine.core.custom.exceptions.OperationEntityException
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.GroupCombineForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper

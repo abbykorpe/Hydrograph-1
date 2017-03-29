@@ -14,6 +14,7 @@ package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.component.utils.OperationOutputField
+import hydrograph.engine.core.custom.exceptions.SchemaMismatchException
 import hydrograph.engine.transformation.schema
 import org.apache.spark.sql.types._
 
@@ -77,7 +78,7 @@ class EncoderHelper extends Serializable {
     try {
       getDataType(schemaFields.filter(s => s.getFieldName.equals(fieldName))(0))
     } catch {
-      case e: Exception => throw new SchemaMisMatchException("Exception for field mismatch: " +fieldName+ " field not found ",e)
+      case e: Exception => throw new SchemaMismatchException(" Field:[\"" + fieldName + "\"]")
     }
 
   }
@@ -92,10 +93,16 @@ class EncoderHelper extends Serializable {
 
   def getEncoder(outFields: List[String], schemaFields: Array[SchemaField]): StructType = {
     val structFields = new Array[StructField](outFields.size)
-    outFields.zipWithIndex.foreach(f => {
-      structFields(f._2) = new StructField(f._1, getStructFieldType(f._1, schemaFields), true)
-    })
-    StructType(structFields)
+    try{
+    outFields.zipWithIndex.foreach(f =>
+      {
+        structFields(f._2) = new StructField(f._1, getStructFieldType(f._1, schemaFields), true)
+      })
+      StructType(structFields)}catch {
+      case e: Exception =>
+        throw e
+    }
+
   }
 
   def getEncoder(operationFields: Array[OperationOutputField]): StructType = {

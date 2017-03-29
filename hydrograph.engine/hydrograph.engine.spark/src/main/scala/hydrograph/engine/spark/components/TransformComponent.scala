@@ -14,9 +14,10 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.TransformEntity
 import hydrograph.engine.core.component.utils.OperationUtils
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, RegexNotAvailableException, SchemaMismatchException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.userfunctions.TransformForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
-import hydrograph.engine.spark.components.handler.OperationHelper
+import hydrograph.engine.spark.components.handler.{OperationHelper, SparkOperation}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import hydrograph.engine.transformation.userfunctions.base.TransformBase
@@ -58,7 +59,20 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
     LOG.trace("In method createComponent()")
     val df = componentsParams.getDataFrame.mapPartitions(itr => {
       //Initialize Transform to call prepare Method
-      val transformsList = initializeOperationList[TransformForExpression](transformEntity.getOperationsList, inputSchema, operationSchema)
+
+      var transformsList: List[SparkOperation[TransformBase]] = null
+      try {
+        transformsList = initializeOperationList[TransformForExpression](transformEntity.getOperationsList, inputSchema, operationSchema)
+      } catch {
+        case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+          "\nError in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
+
+        case e: FieldNotFoundException => throw new FieldNotFoundException(
+          "\nError in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
+      }
+
       transformsList.foreach {
         sparkOperation =>
           sparkOperation.baseClassInstance match {
@@ -70,11 +84,9 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
               t.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
                 .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields)
             } catch {
-              case e: Exception =>
-                LOG.error("Exception in prepare method of: " + t.getClass.getName + ".\nArguments passed to prepare() method are: \nProperties: " + sparkOperation.operationEntity.getOperationProperties + "\nInput Fields: " + sparkOperation
-                  .operationEntity.getOperationInputFields.get(0) + "\nOutput Fields: " + sparkOperation.operationEntity.getOperationOutputFields.get(0), e)
-                throw new OperationEntityException("Exception in prepare method of: " + t.getClass.getName + ".\nArguments passed to prepare() method are: \nProperties: " + sparkOperation.operationEntity.getOperationProperties + "\nInput Fields: " + sparkOperation
-                  .operationEntity.getOperationInputFields.get(0) + "\nOutput Fields: " + sparkOperation.operationEntity.getOperationOutputFields.get(0), e)
+              case e: RegexNotAvailableException =>
+                throw new RegexNotAvailableException("\nError in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+                  "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
             }
           }
       }
@@ -91,8 +103,8 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
             tr.baseClassInstance.transform(tr.inputRow.setRow(row), tr.outputRow.setRow(outRow))
           } catch {
             case e: Exception =>
-              LOG.error("Exception in transform method of: " + tr.getClass.getName + " and message is " + e.getMessage, e)
-              throw new RowFieldException("Exception in Transform Component:[\"" + transformEntity.getComponentId + "\"] for " + tr.getClass.getName + " and message is " + e.getMessage, e)
+              throw new SchemaMismatchException("\nError in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+                "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
           }
 
           if (itr.isEmpty) {
@@ -101,28 +113,21 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
               tr.baseClassInstance.cleanup()
             } catch {
               case e: Exception =>
-                LOG.error("Exception in cleanup method of: " + tr.baseClassInstance.getClass + " and message is " + e.getMessage, e)
-                throw new TransformExceptionForCleanup("Exception in cleanup method of: " + tr.baseClassInstance.getClass + " and message is " + e.getMessage, e)
+                throw new SchemaMismatchException("\nError in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+                  "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
             }
           }
         }
+
         Row.fromSeq(outRow)
       })
 
     })(RowEncoder(operationSchema))
+
 
     val key = transformEntity.getOutSocketList.get(0).getSocketId
     Map(key -> df)
 
   }
 
-}
-
-class TransformExceptionForCleanup private[components](val message: String, val exception: Throwable) extends RuntimeException(message) {
-}
-
-class RowFieldException private[components](val message: String, val exception: Throwable) extends RuntimeException(message) {
-}
-
-class OperationEntityException private[components](val message: String, val exception: Throwable) extends RuntimeException(message) {
 }

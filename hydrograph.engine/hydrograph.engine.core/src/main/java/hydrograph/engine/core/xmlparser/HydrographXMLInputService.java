@@ -73,7 +73,9 @@ public class HydrographXMLInputService implements HydrographInputService {
 			LOG.error("Error while merging subjob and mainjob.", e);
 			throw new RuntimeException(
 					"Error while merging subjob and mainjob.", e);
-		} catch (SAXException e) {
+		}
+
+		catch (SAXException e) {
 			LOG.error("Error while parsing XSD.", e);
 			throw new RuntimeException("Error while parsing XSD.", e);
 		}

@@ -13,6 +13,7 @@
 package hydrograph.engine.core.xmlparser;
 
 import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.custom.exceptions.OperationNotFoundException;
 import hydrograph.engine.jaxb.main.Graph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,7 @@ public class HydrographJobGenerator {
 			LOG.trace("HydrographJob object created successfully");
 			return hydrographJob;
 
-		} catch (JAXBException e) {
+		} catch (Exception e) {
 			LOG.error("Error while creating JAXB objects from job XML.", e);
 			throw new RuntimeException("Error while creating JAXB objects from job XML.", e);
 		}

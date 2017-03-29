@@ -13,10 +13,12 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.PartitionByExpressionEntity
+import hydrograph.engine.core.custom.exceptions.FieldNotFoundException
 import hydrograph.engine.expression.userfunctions.PartitionByExpressionForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.SchemaMisMatchException
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, Row}
@@ -77,10 +79,9 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
       }
 
       map
-    } catch {
-      case e: Exception =>
-        LOG.error("Error in PartitionByExpression component '" + partitionByExpressionEntity.getComponentId + "' error : " + e.getMessage, e)
-        throw new RuntimeException("Error in PartitionByExpression Component '" + partitionByExpressionEntity.getComponentId + "'", e)
+    }catch {
+      case e: Exception => throw new FieldNotFoundException("\nException in Partition By Expression Component - \nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage())
     }
   }
 }

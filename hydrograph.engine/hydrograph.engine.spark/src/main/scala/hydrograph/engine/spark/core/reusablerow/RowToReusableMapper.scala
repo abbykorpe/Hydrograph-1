@@ -14,6 +14,7 @@ package hydrograph.engine.spark.core.reusablerow
 
 import java.util.LinkedHashSet
 
+import hydrograph.engine.core.custom.exceptions.FieldNotFoundException
 import org.apache.spark.sql.types.StructType
 /**
   * The Class RowToReusableMapper.
@@ -29,7 +30,16 @@ class RowToReusableMapper(allFields: StructType, requiredFields: Array[String]) 
     arr
   }
 
-  val fieldIndexList: Array[Int] = requiredFields.map { x => val index = allFields.fieldIndex(x); index }
+  val fieldIndexList: Array[Int] = requiredFields.map { x => {
+    var index: Int = -1
+    try {
+      index = allFields.fieldIndex(x)
+    } catch {
+      case e: IllegalArgumentException => throw new FieldNotFoundException("\nField:[\"" + x + "\"] not found.")
+    }
+    index
+  }
+  }
 
   val fieldIndexMap: Map[String, Int] = requiredFields.map { x => val index = allFields.fieldIndex(x); (x, index) }.toMap
 

@@ -16,6 +16,7 @@ import hydrograph.engine.core.component.entity.elements.*;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
+import hydrograph.engine.core.custom.exceptions.SchemaMismatchException;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.*;
 import org.apache.log4j.Logger;
@@ -48,7 +49,6 @@ public class OperationHandler implements Serializable {
             schemaFieldList.addAll(getPassThroughFields(outSocket, baseComponent));
             schemaFieldList.addAll(getMapFields(outSocket, baseComponent));
             schemaFieldList.addAll(getOperationFields(outSocket, baseComponent));
-
             schemaFieldList.addAll(getCopyOfInsocket(outSocket, baseComponent));
             newSchemaFields.put(baseComponent.getId() + "_" + outSocket.getSocketId(), schemaFieldList);
         }
@@ -73,8 +73,13 @@ public class OperationHandler implements Serializable {
         Map<String, HashSet<SchemaField>> schemaFieldMap = getOperationOutputFields(baseComponent);
         Set<SchemaField> schemaFieldList = new LinkedHashSet<SchemaField>();
         for (OperationField operationFields : outSocket.getOperationFieldList()) {
+            try {
             schemaFieldList.add(
                     getSchemaField(schemaFieldMap.get(operationFields.getOperationId()), operationFields.getName()));
+            } catch (SchemaMismatchException e) {
+                throw new SchemaMismatchException("\nOutSocketId:[\"" + outSocket.getSocketId()
+                        + "\"]\nError while extracting Operation" + e.getMessage());
+            }
         }
         return schemaFieldList;
     }
@@ -105,7 +110,12 @@ public class OperationHandler implements Serializable {
     private Set<SchemaField> getMapFields(OutSocket outSocket, TypeBaseComponent baseComponent) {
         Set<SchemaField> mapFieldsList = new LinkedHashSet<SchemaField>();
         for (MapField mapField : outSocket.getMapFieldsList()) {
-            mapFieldsList.add(generateMapFields(baseComponent, mapField));
+            try {
+                mapFieldsList.add(generateMapFields(baseComponent, mapField));
+            } catch (SchemaMismatchException e) {
+                throw new SchemaMismatchException("\nOutSocketId:[\"" + outSocket.getSocketId()
+                        + "\"]\nError while extracting Map" + e.getMessage());
+            }
         }
         return mapFieldsList;
     }
@@ -173,8 +183,7 @@ public class OperationHandler implements Serializable {
                 return schemaField.clone();
             }
         }
-        log.warn("Exception in getSchemaField method of OperationHandler class.");
-        throw new FieldNotFoundException("Wrong fields obtain in out socket,field name is " + fieldName);
+        throw new SchemaMismatchException(" Field:[\"" + fieldName + "\"]");
 //        return null;
     }
 
