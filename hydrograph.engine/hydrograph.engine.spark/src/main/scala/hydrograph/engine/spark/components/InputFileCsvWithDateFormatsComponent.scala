@@ -13,7 +13,7 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileDelimitedEntity
-import hydrograph.engine.core.custom.exceptions.DelimiterNotFoundException
+import hydrograph.engine.core.custom.exceptions.BadDelimiterFoundException
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -64,7 +64,7 @@ class InputFileCsvWithDateFormatsComponent(iFileDelimitedEntity: InputFileDelimi
       Map(key -> df)
     } catch {
       case e : Exception =>
-        throw new DelimiterNotFoundException("\nException in Filter Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+        throw new BadDelimiterFoundException("\nException in Filter Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage())
     }
 

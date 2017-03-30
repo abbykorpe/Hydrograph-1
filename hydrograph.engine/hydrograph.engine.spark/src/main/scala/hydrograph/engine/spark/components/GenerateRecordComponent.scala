@@ -16,6 +16,7 @@ import java.sql.{Date, Timestamp}
 import java.text.{ParseException, SimpleDateFormat}
 
 import hydrograph.engine.core.component.entity.GenerateRecordEntity
+import hydrograph.engine.core.custom.exceptions.{BadQuoteFoundException, DateFormatException}
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -47,14 +48,15 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
     val recordCount: Int = generateRecordEntity.getRecordCount.toInt
 
     val prop = generateRecordEntity.getRuntimeProperties
-    val noOfPartitions: Int = if (prop != null) {
+    val noOfPartitions: Int = if (prop != null && prop.getProperty("noOfPartitions") != null) {
       try {
         prop.getProperty("noOfPartitions").toInt
       } catch {
-
-        case nfe: NumberFormatException =>
-          LOG.error("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", invalid noOfPartitions")
-          throw new RuntimeException("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", invalid noOfPartitions",nfe)
+        case e: NumberFormatException => throw new NumberFormatException(
+          "\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" +
+            generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
+            generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
+            + "\"]" + e.getMessage)
       }
     } else {
       spark.sparkContext.defaultParallelism
@@ -70,8 +72,7 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
         }
       } catch {
         case ae: ArithmeticException =>
-          LOG.error("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", noOfPartitions may be zero")
-          throw new RuntimeException("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", noOfPartitions may be zero",ae)
+          throw new RuntimeException("Error being: " + ae.getMessage)
       }
 
     try {
@@ -105,10 +106,8 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       Map(key -> df)
 
     } catch {
-
       case e: Exception =>
-        LOG.error("Error in Generate Record Component " + generateRecordEntity.getComponentId, e)
-        throw new RuntimeException("Error in Generate Record Component " + generateRecordEntity.getComponentId, e)
+        throw new RuntimeException("\nError being: " + e.getMessage)
     }
   }
 
@@ -131,11 +130,10 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
       return rowFieldsList
     } catch {
-
-      case aiob: RuntimeException =>
-        LOG.error("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
-        throw new RuntimeException("Error in Generate Record Component:[\"" + generateRecordEntity.getComponentId + "\"] for field name:[\"" + fieldName + "\"] whose field index:[\"" + fieldIndex + "\"] and data type is [\"" + dataType + "\"]. Cause of Error: " ,aiob)
-
+      case e: DateFormatException =>
+        throw new DateFormatException("\nException in Generate Record Component - \nComponent Id:[\""
+          + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
+          + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
     }
   }
 
@@ -170,15 +168,10 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
     } catch {
       case nfe: NumberFormatException =>
-        LOG.error("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " can not cast to integer type")
-        throw new RuntimeException("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " can not cast to integer type",nfe)
-
+        throw new RuntimeException("\nError being: Cannot cast to Integer type")
       case pe: ParseException =>
-        LOG.error("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " unable to parse in simple date format")
-        throw new RuntimeException("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " unable to parse in  simple date format")
-
+        throw new DateFormatException("\nDateFormat:[\"" + fieldEntityLists(fieldIndex).fieldFormat + "\"]\nError being: Unable to parse date")
       case e: Exception =>
-        LOG.error("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId + e)
         throw new RuntimeException(e)
     }
 
@@ -210,14 +203,10 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
         dateFormatList += simpleDateFormat
 
       }
-
       return (fieldEntityLists, dateFormatList)
-
     } catch {
-
       case aiob: ArrayIndexOutOfBoundsException =>
-        LOG.error("Error in Generate Record Component in getFieldPropertiesList()" + generateRecordEntity.getComponentId + aiob)
-        throw new RuntimeException("Error in Generate Record Component in getFieldPropertiesList()" + generateRecordEntity.getComponentId , aiob)
+        throw new RuntimeException("Error being: " + aiob.getMessage)
     }
   }
 }

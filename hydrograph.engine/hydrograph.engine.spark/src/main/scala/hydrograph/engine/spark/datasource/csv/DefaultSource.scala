@@ -14,6 +14,7 @@ package hydrograph.engine.spark.datasource.csv
 
 import java.util.{Locale, TimeZone}
 
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TextFile, TypeCast}
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.lang3.time.FastDateFormat
@@ -121,7 +122,13 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
   }
 
   private def fastDateFormat(dateFormat: String): FastDateFormat = if (!dateFormat.equalsIgnoreCase("null")) {
-      val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+      val date = {
+        try {
+          FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+        } catch {
+          case e: IllegalArgumentException => throw new DateFormatException("\nError being Unparseable Date Format:[\"" + dateFormat + "\"]")
+        }
+      }
 //    val date = new FastDateFormat(dateFormat, Locale.getDefault)
 //    date.setLenient(false)
 //    date.setTimeZone(TimeZone.getDefault)
@@ -134,7 +141,14 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
     parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
     val path = parameters.get("path").get
-    val filesystemPath = new Path(path)
+    val filesystemPath = {
+      try{
+        new Path(path)
+      } catch {
+        case e: IllegalArgumentException => throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + e.getMessage)
+      }
+
+    }
     val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
 
     val doSave = if (fs.exists(filesystemPath)) {
@@ -177,7 +191,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     val delimiterChar = if (delimiter.length == 1) {
       delimiter.charAt(0)
     } else {
-      throw new Exception("Delimiter cannot be more than one character.")
+      throw new BadDelimiterFoundException("\nDelimiter:[\"" + delimiter + "\"]\nError being: Bad Delimiter found")
     }
 
     val quote = parameters.getOrElse("quote", "\"")
@@ -186,7 +200,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     } else if (quote.length == 1) {
       quote.charAt(0)
     } else {
-      throw new Exception("Quotation cannot be more than one character.")
+      throw new BadQuoteFoundException("\nQuote:[\"" + quote + "\"]\nError being: Bad Quote found")
     }
 
     val csvFormat = CSVFormat.DEFAULT.withQuote(quoteChar).withDelimiter(delimiterChar).withSkipHeaderRecord(false).withRecordSeparator("\n")
@@ -239,8 +253,22 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     }
     val codecClass = CompressionCodecs.getCodecClass(codec)
     codecClass match {
-      case null => strRDD.saveAsTextFile(path)
-      case codeClass => strRDD.saveAsTextFile(path, codeClass)
+      case null => {
+        try{
+          strRDD.saveAsTextFile(path)
+        } catch {
+          case e: IllegalArgumentException => throw new BadArgumentException("\nError being: " + e.getMessage)
+          case e: Exception => throw new RuntimeException("\nError being: " + e.getMessage)
+        }
+      }
+      case codeClass => {
+        try{
+          strRDD.saveAsTextFile(path, codeClass)
+        } catch {
+          case e: IllegalArgumentException => throw new BadArgumentException("\nError being: " + e.getMessage)
+          case e: Exception => throw new RuntimeException("\nError being: " + e.getMessage)
+        }
+      }
     }
 
   }

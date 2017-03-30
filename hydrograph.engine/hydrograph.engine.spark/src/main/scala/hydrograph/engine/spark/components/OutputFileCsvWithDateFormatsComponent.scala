@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaMisMatchException, SchemaUtils}
@@ -51,6 +52,18 @@ BaseComponentParams) extends SparkFlow with Serializable {
     } catch {
       case e: AnalysisException => throw new SchemaMisMatchException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
         "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]\nError being: " + e.message)
+      case e: DateFormatException => throw new DateFormatException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
+      case e: PathNotFoundException => throw new PathNotFoundException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
+      case e: BadDelimiterFoundException => throw new BadDelimiterFoundException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
+      case e: BadQuoteFoundException => throw new BadQuoteFoundException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
+      case e: BadArgumentException => throw new BadArgumentException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
+      case e: Exception => throw new RuntimeException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
         val inputFields = cp.getDataFrame().schema.fieldNames
         val outputFields = schemaCreator.makeSchema().fieldNames
         val unexpected = outputFields.filterNot(inputFields.toSet)
