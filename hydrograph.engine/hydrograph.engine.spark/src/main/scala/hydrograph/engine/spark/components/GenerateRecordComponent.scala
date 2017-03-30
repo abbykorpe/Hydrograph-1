@@ -16,7 +16,7 @@ import java.sql.{Date, Timestamp}
 import java.text.{ParseException, SimpleDateFormat}
 
 import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import hydrograph.engine.core.custom.exceptions.{BadQuoteFoundException, DateFormatException}
+import hydrograph.engine.core.custom.exceptions.{BadArgumentException, BadQuoteFoundException, DateFormatException}
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -45,7 +45,16 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
     val spark = iComponentsParams.getSparkSession()
     val schema: StructType = SchemaCreator(generateRecordEntity).makeSchema()
     val key: String = generateRecordEntity.getOutSocketList.get(0).getSocketId
-    val recordCount: Int = generateRecordEntity.getRecordCount.toInt
+    val recordCount: Int = {
+      val count = generateRecordEntity.getRecordCount.toInt
+      if(count > 0)
+        count
+      else
+        throw new BadArgumentException("\nException in Generate Record Component - \nComponent Id:[\"" +
+          generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
+          generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
+          + "\"]\nRecordCount:[\"" + count + "\"]\nError being: Bad Record Count found")
+    }
 
     val prop = generateRecordEntity.getRuntimeProperties
     val noOfPartitions: Int = if (prop != null && prop.getProperty("noOfPartitions") != null) {
@@ -53,7 +62,7 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
         prop.getProperty("noOfPartitions").toInt
       } catch {
         case e: NumberFormatException => throw new NumberFormatException(
-          "\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" +
+          "\nException in Generate Record Component - \nComponent Id:[\"" +
             generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
             generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
             + "\"]" + e.getMessage)

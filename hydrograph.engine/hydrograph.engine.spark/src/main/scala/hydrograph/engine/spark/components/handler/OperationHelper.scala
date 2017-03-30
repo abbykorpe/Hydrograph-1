@@ -89,7 +89,7 @@ trait OperationHelper[T] {
       clazz(0).setAccessible(true)
       clazz(0).newInstance().asInstanceOf[T]
     } catch {
-      case e: ClassNotFoundException => throw new UserFunctionClassNotFoundException("User Function:[\"" + className + "\"] not found.")
+      case e: ClassNotFoundException => throw new UserFunctionClassNotFoundException("\nUser Function:[\"" + className + "\"] not found.")
     }
 
   }

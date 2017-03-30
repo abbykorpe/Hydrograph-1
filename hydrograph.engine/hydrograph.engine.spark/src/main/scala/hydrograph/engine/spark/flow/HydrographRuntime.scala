@@ -129,7 +129,12 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   override def prepareToExecute(): Unit = {
     LOG.info("Building spark flows")
+    try {
       flows = FlowBuilder(RuntimeContext.instance).buildFlow()
+    } catch {
+      case e: Exception => throw e
+    }
+
     LOG.info("Spark flows built successfully")
   }
 
@@ -151,6 +156,8 @@ class HydrographRuntime extends HydrographRuntimeService {
       catch{case e: Exception => {
         hydrographListener.failComponentsOfFlow(sparkFlow)
 //                executionTrackingListener.getStatus().asScala.foreach(println)
+//        throw new RuntimeException("\nException in Job:[\"" + flowManipulationContext.getGraphName + "\"]" +
+//          "\nError being: " + e.getMessage)
         throw e
       }
       }

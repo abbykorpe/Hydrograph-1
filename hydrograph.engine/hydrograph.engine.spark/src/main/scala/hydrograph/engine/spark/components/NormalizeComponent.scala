@@ -14,13 +14,14 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.NormalizeEntity
 import hydrograph.engine.core.component.utils.OperationUtils
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, RegexNotAvailableException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.NormalizeForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.handler.{OperationHelper, SparkOperation}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.EncoderHelper
+import hydrograph.engine.spark.components.utils.{EncoderHelper, SchemaMisMatchException}
 import hydrograph.engine.spark.core.reusablerow.{InputReusableRow, OutputReusableRow, RowToReusableMapper}
 import hydrograph.engine.transformation.userfunctions.base.{NormalizeTransformBase, OutputDispatcher}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
@@ -71,8 +72,19 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
 
     val outRow = new Array[Any](outputFields.size)
     val df = componentsParams.getDataFrame.mapPartitions(itr => {
+        val normalizeList: List[SparkOperation[NormalizeTransformBase]] = {
+          try {
+            initializeOperationList[NormalizeForExpression](normalizeEntity.getOperationsList, inputSchema, outputSchema)
+          } catch {
+            case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Normalize Component - \nComponent Id:[\""
+              + normalizeEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + normalizeEntity.getComponentName
+              + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
+            case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+              "\nException in Transform Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+                "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage())
+          }
+        }
 
-      val normalizeList: List[SparkOperation[NormalizeTransformBase]] = initializeOperationList[NormalizeForExpression](normalizeEntity.getOperationsList, inputSchema, outputSchema)
       val inputRow_new = InputReusableRow(null, new RowToReusableMapper(inputSchema,inputFieldNames.toArray))
       val outputRow_new = OutputReusableRow(null, new RowToReusableMapper(outputSchema,outputFields.toArray))
 
@@ -92,7 +104,18 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
               n.callPrepare(inputFieldNames.toArray,inputFieldTypes.toArray)
               n.initialize(listofFieldNames,listofFieldTypes,listOfOutFields)
             }
-            case n: NormalizeTransformBase=> n.prepare(normalizeList.get(0).operationEntity.getOperationProperties)
+            case n: NormalizeTransformBase => {
+              try {
+                n.prepare(normalizeList.get(0).operationEntity.getOperationProperties)
+              }  catch {
+                case e: RuntimeException =>
+                  throw new RegexNotAvailableException("\nException in Transform Component - \nComponentId:[\"" + normalizeEntity.getComponentId + "\"]" +
+                    "\nComponentName:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" +
+                    "\nOperationId:[\"" + normalizeList.get(0).operationEntity.getOperationId + "\"]\nOperationClass:[\""
+                    + n.getClass.getName + "\"]\nError being: " + e.getMessage())
+
+              }
+            }
           }
 
       val it = itr.flatMap(row => {

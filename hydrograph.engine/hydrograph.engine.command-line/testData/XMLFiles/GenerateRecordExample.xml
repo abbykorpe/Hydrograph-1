@@ -22,7 +22,7 @@
 			<schema name="timepass">
 				<field name="f1" type="java.lang.String" length="5" />
 				<field name="f2" type="java.math.BigDecimal" scale="3" />
-				<field name="f3" type="java.util.Date" format="yyasdyy-MM-dd"
+				<field name="f3" type="java.util.Date" format="yyyy-MM-dd"
 					rangeFrom="2015-10-31" rangeTo="2015-12-31" />
 				<field name="f4" type="java.lang.Integer" rangeFrom="100"
 					rangeTo="111" />
@@ -38,7 +38,7 @@
 		<runtimeProperties>
 			<property name="noOfPartitions" value="1" />
 		</runtimeProperties>
-		<recordCount value="5" />
+		<recordCount value="-5" />
 	</inputs>
 
 

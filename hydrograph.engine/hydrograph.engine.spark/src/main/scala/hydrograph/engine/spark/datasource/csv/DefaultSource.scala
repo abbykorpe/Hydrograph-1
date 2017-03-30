@@ -47,13 +47,14 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     val dateFormats = parameters.getOrElse("dateFormats", "null")
     val quote = parameters.getOrElse("quote", "\"")
 
-    val quoteChar: Character = if (quote == null) {
+    val quoteChar: Character = if (quote == null || quote.isEmpty) {
       null
     } else if (quote.length == 1) {
       quote.charAt(0)
     } else {
-      throw new Exception("Quotation cannot be more than one character.")
+      throw new BadQuoteFoundException("\nQuote:[\"" + quote + "\"]\nError being: Bad Quote found")
     }
+
     val useHeader = parameters.getOrElse("header", "false")
     val componentId = parameters.getOrElse("componentId", "")
     val dateFormat: List[FastDateFormat] = getDateFormats(dateFormats.split("\t").toList)
@@ -64,9 +65,8 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     } else if (useHeader.equals("false")) {
       false
     } else {
-      throw new Exception("Header flag can be true or false")
+      throw new BadArgumentException("\nHeader:[\"" + useHeader + "\"]\nError being: Bad Header found")
     }
-
 
     val safe = parameters.getOrElse("safe", "false")
     val safeFlag = if (safe.equals("true")) {
@@ -74,7 +74,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     } else if (safe.equals("false")) {
       false
     } else {
-      throw new Exception("Safe flag can be true or false")
+      throw new BadArgumentException("\nSafe:[\"" + safe + "\"]\nError being: Bad Safe found")
     }
 
 
@@ -84,7 +84,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     } else if (strict.equals("false")) {
       false
     } else {
-      throw new Exception("Strict flag can be true or false")
+      throw new BadArgumentException("\nStrict:[\"" + strict + "\"]\nError being: Bad Strict found")
     }
 
 
@@ -257,7 +257,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
         try{
           strRDD.saveAsTextFile(path)
         } catch {
-          case e: IllegalArgumentException => throw new BadArgumentException("\nError being: " + e.getMessage)
+          case e: IllegalArgumentException => throw new BadArgumentException("\nError being: " + e.getMessage,e)
           case e: Exception => throw new RuntimeException("\nError being: " + e.getMessage)
         }
       }
