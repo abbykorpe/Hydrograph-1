@@ -13,7 +13,7 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.PartitionByExpressionEntity
-import hydrograph.engine.core.custom.exceptions.FieldNotFoundException
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.userfunctions.PartitionByExpressionForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.handler.OperationHelper
@@ -79,9 +79,16 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
       }
 
       map
-    }catch {
-      case e: Exception => throw new FieldNotFoundException("\nException in Partition By Expression Component - \nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage())
+    } catch {
+      case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException("\nException in Partition By Expression Component - "
+        + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
+      case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Partition By Expression Component - "
+        + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
+      case e: Exception => throw new RuntimeException("\nException in Partition By Expression Component - "
+        + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
     }
   }
 }

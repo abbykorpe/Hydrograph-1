@@ -13,11 +13,12 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.LookupEntity
+import hydrograph.engine.core.custom.exceptions.BadArgumentException
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.{AnalysisException, Column, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -46,7 +47,15 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       val matchType = lookupEntity.getMatch
 
       def getDFWithRequiredFields(df: DataFrame): DataFrame = {
-        df.select(mergedFields.map(field => col(field._1).as(field._2)): _*)
+        try {
+          df.select(mergedFields.map(field => col(field._1).as(field._2)): _*)
+        } catch {
+          case e: AnalysisException => {
+            throw new BadArgumentException("\nException in Lookup Component - \nComponent Id:[\""
+              + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+              + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
+          }
+        }
       }
 
       val driverInSocketId = lookupEntity.getInSocketList.asScala.filter { in => (in.getInSocketType == "driver") }(0).getInSocketId
@@ -55,8 +64,28 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       val driverJoinOp = lookupOperations.filter { j => (j.inSocketId == driverInSocketId) }(0)
       val lookupJoinOp = lookupOperations.filter { j => (j.inSocketId == lookupInSocketId) }(0)
 
-      val driverDF = driverJoinOp.dataFrame.select((driverJoinOp.keyFields ++ driverJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)      
-      val lookupDF = lookupJoinOp.dataFrame.select((lookupJoinOp.keyFields ++ lookupJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)      
+      val driverDF = {
+        try {
+          driverJoinOp.dataFrame.select((driverJoinOp.keyFields ++ driverJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+        } catch {
+          case e: AnalysisException => {
+            throw new BadArgumentException("\nException in Lookup Component - \nComponent Id:[\""
+              + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+              + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
+          }
+        }
+      }
+      val lookupDF = {
+        try {
+          lookupJoinOp.dataFrame.select((lookupJoinOp.keyFields ++ lookupJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
+        } catch {
+          case e: AnalysisException => {
+            throw new BadArgumentException("\nException in Lookup Component - \nComponent Id:[\""
+              + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+              + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
+          }
+        }
+      }
       
       val broadcastDF = broadcast({
         if (matchType == "all")
@@ -83,8 +112,9 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       Map(key -> outputDF)
     }
     catch {
-      case ex: RuntimeException =>
-        LOG.error("Error in Lookup component '" + lookupEntity.getComponentId + "', Error", ex); throw ex
+      case e: RuntimeException => throw new RuntimeException("\nException in Lookup Component - \nComponent Id:[\""
+        + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+        + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.getMessage, e)
     }
 
   }

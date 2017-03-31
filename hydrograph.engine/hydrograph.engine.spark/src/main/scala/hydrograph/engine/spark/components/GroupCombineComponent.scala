@@ -14,7 +14,7 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.GroupCombineEntity
 import hydrograph.engine.core.component.utils.OperationUtils
-import hydrograph.engine.core.custom.exceptions.OperationEntityException
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, OperationEntityException, SchemaMismatchException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.GroupCombineForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
@@ -46,7 +46,15 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
   val outputFields = OperationUtils.getAllFields(groupCombineEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
   val fieldsForOPeration = OperationUtils.getAllFieldsWithOperationFields(groupCombineEntity, outputFields.toList.asJava)
-  val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
+  val operationSchema: StructType = {
+    try {
+      EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
+    } catch {
+      case e: SchemaMismatchException => throw new SchemaMismatchException(
+        "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
+    }
+  }
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = groupCombineEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -68,10 +76,19 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
     val sourceDf = componentsParams.getDataFrame()
 
     //Initialize Aggregarte to call prepare Method
-    val groupCombineList: List[SparkOperation[GroupCombineTransformBase]] = initializeOperationList[GroupCombineForExpression](groupCombineEntity
-      .getOperationsList,
-      inputSchema,
-      operationSchema)
+    val groupCombineList: List[SparkOperation[GroupCombineTransformBase]] = {
+      try {
+        initializeOperationList[GroupCombineForExpression](groupCombineEntity.getOperationsList, inputSchema, operationSchema)
+      } catch {
+        case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+          "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
+
+        case e: FieldNotFoundException => throw new FieldNotFoundException(
+          "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
+      }
+    }
 
     //init for expressions
     groupCombineList.foreach(sparkOperation => {
@@ -113,7 +130,16 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
 
     try {
       val groupedDF = sourceDf.groupBy(keyFields.map(col(_)): _*)
-      var aggregatedDf = groupedDF.agg(finalList.head, finalList.tail: _*)
+      var aggregatedDf = {
+        try {
+          groupedDF.agg(finalList.head, finalList.tail: _*)
+        } catch {
+          case e: AnalysisException => throw new SchemaMismatchException(
+            "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch
+              + "\"]\nError being: " + e.message, e)
+        }
+      }
 
       outSocketEntity.getOperationFieldList.asScala.foreach(operationField => {
         aggregatedDf = aggregatedDf.withColumn(operationField.getName, col(compID + operationField.getOperationId + "_agg." + operationField.getName))

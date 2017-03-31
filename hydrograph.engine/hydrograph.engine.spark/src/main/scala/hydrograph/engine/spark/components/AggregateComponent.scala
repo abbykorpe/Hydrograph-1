@@ -105,22 +105,37 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       }
       catch {
         case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
-          "\nException in Transform Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+          "\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
             "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
 
         case e: FieldNotFoundException => throw new FieldNotFoundException(
-          "\nException in Transform Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+          "\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
             "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
       }
 
       aggregateList.foreach(sparkOperation => {
         sparkOperation.baseClassInstance match {
-          case a: AggregateForExpression =>
-            a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
-            a.init()
-            a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
-          case a: AggregateTransformBase => a.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
-            .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields, keyFields)
+          case a: AggregateForExpression => {
+            try {
+              a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
+              a.init()
+              a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
+            } catch {
+              case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
+                + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
+            }
+          }
+          case a: AggregateTransformBase => {
+            try {
+              a.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
+                .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields, keyFields)
+            } catch {
+              case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
+                + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
+            }
+          }
         }
       })
       var outRow: Array[Any] = null
@@ -143,15 +158,19 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
 
           if (isEndOfIterator) {
             aggregateList.foreach(agt => {
-              agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
+              try {
+                agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
+              } catch {
+                case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                  + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
+                  + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
+              }
             })
             isContinue = false;
             isItrEmpty = true;
             return Row.fromSeq(tempOutRow)
           }
-
           val row: Row = itr.next()
-
           val isPrevKeyDifferent: Boolean = {
             if (previousRow == null)
               true
@@ -160,27 +179,31 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           previousRow = row
 
           if (isPrevKeyDifferent) {
-
             if (!isPrevKeyNull) {
               aggregateList.foreach(agt => {
-                agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
+                try {
+                  agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
+                } catch {
+                  case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                    + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
+                    + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
+                }
               })
             }
-
             outRow = tempOutRow
             tempOutRow = new Array[Any](outSize)
             copyFields(row, tempOutRow, mapFieldIndexes)
             copyFields(row, tempOutRow, passthroughIndexes)
-
           }
 
           aggregateList.foreach(agt => {
             try {
               agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
             } catch {
-              case e: Exception => throw new RuntimeException("Error in Aggregate Component:[\"" + aggregateEntity.getComponentId + "\"] ", e)
+              case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
+                + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
             }
-
           })
 
           if (isPrevKeyDifferent && (!isPrevKeyNull))

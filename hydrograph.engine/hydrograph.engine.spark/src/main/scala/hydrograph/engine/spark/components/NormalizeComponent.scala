@@ -14,7 +14,7 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.NormalizeEntity
 import hydrograph.engine.core.component.utils.OperationUtils
-import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, RegexNotAvailableException, UserFunctionClassNotFoundException}
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, RegexNotAvailableException, SchemaMismatchException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.NormalizeForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
@@ -56,7 +56,14 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
   val outputFields = OperationUtils.getAllFields(normalizeEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
   val fieldsForOperation = OperationUtils.getAllFieldsWithOperationFields(normalizeEntity, outputFields.toList.asJava)
-  val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
+  try {
+    val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
+  } catch {
+    case e: SchemaMismatchException => throw new SchemaMismatchException(
+      "\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
+  }
+
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = normalizeEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -80,7 +87,7 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
               + normalizeEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + normalizeEntity.getComponentName
               + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
             case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
-              "\nException in Transform Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+              "\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
                 "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage())
           }
         }
@@ -109,7 +116,7 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
                 n.prepare(normalizeList.get(0).operationEntity.getOperationProperties)
               }  catch {
                 case e: RuntimeException =>
-                  throw new RegexNotAvailableException("\nException in Transform Component - \nComponentId:[\"" + normalizeEntity.getComponentId + "\"]" +
+                  throw new RegexNotAvailableException("\nException in Normalize Component - \nComponentId:[\"" + normalizeEntity.getComponentId + "\"]" +
                     "\nComponentName:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" +
                     "\nOperationId:[\"" + normalizeList.get(0).operationEntity.getOperationId + "\"]\nOperationClass:[\""
                     + n.getClass.getName + "\"]\nError being: " + e.getMessage())

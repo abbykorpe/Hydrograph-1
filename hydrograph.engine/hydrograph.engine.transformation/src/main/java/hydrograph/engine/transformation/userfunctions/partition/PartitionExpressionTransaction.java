@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  *******************************************************************************/
-package hydrograph.engine.userfunctions;
+package hydrograph.engine.transformation.userfunctions.partition;
 
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;

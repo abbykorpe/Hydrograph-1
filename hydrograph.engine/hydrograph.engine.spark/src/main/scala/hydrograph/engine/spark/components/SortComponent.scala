@@ -16,10 +16,11 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.SortEntity
 import hydrograph.engine.core.component.entity.elements.KeyField
+import hydrograph.engine.core.custom.exceptions.{SchemaMismatchException, UserFunctionClassNotFoundException}
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.{AnalysisException, Column, DataFrame}
 import org.slf4j.LoggerFactory
 
 /**
@@ -52,8 +53,14 @@ class SortComponent(sortEntity: SortEntity, componentsParams: BaseComponentParam
       Map(outSocketId -> sortedDF)
 
     } catch {
-      case ex: Exception => LOG.error("Error in Sort component " + sortEntity.getComponentId, ex)
-        throw ex
+      case e: AnalysisException => throw new SchemaMismatchException("\nException in Sort Component - "
+        + "\nComponent Id:[\"" + sortEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + sortEntity.getComponentName + "\"]\nBatch:[\"" + sortEntity.getBatch
+        + "\"]\nError being: " + e.message, e)
+      case e: Exception => throw new RuntimeException("\nException in Sort Component - "
+        + "\nComponent Id:[\"" + sortEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + sortEntity.getComponentName + "\"]\nBatch:[\"" + sortEntity.getBatch
+        + "\"]\nError being: " + e.getMessage, e)
     }
   }
 

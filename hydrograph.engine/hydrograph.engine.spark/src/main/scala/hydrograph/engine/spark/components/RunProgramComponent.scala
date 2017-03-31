@@ -53,24 +53,30 @@ class RunProgramComponent(assemblyEntityBase: AssemblyEntityBase) extends Comman
         }
       }
       catch {
-        case e => {
-          throw new RuntimeException(e)
-        }
+        case e => throw new RuntimeException("\nException in Run Program Component - "
+          + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+          + "\"]\nError being: " + e.getMessage, e)
       }
       finally {
         if (errorMessage != null) {
-          throw new RuntimeException(errorMessage).initCause(new RuntimeException(errorMessage))
+          throw new IOException("\nException in Run Program Component - "
+            + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+            + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+            + "\"]\nError being: " + errorMessage)
         }
         exitStatus = p.waitFor
       }
     }
     catch {
-      case e: IOException => {
-        throw new RuntimeException(e)
-      }
-      case e: InterruptedException => {
-        throw new RuntimeException(e)
-      }
+      case e: IOException => throw new IOException("\nException in Run Program Component - "
+        + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+        + "\"]\nError being: " + e.getMessage, e)
+      case e: InterruptedException => throw new InterruptedException("\nException in Run Program Component - "
+        + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+        + "\"]\nError being: " + e.getMessage)
     }
   }
 
