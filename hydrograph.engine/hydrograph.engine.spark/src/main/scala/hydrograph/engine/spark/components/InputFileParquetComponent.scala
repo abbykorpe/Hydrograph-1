@@ -13,10 +13,11 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileParquetEntity
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils}
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{AnalysisException, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -41,8 +42,31 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
       val fieldList = iFileParquetEntity.getFieldsList.asScala
       fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + iFileParquetEntity.getComponentId) }
 
-      val df = iComponentsParams.getSparkSession().read.parquet(path)
-      SchemaUtils().compareSchema(schemaField.toList, df.schema.toList)
+      val df = try {
+        iComponentsParams.getSparkSession().read.parquet(path)
+      } catch {
+
+        case ex: AnalysisException =>
+
+          LOG.error("Exception in  in Input  File Parquet component - \nComponent Id:[\"" + iFileParquetEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + iFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + iFileParquetEntity.getBatch + "\"]\n" + "Error being : " + ex.getMessage(), ex)
+
+          throw new PathNotFoundException(
+            "\nException in  in Input  File Parquet component - \nComponent Id:[\"" + iFileParquetEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + iFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + iFileParquetEntity.getBatch + "\"]\n" + "Error being : " + ex.getMessage(), ex)
+      }
+      try {
+        SchemaUtils().compareSchema(schemaField.toList, df.schema.toList)
+      } catch {
+        case ex: SchemaMismatchException =>
+
+          LOG.error("Exception in  in Input  File Parquet component - \nComponent Id:[\"" + iFileParquetEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + iFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + iFileParquetEntity.getBatch + "\"]\n" + "Error being : " + ex.getMessage(), ex)
+
+          throw new SchemaMismatchException(
+            "\nException in Input  File Parquet component - \nComponent Id:[\"" + iFileParquetEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + iFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + iFileParquetEntity.getBatch + "\"]\n" + "Error being : " + ex.getMessage(), ex)
+      }
 
       val key = iFileParquetEntity.getOutSocketList.get(0).getSocketId
 
@@ -52,8 +76,14 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
       Map(key -> df)
     }
     catch {
+
       case ex: RuntimeException =>
-        LOG.error("Error in Input  File Parquet component '" + iFileParquetEntity.getComponentId + "', Error" + ex.getMessage, ex); throw ex
+        LOG.error("Exception in  in Input  File Parquet component - \nComponent Id:[\"" + iFileParquetEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + iFileParquetEntity.getBatch + "\"]\n" + "Error being : " + ex.getMessage(), ex)
+
+        throw new RuntimeException(
+          "\nException in Input  File Parquet component - \nComponent Id:[\"" + iFileParquetEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + iFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + iFileParquetEntity.getBatch + "\"]\n" + "Error being : " + ex.getMessage(), ex)
     }
   }
 }

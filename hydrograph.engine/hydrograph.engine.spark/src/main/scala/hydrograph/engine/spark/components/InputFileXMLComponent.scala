@@ -101,9 +101,17 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
 
     } catch {
 
-      case e : Exception =>
-        LOG.error("Error in Input File XML Component "+ iFileXMLEntity.getComponentId, e)
-        throw new RuntimeException("Error in Input File XML Component "+ iFileXMLEntity.getComponentId, e)
+      case e: Exception =>
+
+        LOG.error("Exception in Input File XML Component - \nComponent Id:[\"" + iFileXMLEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileXMLEntity.getComponentName + "\"]\nBatch:[\"" + iFileXMLEntity.getBatch + "\"]\n"
+          + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Input File XML Component - \nComponent Id:[\"" + iFileXMLEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + iFileXMLEntity.getComponentName + "\"]\nBatch:[\"" + iFileXMLEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
     }
 
   }

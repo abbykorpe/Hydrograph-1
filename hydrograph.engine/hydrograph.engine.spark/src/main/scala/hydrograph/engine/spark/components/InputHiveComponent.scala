@@ -14,9 +14,10 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.base.HiveEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{AnalysisException, DataFrame}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
@@ -34,8 +35,25 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     val sparkSession = parameters.getSparkSession()
 
 
-    val data = sparkSession.sql(constructQuery(entity))
-    val key = entity.getOutSocketList.get(0).getSocketId
+    val data = try {
+      sparkSession.sql(constructQuery(entity))
+    } catch {
+      case ex : AnalysisException =>
+
+        LOG.error("Exception in Input Hive Component Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\n"
+          + "Error being : " + ex.getMessage(), ex)
+
+        throw new RuntimeException("\nException in Input Hive Component Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\n"
+          + "Error being : " + ex.getMessage(), ex)
+    }
+    val key =  try {entity.getOutSocketList.get(0).getSocketId }
+    catch {
+      case ex : RuntimeException => throw new FieldNotFoundException("\nError in Input Hive Component Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\n"
+        + "Error being : " + ex.getMessage(), ex)
+    }
 
     LOG.info("Created Hive Input component " + entity.getComponentId + " in batch " + entity.getBatch + " with out socket " + key + " to read Hive table " + entity.getDatabaseName + "." + entity.getTableName)
     Map(key -> data)
@@ -45,8 +63,9 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
   def constructQuery(entity: HiveEntityBase): String = {
     LOG.trace("In method constructQuery() which returns constructed query to execute with spark-sql")
     var query = ""
-    val databaseName = entity.getDatabaseName
-    val tableName = entity.getTableName
+
+      val databaseName = entity.getDatabaseName
+      val tableName = entity.getTableName
 
     val fieldList = entity.getFieldsList.asScala.toList
     val partitionKeyValueMap = entity.getListOfPartitionKeyValueMap.asScala.toList

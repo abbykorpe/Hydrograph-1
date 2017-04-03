@@ -18,14 +18,19 @@ import java.util.Properties
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{DbTableUtils, SchemaCreator, SchemaMismatchException}
+import hydrograph.engine.spark.components.utils.{DbTableUtils, SchemaCreator, SchemaMisMatchException}
 import org.apache.hadoop.conf.Configuration
-import org.apache.spark.sql.{DataFrame, DataFrameReader, SparkSession}
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.{DataFrame, DataFrameReader}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
-
+/**
+  * The Class InputSparkRedshiftComponent.
+  *
+  * @author Bitwise
+  *
+  */
 class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams: BaseComponentParams) extends
   InputComponentBase {
   val LOG: Logger = LoggerFactory.getLogger(classOf[InputSparkRedshiftComponent])
@@ -52,7 +57,7 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
       + " reading data using query '" + selectQuery + "'")
 
     val connectionURL = "jdbc:redshift://" + inputRDBMSEntity.getHostName + ":" + inputRDBMSEntity.getPort() + "/" +
-      inputRDBMSEntity.getDatabaseName + "?user=" + inputRDBMSEntity.getUsername + "&password=" + inputRDBMSEntity.getPassword;
+      inputRDBMSEntity.getDatabaseName
 
     LOG.info("Connection  url for input Spark Redshift  component: " + connectionURL)
 
@@ -61,6 +66,8 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
         .format("com.databricks.spark.redshift")
         .option("url", connectionURL)
         .option("query", selectQuery)
+        .option("user", inputRDBMSEntity.getUsername)
+        .option("password", inputRDBMSEntity.getPassword)
         .option("tempdir", inputRDBMSEntity.getTemps3dir)
 
       val df = getDataFrameReader(sparkSession.sparkContext.hadoopConfiguration,dataFrameReader, properties).load
@@ -70,31 +77,46 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
+      case e: SchemaMisMatchException =>
+        LOG.error(
+          "Exception in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
+        throw new SchemaMisMatchException(
+          "\nException in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
       case e: Exception =>
-        LOG.error("Error in Input Spark Redshift component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
-        throw new RuntimeException("Error in Spark Input Redshift Component " + inputRDBMSEntity.getComponentId, e)
+        LOG.error(
+          "Exception in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
 
   def getDataFrameReader(hadoopConfiguration:Configuration, dataFrameReader : DataFrameReader, properties:Properties) : DataFrameReader = {
-    if (properties.getProperty("aws_iam_role") != null && !properties.getProperty("aws_iam_role").equals("")) {
-      dataFrameReader.option("aws_iam_role", properties.getProperty("aws_iam_role"))
-      LOG.debug("aws_iam_role for input spark redshift component '" + properties.getProperty("aws_iam_role") + "'")
 
-    }
-    if (properties.getProperty("forward_spark_s3_credentials") != null && !properties.getProperty("forward_spark_s3_credentials").equals("")) {
-      // discover the credentials that Spark is using to connect to S3 and will forward those credentials to Redshift over JDBC
-      dataFrameReader.option("forward_spark_s3_credentials", properties.getProperty("forward_spark_s3_credentials").toBoolean)
-      LOG.debug("forward_spark_s3_credentials for input spark redshift component ''" + properties.getProperty("forward_spark_s3_credentials") + "'")
-    }
-    if ((properties.getProperty("fs.s3n.awsAccessKeyId") != null && !properties.getProperty("fs.s3n.awsAccessKeyId").equals("")) &&
-      (properties.getProperty("fs.s3n.awsSecretAccessKey") != null && !properties.getProperty("fs.s3n.awsSecretAccessKey").equals(""))) {
-      hadoopConfiguration.set("fs.s3n.awsAccessKeyId", properties.getProperty("fs.s3n.awsAccessKeyId"))
-      hadoopConfiguration.set("fs.s3n.awsSecretAccessKey", properties.getProperty("fs.s3n.awsSecretAccessKey"))
-      LOG.debug("fs.s3n.awsAccessKeyId '" + properties.getProperty("fs.s3n.awsAccessKeyId") + "' and "
-        + "fs.s3n.awsSecretAccessKey  '" + properties.getProperty("fs.s3n.awsSecretAccessKey") + "' "
-        + "for input spark redshift component")
-    }
+    properties.stringPropertyNames().asScala.toList.foreach(name => {
+      if (name.startsWith("fs.s3")) {
+        hadoopConfiguration.set(name, properties.getProperty(name))
+        LOG.debug(name + " '" + properties.getProperty(name) + "' for Input Spark Redshift component")
+      }
+      if(name.equals("aws_iam_role")){
+        dataFrameReader.option(name, properties.getProperty(name))
+        LOG.debug(name+" '" + properties.getProperty(name) + "' for input spark redshift component '")
+      }
+      if(name.equals("forward_spark_s3_credentials")){
+        dataFrameReader.option(name, properties.getProperty(name).toBoolean)
+        LOG.debug(name + "' "+ properties.getProperty(name) + "' for input spark redshift component ")
+      }
+    })
     dataFrameReader
   }
 
@@ -128,11 +150,11 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
       if (fieldExist) {
         if (!(inSchema.dataType.typeName.equalsIgnoreCase(dbDataType.typeName))) {
           LOG.error("Field '" + inSchema.name + "', data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
-          throw SchemaMismatchException("Field '" + inSchema.name + "' data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
+          throw SchemaMisMatchException("Field '" + inSchema.name + "' data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
         }
       } else {
         LOG.error("Field '" + inSchema.name + "' does not exist in metadata")
-        throw SchemaMismatchException("Input schema does not match with metadata schema, "
+        throw SchemaMisMatchException("Input schema does not match with metadata schema, "
           + "Field '" + inSchema.name + "' does not exist in metadata")
       }
     })

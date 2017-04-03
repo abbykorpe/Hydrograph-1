@@ -42,9 +42,14 @@ class InputSequenceFileComponent(iSequenceEntity: InputFileSequenceFormatEntity,
       Map(key -> df)
     }
     catch {
-      case e:Exception =>
-        LOG.error("Error in Input Sequence File Component "+ iSequenceEntity.getComponentId, e)
-        throw new RuntimeException("Error in Input Sequence File Component "+ iSequenceEntity.getComponentId, e)
+      case e: Exception =>
+
+        LOG.error("Exception in Input Sequence File Component - \nComponent Id:[\"" + iSequenceEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iSequenceEntity.getComponentName + "\"]\nBatch:[\"" + iSequenceEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Input Sequence File Component - \nComponent Id:[\"" + iSequenceEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + iSequenceEntity.getComponentName + "\"]\nBatch:[\"" + iSequenceEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
     }
   }
 }
