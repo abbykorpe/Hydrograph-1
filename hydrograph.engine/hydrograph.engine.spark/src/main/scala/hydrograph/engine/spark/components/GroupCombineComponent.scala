@@ -14,7 +14,7 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.GroupCombineEntity
 import hydrograph.engine.core.component.utils.OperationUtils
-import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, OperationEntityException, SchemaMismatchException, UserFunctionClassNotFoundException}
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, SchemaMismatchException, UserFunctionClassNotFoundException}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.GroupCombineForExpression
 import hydrograph.engine.expression.utils.ExpressionWrapper
@@ -83,7 +83,6 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
         case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
           "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
             "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
-
         case e: FieldNotFoundException => throw new FieldNotFoundException(
           "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
             "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
@@ -96,18 +95,17 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
         //For Expression Editor call extra methods
         case a: GroupCombineForExpression => {
           LOG.info("Expressions present in GroupCombine component:[\"" + groupCombineEntity.getComponentId + "\"].")
-          a.setValidationAPIForUpateExpression(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
-          a.setValidationAPIForMergeExpression(new ExpressionWrapper(new ValidationAPI(sparkOperation.operationEntity.getMergeExpression, "")))
-          a.init(sparkOperation.operationEntity.getOperationFields.head.getDataType, sparkOperation.operationEntity.getOperationFields.head.getFormat,
-            sparkOperation.operationEntity.getOperationFields.head.getScale, sparkOperation.operationEntity.getOperationFields.head.getPrecision)
           try {
+            a.setValidationAPIForUpateExpression(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
+            a.setValidationAPIForMergeExpression(new ExpressionWrapper(new ValidationAPI(sparkOperation.operationEntity.getMergeExpression, "")))
+            a.init(sparkOperation.operationEntity.getOperationFields.head.getDataType, sparkOperation.operationEntity.getOperationFields.head.getFormat,
+              sparkOperation.operationEntity.getOperationFields.head.getScale, sparkOperation.operationEntity.getOperationFields.head.getPrecision)
             a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
           } catch {
             case e: Exception =>
-              LOG.error("Exception in callPrepare method of: " + a.getClass.getName + ".\nArguments passed to prepare() method are: \nProperties: " + sparkOperation.operationEntity.getOperationProperties + "\nInput Fields: " + sparkOperation
-                .operationEntity.getOperationInputFields.get(0) + "\nOutput Fields: " + sparkOperation.operationEntity.getOperationOutputFields.get(0), e)
-              throw new OperationEntityException("Exception in prepare method of: " + a.getClass.getName + ".\nArguments passed to prepare() method are: \nProperties: " + sparkOperation.operationEntity.getOperationProperties + "\nInput Fields: " + sparkOperation
-                .operationEntity.getOperationInputFields.get(0) + "\nOutput Fields: " + sparkOperation.operationEntity.getOperationOutputFields.get(0), e)
+              throw new RuntimeException(
+                "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+                  "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
           }
         }
         case _ => {}
@@ -155,10 +153,9 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
 
       Map(key -> aggregatedDf)
     } catch {
-
-      case e: Exception =>
-        LOG.error("Exception in GroupCombine component:" + groupCombineEntity.getComponentId + " where exception ",e)
-        throw new RuntimeException("Exception in GroupCombine component:[\"" + groupCombineEntity.getComponentId + "\"] where exception ", e)
+      case e: Exception => throw new RuntimeException("\nException in GroupCombine Component - \nComponent Id:[\""
+        + groupCombineEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + groupCombineEntity.getComponentName
+        + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]\nError being: " + e.getMessage, e)
     }
   }
 

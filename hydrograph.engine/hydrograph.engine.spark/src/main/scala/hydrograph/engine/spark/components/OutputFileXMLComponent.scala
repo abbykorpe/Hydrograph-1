@@ -70,6 +70,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
         val unexpected = outputFields.filterNot(inputFields.toSet)
         LOG.error("Error in Output File XML Component "+ outputFileXMLEntity.getComponentId +" and unmatched fields are "+unexpected.toList, null)
         throw new SchemaMisMatchException("Error in Output File XML Component "+ outputFileXMLEntity.getComponentId+" and unmatched fields are "+unexpected.toList, e)
+
     }
     LOG.info("Created Output File XML Component "+ outputFileXMLEntity.getComponentId
       + " in Batch "+ outputFileXMLEntity.getBatch +" with path " + outputFileXMLEntity.getPath)

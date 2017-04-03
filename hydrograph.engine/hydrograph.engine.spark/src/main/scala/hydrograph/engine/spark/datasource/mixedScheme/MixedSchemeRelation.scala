@@ -65,18 +65,19 @@ case class MixedSchemeRelation(componentName:String,
     val input = sc.hadoopFile(location.get, classOf[DelimitedAndFixedWidthInputFormat], classOf[LongWritable], classOf[Text])
 
     val tokens:RDD[Array[AnyRef]] = {
-
+      try{
         input.values.map( line =>
-          try{
+
           DelimitedAndFixedWidthHelper.getFields(schema,
             line.toString, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
             lengthsAndDelimitersType.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
             safe, quote, dateFormats)
-          } catch {
-            case e:Exception => {
-              throw new RuntimeException("Error in Input Mixed Scheme Component:[\""+componentName+"\"] \n ",e )
-            }
-          })
+          )
+      } catch {
+        case e:Exception => {
+          throw new RuntimeException("Error in Input Mixed Scheme Component:[\""+componentName+"\"] \n ",e )
+        }
+      }
 
     }
 

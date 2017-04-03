@@ -51,7 +51,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
     operationSchema= EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
   } catch {
     case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
-      "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+      "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
   }
 
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
@@ -63,16 +63,14 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
   val keyFields = if (cumulateEntity.getKeyFields == null) Array[String]()
   else cumulateEntity.getKeyFields.map(_.getName)
-  var keyFieldsIndexes: Array[(Int, Int)] = null
-  try
-  {
-    keyFieldsIndexes = getIndexes(inputSchema, keyFields)
-  }catch {
-    case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
-      "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+  val keyFieldsIndexes: Array[(Int, Int)] = {
+    try {
+      getIndexes(inputSchema, keyFields)
+    } catch {
+      case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+    }
   }
-
-
 
   override def createComponent(): Map[String, DataFrame] = {
     if (LOG.isTraceEnabled) LOG.trace(cumulateEntity.toString)
@@ -99,21 +97,38 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
         try {
           cumulateList = initializeOperationList[CumulateForExpression](cumulateEntity.getOperationsList, inputSchema, operationSchema)
         } catch {
-          case e: Exception => throw new UserFunctionClassNotFoundException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
-            "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+          case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException("\nException in Cumulate Component - \nComponent Id:[\""
+            + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
+            + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+          case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Cumulate Component - \nComponent Id:[\""
+            + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
+            + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
         }
 
         cumulateList.foreach(sparkOperation => {
           sparkOperation.baseClassInstance match {
-            case a: CumulateForExpression =>
-              a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
-              a.init()
-              a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
-            case a: CumulateTransformBase =>
-
-              a.prepare(sparkOperation.operationEntity.getOperationProperties,
-                sparkOperation.operationEntity.getOperationInputFields,
-                sparkOperation.operationEntity.getOperationOutputFields, keyFields)
+            case a: CumulateForExpression => {
+              try {
+                a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
+                a.init()
+                a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
+              } catch {
+                case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                  + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
+                  + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+              }
+            }
+            case a: CumulateTransformBase => {
+              try {
+                a.prepare(sparkOperation.operationEntity.getOperationProperties,
+                  sparkOperation.operationEntity.getOperationInputFields,
+                  sparkOperation.operationEntity.getOperationOutputFields, keyFields)
+              }  catch {
+                case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                  + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
+                  + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+              }
+            }
           }
         })
 
@@ -149,23 +164,33 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
             copyFields(row, outRow, passthroughIndexes)
 
             cumulateList.foreach(cmt => {
-              cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+              try {
+                cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+              } catch {
+                case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                  + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
+                  + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+              }
             })
 
             if (itr.isEmpty) {
               cumulateList.foreach(cmt => {
-                cmt.baseClassInstance.onCompleteGroup()
+                try {
+                  cmt.baseClassInstance.onCompleteGroup()
+                } catch {
+                  case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                    + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
+                    + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+                }
               })
             }
             Row.fromSeq(outRow)
           }
         }
       })(RowEncoder(outputSchema))
-    }catch{
-      case e:Exception=> throw new FieldNotFoundException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage())
+    } catch {
+      case e:Exception => throw e
     }
-
     Map(key -> outputDf)
   }
 
@@ -174,7 +199,6 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
       field => if (field.getSortOrder.toLowerCase == "desc") (col(field.getName).desc) else (col(field.getName))
     }
   }
-
 
 }
 

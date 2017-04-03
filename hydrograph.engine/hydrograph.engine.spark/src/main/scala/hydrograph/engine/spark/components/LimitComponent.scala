@@ -29,11 +29,12 @@ class LimitComponent(limitEntity : LimitEntity, componentsParams : BaseComponent
       Map(outSocketId -> output)
 
     } catch {
-      case e: AnalysisException => {
-        throw new BadArgumentException("\nException in Limit Component - \nComponent Id:[\""
+      case e: AnalysisException => throw new BadArgumentException("\nException in Limit Component - \nComponent Id:[\""
           + limitEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + limitEntity.getComponentName
           + "\"]\nBatch:[\"" + limitEntity.getBatch + "\"]\nError being: " + e.message, e)
-      }
+      case e: Exception => throw new RuntimeException("\nException in Limit Component - \nComponent Id:[\""
+        + limitEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + limitEntity.getComponentName
+        + "\"]\nBatch:[\"" + limitEntity.getBatch + "\"]\nError being: " + e.getMessage, e)
     }
   }
 }

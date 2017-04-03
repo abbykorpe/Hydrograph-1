@@ -16,6 +16,7 @@ package hydrograph.engine.spark.datasource.mixedScheme
 import java.util.{Locale, TimeZone}
 
 import hydrograph.engine.core.constants.Constants
+import hydrograph.engine.core.custom.exceptions.SchemaMismatchException
 import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TextFile, TypeCast}
 import hydrograph.engine.spark.helper.DelimitedAndFixedWidthHelper
 import org.apache.commons.lang3.time.FastDateFormat
@@ -34,6 +35,7 @@ import org.slf4j.{Logger, LoggerFactory}
 class DefaultSource extends RelationProvider
   with SchemaRelationProvider with CreatableRelationProvider with Serializable {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[DefaultSource])
+  private var componentName: String = null
 
   /**
     * Creates a new relation for data store in delimited given parameters.
@@ -51,12 +53,13 @@ class DefaultSource extends RelationProvider
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): MixedSchemeRelation = {
 
-    val path = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File MixedScheme Component"))
+    val path = parameters.getOrElse("path", throw new RuntimeException("\nError being: Path option must be specified for Input File MixedScheme Component"))
     val inDateFormats: String = parameters.getOrElse("dateFormats", "null")
     val strict: Boolean = parameters.getOrElse("strict", "true").toBoolean
     val safe: Boolean = parameters.getOrElse("safe", "false").toBoolean
     val nullValue: String = parameters.getOrElse("nullValue", "")
     val componentName: String = parameters.getOrElse("componentName", "")
+    this.componentName = componentName
     val quote: String = if (parameters.getOrElse("quote", "\"") == null) "\"" else parameters.getOrElse("quote", "\"")
     val treatEmptyValuesAsNulls: Boolean = parameters.getOrElse("treatEmptyValuesAsNulls", "false").toBoolean
     val charset: String = parameters.getOrElse("charset", TextFile.DEFAULT_CHARSET.name())
@@ -64,8 +67,7 @@ class DefaultSource extends RelationProvider
     val lengthsAndDelimitersType = parameters.getOrElse("lengthsAndDelimitersType", "")
 
     if (path == null || path.equals("")) {
-      LOG.error("MixedScheme Input File path cannot be null or empty")
-      throw new RuntimeException("MixedScheme Input File path cannot be null or empty")
+      throw new RuntimeException("\nError being: MixedScheme Input File path cannot be null or empty")
     }
 
     val dateFormat: List[FastDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
@@ -106,10 +108,9 @@ class DefaultSource extends RelationProvider
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
     LOG.trace("In method createRelation for creating MixedScheme Output File")
-    val path: String = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Output File MixedScheme Component"))
+    val path: String = parameters.getOrElse("path", throw new RuntimeException("\nError being: Path option must be specified for Output File MixedScheme Component"))
     if (path == null || path.equals("")) {
-      LOG.error("MixedScheme Output File path cannot be null or empty")
-      throw new RuntimeException("MixedScheme Output File path cannot be null or empty")
+      throw new RuntimeException("\nError being: MixedScheme Output File path cannot be null or empty")
     }
 
     val fsPath: Path = new Path(path)
@@ -117,18 +118,15 @@ class DefaultSource extends RelationProvider
 
     val isSave = if (fs.exists(fsPath)) {
       mode match {
-        case SaveMode.Append => LOG.error("Output file append operation is not supported")
-          throw new RuntimeException("Output file append operation is not supported")
+        case SaveMode.Append => throw new RuntimeException("\nError being: Output file append operation is not supported")
         case SaveMode.Overwrite =>
           if (fs.delete(fsPath, true))
             true
           else {
-            LOG.error("Output directory path '" + path + "' cannot be deleted")
-            throw new RuntimeException("Output directory path '" + path + "' cannot be deleted")
+            throw new RuntimeException("\nError being: Output directory path '" + path + "' cannot be deleted")
           }
         case SaveMode.ErrorIfExists =>
-          LOG.error("Output directory path '" + path + "' already exists")
-          throw new RuntimeException("Output directory path '" + path + "' already exists")
+          throw new RuntimeException("\nError being: Output directory path '" + path + "' already exists")
         case SaveMode.Ignore => false
       }
     } else
@@ -158,21 +156,29 @@ class DefaultSource extends RelationProvider
 
       case (index, iter) =>
         new Iterator[String] {
-          override def hasNext: Boolean = iter.hasNext
+          override def hasNext: Boolean = {
+            try {
+              iter.hasNext
+            } catch {
+              case e: SchemaMismatchException => throw new SchemaMismatchException("Exception in Input File Mixed Scheme Component -" +
+                "\nComponentName:[\"" + componentName + "\"]", e)
+            }
+          }
 
           override def next: String = {
-            val tuple = iter.next()
+            val tuple = {
+              try {
+                iter.next()
+              } catch {
+                case e: SchemaMismatchException => throw e
+              }
+            }
             if (strict && tuple.length != schema.fields.length) {
-              LOG.error("Output row does not have enough length to parse all fields. Output length is "
-                + tuple.length
-                + ". Number of fields in output schema are "
-                + schema.fields.length
-                + "\nRow being parsed: " + tuple)
-              throw new RuntimeException("Output row does not have enough length to parse all fields. Output length is "
-                + tuple.length
-                + ". Number of fields in output schema are "
-                + schema.fields.length
-                + "\nRow being parsed: " + tuple)
+              throw new SchemaMismatchException(
+                "\nOutput Record Length:[\"" + tuple.length + "\"]" +
+                "\nNumber of fields in output schema:[\"" + schema.fields.length + "\"]" +
+                "\nRow being parsed:[\"" + tuple + "\"]" +
+                "\nError being: Output row does not have enough length to parse all fields. ")
             }
 
             val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({

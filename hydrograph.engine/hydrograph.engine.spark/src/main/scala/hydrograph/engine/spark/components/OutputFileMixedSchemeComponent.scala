@@ -82,14 +82,9 @@ BaseComponentParams) extends SparkFlow with Serializable {
        .format("hydrograph.engine.spark.datasource.mixedScheme")
        .save(outputFileMixedSchemeEntity.getPath)
    } catch {
-     case e: AnalysisException if (e.getMessage().matches("(.*)cannot resolve(.*)given input columns(.*)"))=>
-       LOG.error("Error in Output File MixedScheme Component "+ outputFileMixedSchemeEntity.getComponentId, e)
-       throw new RuntimeException("Error in Output File MixedScheme Component "
-         + outputFileMixedSchemeEntity.getComponentId, e )
-     case e:Exception =>
-       LOG.error("Error in Output File MixedScheme Component "+ outputFileMixedSchemeEntity.getComponentId, e)
-       throw new RuntimeException("Error in Output File MixedScheme Component "
-         + outputFileMixedSchemeEntity.getComponentId, e)
+     case e: Exception => throw new RuntimeException("\nException in Output File Mixed Scheme Component - \nComponent Id:[\""
+       + outputFileMixedSchemeEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + outputFileMixedSchemeEntity.getComponentName
+       + "\"]\nBatch:[\"" + outputFileMixedSchemeEntity.getBatch + "\"]" + e.getMessage, e)
    }
     LOG.info("Created Output File MixedScheme Component "+ outputFileMixedSchemeEntity.getComponentId
       + " in Batch "+ outputFileMixedSchemeEntity.getBatch +" with path " + outputFileMixedSchemeEntity.getPath)

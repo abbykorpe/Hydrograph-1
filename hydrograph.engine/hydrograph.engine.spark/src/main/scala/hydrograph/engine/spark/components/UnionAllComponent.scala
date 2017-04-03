@@ -4,6 +4,7 @@ import java.util.Set
 
 import hydrograph.engine.core.component.entity.UnionAllEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.custom.exceptions.SchemaMismatchException
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.DataFrame
@@ -33,8 +34,10 @@ class UnionAllComponent(unionAllEntity: UnionAllEntity, componentsParams: BaseCo
         + " in batch "+ unionAllEntity.getBatch )
       Map(outSocketId -> df)
     } catch {
-      case ex: Exception => LOG.error("Error in UnionAll component " + unionAllEntity.getComponentId, ex)
-        throw ex
+      case e: Exception => throw new RuntimeException("\nException in Sort Component - "
+        + "\nComponent Id:[\"" + unionAllEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+        + unionAllEntity.getComponentName + "\"]\nBatch:[\"" + unionAllEntity.getBatch
+        + "\"]" + e.getMessage, e)
     }
 
   }
@@ -47,30 +50,25 @@ class UnionAllComponent(unionAllEntity: UnionAllEntity, componentsParams: BaseCo
     combine(dataFrameList(0), 1)
   }
 
-  @throws(classOf[SchemaMismatchException])
   def validateInputFields(schemaFieldList: ListBuffer[Set[SchemaField]]) = {
-
     val refSchema = schemaFieldList(0)
-
     schemaFieldList.tail.foreach { sf =>
     {
       if (refSchema.size != sf.size) {
-        LOG.error("Component:" + unionAllEntity.getComponentId()
-          + " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.")
-        throw new SchemaMismatchException("Component:" + unionAllEntity.getComponentId()
-          + " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.");
+        throw new SchemaMismatchException("\nException in Sort Component - "
+          + "\nComponent Id:[\"" + unionAllEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + unionAllEntity.getComponentName + "\"]\nBatch:[\"" + unionAllEntity.getBatch
+          + "\"]\nError being: Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same")
       }
       if (!refSchema.containsAll(sf)) {
-        LOG.error("Component:" + unionAllEntity.getComponentId()
-          + " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.")
-        throw new SchemaMismatchException("Component:" + unionAllEntity.getComponentId()
-          + " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.");
+        throw new SchemaMismatchException("\nException in Sort Component - "
+          + "\nComponent Id:[\"" + unionAllEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + unionAllEntity.getComponentName + "\"]\nBatch:[\"" + unionAllEntity.getBatch
+          + "\"]\nError being: Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same")
       }
     }
     }
   }
-
-  class SchemaMismatchException(msg: String) extends RuntimeException(msg: String)
 
 }
 
