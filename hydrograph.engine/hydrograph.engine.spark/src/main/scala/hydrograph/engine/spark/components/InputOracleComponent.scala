@@ -71,8 +71,13 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
       Map(key -> df)
     } catch {
       case e: Exception =>
-        LOG.error("Error in Input  Oracle input component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
-        throw new DatabaseConnectionException("Error in Input Oracle Component " + inputRDBMSEntity.getComponentId, e)
+
+        LOG.error("Error in Input Oracle Component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new DatabaseConnectionException(
+          "\nError in Input Oracle Component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
     }
   }
 

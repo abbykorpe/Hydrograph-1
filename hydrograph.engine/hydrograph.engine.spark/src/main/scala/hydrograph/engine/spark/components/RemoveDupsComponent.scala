@@ -16,11 +16,12 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.RemoveDupsEntity
 import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.core.constants.Keep
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.{Column, DataFrame, Row}
+import org.apache.spark.sql.{AnalysisException, Column, DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters.asScalaBufferConverter
@@ -49,7 +50,20 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
       val sourceDf = componentsParams.getDataFrame()
       val operationalSchema =  RowEncoder(componentsParams.getDataFrame().schema)
       val repartitionedDf = if (primaryKeys.isEmpty) (sourceDf.repartition(1)) else (sourceDf.repartition(primaryKeys.map { field => col(field.getName) }: _*))
-      val sortedDf = repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
+      val sortedDf = {
+        try {
+          repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
+        } catch {
+          case e: AnalysisException =>
+
+            logger.error("Exception in Remove Dups Component - \nComponent Id:[\"" + removeDupsEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + removeDupsEntity.getComponentName + "\"]\nBatch:[\"" + removeDupsEntity.getBatch + "\"]\n"  + "Error being : " + e.getMessage(), e)
+
+            throw new SchemaMismatchException(
+              "\nException in Remove Dups Component - \nComponent Id:[\"" + removeDupsEntity.getComponentId + "\"]" +
+                "\nComponent Name:[\"" + removeDupsEntity.getComponentName + "\"]\nBatch:[\"" + removeDupsEntity.getBatch + "\"]\n"  + "Error being : " + e.getMessage(), e)
+        }
+      }
       val outDf = sortedDf.mapPartitions(itr => {
         def compare(row: Row, previousRow: Row): Boolean = {
           keyFieldsIndexArray.forall(i => row(i).equals(previousRow(i))
@@ -162,7 +176,15 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
 
       map
     } catch {
-      case e: RuntimeException => logger.error("Error in RemoveDups Component : " + removeDupsEntity.getComponentId() + "\n" , e); throw e
+
+      case e: Exception =>
+        logger.error("Exception in Remove Dups Component - \nComponent Id:[\"" + removeDupsEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + removeDupsEntity.getComponentName + "\"]\nBatch:[\"" + removeDupsEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Output File XML Component - \nComponent Id:[\"" + removeDupsEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + removeDupsEntity.getComponentName + "\"]\nBatch:[\"" + removeDupsEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
 
@@ -172,7 +194,18 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
       Array[Int]()
     } else {
       removeDupsEntity.getKeyFields.map(keyfield => {
-        componentsParams.getDataFrame().schema.fieldIndex(keyfield.getName)
+        try {
+          componentsParams.getDataFrame().schema.fieldIndex(keyfield.getName)
+        } catch {
+          case e: IllegalArgumentException =>
+
+            logger.error("Exception in Remove Dups Component - \nComponent Id:[\"" + removeDupsEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + removeDupsEntity.getComponentName + "\"]\nBatch:[\"" + removeDupsEntity.getBatch + "\"]" + e.getMessage(), e)
+
+            throw new FieldNotFoundException(
+              "\nException in Remove Dups Component - \nComponent Id:[\"" + removeDupsEntity.getComponentId + "\"]" +
+                "\nComponent Name:[\"" + removeDupsEntity.getComponentName + "\"]\nBatch:[\"" + removeDupsEntity.getBatch + "\"]" + e.getMessage(), e)
+        }
       })
     }
   }

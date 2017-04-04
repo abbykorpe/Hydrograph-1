@@ -84,11 +84,24 @@ class OutputRedshiftComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsP
       connection.close()
     } catch {
       case e: SQLException =>
-        LOG.error("Error while connecting to database " + e.getMessage)
-        throw new RuntimeException("Error message " , e)
+        LOG.error("Exception in Output Redshift Component While connecting to DataBase - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\n\"Exception in Output Redshift Component While connecting to DataBase - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
       case e: Exception =>
-        LOG.error("Error while executing '" + query + "' query in executeQuery()")
-        throw new RuntimeException("Error message " , e)
+        LOG.error("Exception in Output Redshift Component while executing - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch
+          + "\"]\nQuery:[\"" + query + "\"]\n"
+          + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Output Redshift Component while executing - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch
+            + "\"]\nQuery:[\"" + query + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
 

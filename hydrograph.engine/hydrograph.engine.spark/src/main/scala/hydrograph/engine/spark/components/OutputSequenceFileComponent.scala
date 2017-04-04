@@ -37,9 +37,13 @@ BaseComponentParams) extends SparkFlow {
     } catch {
       case
         e: Exception =>
-        LOG.error("Error in Output File Delimited Component " + outputSequenceEntity.getComponentId, e)
-        throw new RuntimeException("Error in Output File Delimited Component "
-          + outputSequenceEntity.getComponentId, e)
+        LOG.error("Error in Output sequence File Component- \nComponent Id:[\"" + outputSequenceEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputSequenceEntity.getComponentName + "\"]\nBatch:[\"" + outputSequenceEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\n\"Error in Output sequence File Component- \nComponent Id:[\"" + outputSequenceEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + outputSequenceEntity.getComponentName + "\"]\nBatch:[\"" + outputSequenceEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
     }
   }
 }

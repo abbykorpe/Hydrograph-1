@@ -54,9 +54,15 @@ class OutputFileAvroComponent(outputFileAvroEntity: OutputFileAvroEntity, baseCo
         + ", file path " + outputFileAvroEntity.getPath)
     } catch {
       case e: Exception =>
-        LOG.error("Error in Output File Avro Component " + outputFileAvroEntity.getComponentId, e)
-        throw new RuntimeException("Error in Output File Avro Component "
-          + outputFileAvroEntity.getComponentId, e)
+
+        LOG.error("Exception in Output File Avro Component - \nComponent Id:[\"" + outputFileAvroEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileAvroEntity.getComponentName + "\"]\nBatch:[\"" + outputFileAvroEntity.getBatch + "\"]\n"
+          + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Output File Avro Component - \nComponent Id:[\"" + outputFileAvroEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + outputFileAvroEntity.getComponentName + "\"]\nBatch:[\"" + outputFileAvroEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
   private def setPrecisonScale(field: SchemaField) = {

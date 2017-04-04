@@ -79,9 +79,27 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
+      case e: SchemaMisMatchException =>
+
+        LOG.error("Exception in Input Red Shift  Component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+          + "Error being : " + e.getMessage(), e)
+
+        throw new SchemaMisMatchException(
+          "\nException in Input Red Shift Component  - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
       case e: Exception =>
-        LOG.error("Error in Input  Redshift component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
-        throw new DatabaseConnectionException("Error in Input Redshift Component " + inputRDBMSEntity.getComponentId, e)
+
+        LOG.error("Exception in Input Red Shift Component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+          + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Input Red Shift Component Component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
 

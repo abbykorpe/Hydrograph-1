@@ -42,9 +42,15 @@ class InputFileAvroComponent(inputFileAvroEntity: InputFileAvroEntity, baseCompo
       Map(key -> df)
     } catch {
       case e: Exception =>
-        LOG.error("Error in Input File Avro Component " + inputFileAvroEntity.getComponentId, e)
-        throw new RuntimeException("Error in Input File Avro Component "
-          + inputFileAvroEntity.getComponentId, e)
+
+        LOG.error("Exception in Input File Avro Component - \nComponent Id:[\"" + inputFileAvroEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + inputFileAvroEntity.getComponentName + "\"]\nBatch:[\"" + inputFileAvroEntity.getBatch + "\"]\n"
+          + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Input File Avro Component - \nComponent Id:[\"" + inputFileAvroEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputFileAvroEntity.getComponentName + "\"]\nBatch:[\"" + inputFileAvroEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
 }

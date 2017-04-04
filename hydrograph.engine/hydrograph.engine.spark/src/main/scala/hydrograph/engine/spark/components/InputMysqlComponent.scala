@@ -70,9 +70,22 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
       Map(key -> df)
 
     } catch {
+      case e: ClassNotFoundException =>
+
+        LOG.error("Exception in Input  Mysql component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new DatabaseConnectionException(
+          "\nError in Input  Mysql component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
       case e: Exception =>
-        LOG.error("Error in Input  Mysql component '" + inputRDBMSEntity.getComponentId + "', " + e.getMessage, e)
-        throw new DatabaseConnectionException("Error in Input Mysql Component " + inputRDBMSEntity.getComponentId, e)
+        LOG.error("Exception in Input  Mysql component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
+
+        throw new DatabaseConnectionException(
+          "\nException in Input  Mysql component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n" + "Error being : " + e.getMessage(), e)
     }
   }
 

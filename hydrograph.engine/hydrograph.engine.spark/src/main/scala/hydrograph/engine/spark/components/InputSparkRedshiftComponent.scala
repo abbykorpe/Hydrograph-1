@@ -77,9 +77,27 @@ class InputSparkRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponent
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
+      case e: SchemaMisMatchException =>
+        LOG.error(
+          "Exception in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
+        throw new SchemaMisMatchException(
+          "\nException in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
       case e: Exception =>
-        LOG.error("Error in Input Spark Redshift component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
-        throw new RuntimeException("Error in Spark Input Redshift Component " + inputRDBMSEntity.getComponentId, e)
+        LOG.error(
+          "Exception in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
+
+        throw new RuntimeException(
+          "\nException in Input Spark Redshift component - \nComponent Id:[\"" + inputRDBMSEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + inputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + inputRDBMSEntity.getBatch + "\"]\n"
+            + "Error being : " + e.getMessage(), e)
     }
   }
 
