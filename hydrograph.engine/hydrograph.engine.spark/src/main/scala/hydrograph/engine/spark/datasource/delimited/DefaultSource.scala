@@ -15,6 +15,7 @@ package hydrograph.engine.spark.datasource.delimited
 
 import java.util.{Locale, TimeZone}
 
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.commons.lang3.time.FastDateFormat
 import org.apache.hadoop.fs.{FileSystem, Path}
@@ -43,10 +44,17 @@ class DefaultSource extends RelationProvider
   }
 
   private def fastDateFormat(dateFormat: String): FastDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
-      val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+
 //    val date = new FastDateFormat(dateFormat, Locale.getDefault)
 //    date.setLenient(false)
 //    date.setTimeZone(TimeZone.getDefault)
+    val date = {
+      try {
+        FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+      } catch {
+        case e: IllegalArgumentException => throw new DateFormatException("\nError being Unparseable Date Format:[\"" + dateFormat + "\"]")
+      }
+    }
     date
   } else null
 
@@ -65,26 +73,74 @@ class DefaultSource extends RelationProvider
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): DelimitedRelation = {
 
-    val path = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File Delimited Component"))
-    val delimiter: String = parameters.getOrElse("delimiter", ",")
-    val inDateFormats: String = parameters.getOrElse("dateFormats", "null")
-    val useHeader: Boolean = parameters.getOrElse("header", "false").toBoolean
-    val strict: Boolean = parameters.getOrElse("strict", "true").toBoolean
-    val safe: Boolean = parameters.getOrElse("safe", "false").toBoolean
-    val nullValue: String = parameters.getOrElse("nullValue", "")
-    val quote: String = if (parameters.getOrElse("quote", "\"") == null ) "\"" else parameters.getOrElse("quote", "\"")
+   // val path = parameters.getOrElse("path", throw new PathNotFoundException("path option must be specified for Input File Delimited Component"))
+
+    val path = parameters.get("path").get
 
     if (path == null || path.equals("")){
-      LOG.error("Delimited Input File path cannot be null or empty")
-      throw new RuntimeException("Delimited Input File path cannot be null or empty")
+
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "path option must be specified for Input File Delimited Component")
     }
+
+    val fsPath = new Path(path)
+    val fs = fsPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
+    if(!fs.exists(fsPath)){
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "input file path does not exist")
+    }
+
+    val delimiter: String = parameters.getOrElse("delimiter", ",")
+
+    val delimiterString = if (delimiter.length > 0) {
+      delimiter
+    } else {
+      throw new BadDelimiterFoundException("\nDelimiter:[\"" + delimiter + "\"]\nError being: Bad Delimiter found")
+    }
+
+    val inDateFormats: String = parameters.getOrElse("dateFormats", "null")
+    val useHeader = parameters.getOrElse("header", "false")
+
+    val headerFlag = if (useHeader.equals("true")) {
+      true
+    } else if (useHeader.equals("false")) {
+      false
+    } else {
+      throw new BadArgumentException("\nHeader:[\"" + useHeader + "\"]\nError being: Bad Header found")
+    }
+
+    val strict = parameters.getOrElse("strict", "true")
+    val strictFlag = if (strict.equals("true")) {
+      true
+    } else if (strict.equals("false")) {
+      false
+    } else {
+      throw new BadArgumentException("\nStrict:[\"" + strict + "\"]\nError being: Bad Strict found")
+    }
+
+    val safe = parameters.getOrElse("safe", "false")
+    val safeFlag = if (safe.equals("true")) {
+      true
+    } else if (safe.equals("false")) {
+      false
+    } else {
+      throw new BadArgumentException("\nSafe:[\"" + safe + "\"]\nError being: Bad Safe found")
+    }
+
+    val nullValue: String = parameters.getOrElse("nullValue", "")
+    val quote = if(parameters.getOrElse("quote", "\"") == null)  "\"" else parameters.getOrElse("quote", "\"")
+
+    val quoteChar: String = if (quote.length > 0) {
+      quote
+    } else {
+      throw new BadQuoteFoundException("\nQuote:[\"" + quote + "\"]\nError being: Bad Quote found")
+    }
+
 
     val dateFormat: List[FastDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
     val delimitedParser = new HydrographDelimitedParser(
-      delimiter,
-      quote, null, strict,
-      safe, dateFormat, schema)
+      delimiterString,
+      quoteChar, null, strictFlag,
+      safeFlag, dateFormat, schema)
 
     val treatEmptyValuesAsNulls: Boolean = parameters.getOrElse("treatEmptyValuesAsNulls", "false").toBoolean
 
@@ -92,7 +148,7 @@ class DefaultSource extends RelationProvider
     DelimitedRelation(
       charset,
       path,
-      useHeader,
+      headerFlag,
       delimitedParser,
       nullValue,
       treatEmptyValuesAsNulls,
@@ -104,30 +160,35 @@ class DefaultSource extends RelationProvider
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
     LOG.trace("In method createRelation for creating Delimited Output File")
-    val path: String = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Output File Delimited Component"))
+
+    val path = parameters.get("path").get
+
     if (path == null || path.equals("")){
-      LOG.error("Delimited Output File path cannot be null or empty")
-      throw new RuntimeException("Delimited Input File path cannot be null or empty")
+
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "path option must be specified for Output File Delimited Component")
     }
 
-    val fsPath: Path = new Path(path)
+    val fsPath = new Path(path)
     val fs: FileSystem = fsPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
 
     val isSave = if (fs.exists(fsPath)) {
       mode match {
-        case SaveMode.Append => LOG.error("Output file append operation is not supported")
-          throw new RuntimeException("Output file append operation is not supported")
+        case SaveMode.Append =>
+          LOG.error("\nError being Output file append operation is not supported")
+          throw new FileAppendException("\nError being Output file append operation is not supported")
         case SaveMode.Overwrite =>
           if (fs.delete(fsPath, true))
             true
           else{
-            LOG.error("Output directory path '"+ path +"' cannot be deleted")
-            throw new RuntimeException("Output directory path '"+ path +"' cannot be deleted")
+           LOG.error("\nError being Output directory path :[\"" + path + "\"] "+" cannot be deleted")
+            throw new FileDeleteException("\nError being Output directory path :[\"" + path + "\"] "+" cannot be deleted")
           }
         case SaveMode.ErrorIfExists =>
-          LOG.error("Output directory path '"+ path +"' already exists")
-          throw new RuntimeException("Output directory path '"+ path +"' already exists")
+          LOG.error(\nError being Output directory path :[\"" + path + "\"] "+" already exists")
+        throw new FileAlreadyExistsException("\nError being Output directory path :[\"" + path + "\"] "+" already exists")
         case SaveMode.Ignore => false
+
+
       }
     } else
       true
@@ -141,16 +202,31 @@ class DefaultSource extends RelationProvider
   private def saveAsDelimitedFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
     LOG.trace("In method saveAsFW for creating Delimited Output File")
     val delimiter: String = parameters.getOrElse("delimiter", ",")
+
+    val delimiterString = if (delimiter.length >0) {
+      delimiter
+    } else {
+      throw new BadDelimiterFoundException("\nDelimiter:[\"" + delimiter + "\"]\nError being: Bad Delimiter found")
+    }
+
+
     val outDateFormats: String = parameters.getOrElse("dateFormats","null")
     val strict: Boolean = parameters.getOrElse("strict", "true").toBoolean
-    val quote: String = if (parameters.getOrElse("quote", "\"") == null ) "\"" else parameters.getOrElse("quote", "\"")
+    val quote = if(parameters.getOrElse("quote", "\"") == null)  "\"" else parameters.getOrElse("quote", "\"")
+
+    val quoteChar: String = if (quote.length > 0) {
+      quote
+    } else {
+      throw new BadQuoteFoundException("\nQuote:[\"" + quote + "\"]\nError being: Bad Quote found")
+    }
+
     val generateHeader: Boolean = parameters.getOrElse("header", "true").toBoolean
     val schema: StructType = dataFrame.schema
 
     val dateFormat: List[FastDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
 
     val header: String = if (generateHeader) {
-      dataFrame.columns.mkString(delimiter)
+      dataFrame.columns.mkString(delimiterString)
     } else {
       "" // There is no need to generate header in this case
     }
@@ -166,12 +242,7 @@ class DefaultSource extends RelationProvider
             if (iter.nonEmpty) {
               val tuple = iter.next()
               if (strict && tuple.length != schema.fields.length){
-                LOG.error("Output row does not have enough length to parse all fields. Output length is "
-                  + tuple.length
-                  + ". Number of fields in output schema are "
-                  + schema.fields.length
-                  + "\nRow being parsed: " + tuple)
-                throw new RuntimeException("Output row does not have enough length to parse all fields. Output length is "
+                throw new LengthMisMatchException("Output row does not have enough length to parse all fields. Output length is "
                   + tuple.length
                   + ". Number of fields in output schema are "
                   + schema.fields.length
@@ -199,17 +270,17 @@ class DefaultSource extends RelationProvider
                 var string:String = ""
                 if (castedValue != null ){
                   string = castedValue.toString
-                  if (string.contains(quote))
-                    string = string.replaceAll(quote, quote + quote)
-                  if (string.contains(delimiter))
-                    string = quote + string + quote
+                  if (string.contains(quoteChar))
+                    string = string.replaceAll(quoteChar, quoteChar + quoteChar)
+                  if (string.contains(delimiterString))
+                    string = quoteChar + string + quoteChar
                 }
                 fields(i) = string
                 i = i + 1
                 string
               }
 
-              val row: String = fields.mkString(delimiter)
+              val row: String = fields.mkString(delimiterString)
               if (firstRow) {
                 firstRow = false
                 header + recordSeparator + row

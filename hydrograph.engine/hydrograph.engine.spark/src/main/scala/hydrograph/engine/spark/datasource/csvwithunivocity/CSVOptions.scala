@@ -20,6 +20,7 @@ package hydrograph.engine.spark.datasource.csvwithunivocity
 import java.nio.charset.StandardCharsets
 import java.util.{Locale, TimeZone}
 
+import hydrograph.engine.core.custom.exceptions.{BadDelimiterFoundException, DateFormatException}
 import hydrograph.engine.spark.datasource.utils.CompressionCodecs
 import org.apache.commons.lang3.time.FastDateFormat
 import org.slf4j.{Logger, LoggerFactory}
@@ -52,7 +53,7 @@ class CSVOptions(@transient private val parameters: Map[String, String])
         value.toInt
       } catch {
         case e: NumberFormatException =>
-          throw new RuntimeException(s"$paramName should be an integer. Found $value",e)
+          throw new NumberFormatException(s"$paramName should be an integer. Found $value"+e)
       }
     }
   }
@@ -70,8 +71,18 @@ class CSVOptions(@transient private val parameters: Map[String, String])
     }
   }
 
-  val delimiter = CSVTypeCast.toChar(
-    parameters.getOrElse("sep", parameters.getOrElse("delimiter", ",")))
+  /*val delimiter = CSVTypeCast.toChar(
+    parameters.getOrElse("sep", parameters.getOrElse("delimiter", ",")))*/
+
+  val delimiterString: String = parameters.getOrElse("delimiter", ",")
+
+  val delimiter = if (delimiterString == "" | delimiterString.isEmpty ) {
+    throw new BadDelimiterFoundException("\nDelimiter:[\"" + delimiterString + "\"]\nError being: Bad Delimiter found")
+
+  } else {
+    CSVTypeCast.toChar(delimiterString)
+  }
+
   private val parseMode = parameters.getOrElse("mode", "PERMISSIVE")
   val charset = parameters.getOrElse("encoding",
     parameters.getOrElse("charset", StandardCharsets.UTF_8.name()))
@@ -120,10 +131,13 @@ class CSVOptions(@transient private val parameters: Map[String, String])
     }
   }
   private def fastDateFormat(dateFormat: String): FastDateFormat = if (!dateFormat.equalsIgnoreCase("null")) {
-    val date = FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
-    //    val date = new FastDateFormat(dateFormat, Locale.getDefault)
-    //    date.setLenient(false)
-    //    date.setTimeZone(TimeZone.getDefault)
+    val date = {
+      try {
+        FastDateFormat.getInstance(dateFormat,TimeZone.getDefault,Locale.getDefault)
+      } catch {
+        case e: IllegalArgumentException => throw new DateFormatException("\nError being Unparseable Date Format:[\"" + dateFormat + "\"]")
+      }
+    }
     date
   } else null
 

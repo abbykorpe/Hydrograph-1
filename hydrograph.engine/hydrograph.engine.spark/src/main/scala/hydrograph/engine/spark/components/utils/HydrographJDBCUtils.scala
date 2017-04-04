@@ -19,6 +19,7 @@ import java.util.Properties
 import org.apache.spark.sql._
 import org.apache.spark.sql.execution.datasources.jdbc.{DriverRegistry, DriverWrapper}
 import org.apache.spark.sql.types._
+import org.apache.zookeeper.KeeperException.BadArgumentsException
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -122,9 +123,16 @@ case class HydrographJDBCUtils() {
                      updateIndex: Array[Int],
                      batchSize: Int
                    ): Iterator[Byte] = {
-    require(batchSize >= 1,
+    try{
+      require(batchSize >= 1)
+
+    }
+    catch{
+      case e:IllegalArgumentException =>throw new BadArgumentsException("\nBatchSize:[\"" + batchSize.toString + "\"]\nError being: The minimum batch size value should 1.")
+    }
+    /*require(batchSize >= 1,
       s"Invalid value `${batchSize.toString}` for parameter " +
-        batchSize + " The minimum value is 1.")
+        batchSize + " The minimum value is 1.")*/
     LOG.debug("Updating table '" + table + "'")
     val conn = getConnection()
     var committed = false

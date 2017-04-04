@@ -21,6 +21,7 @@ import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 
+import hydrograph.engine.core.custom.exceptions.BadDelimiterFoundException
 import org.apache.commons.lang3.time.FastDateFormat
 import org.apache.spark.sql.catalyst.util.DateTimeUtils
 import org.apache.spark.sql.types._
@@ -291,7 +292,7 @@ private object CSVTypeCast {
    * It handles some Java escaped strings and throws exception if given string is longer than one
    * character.
    */
-  @throws[IllegalArgumentException]
+
   def toChar(str: String): Char = {
     if (str.charAt(0) == '\\') {
       str.charAt(1)
@@ -304,12 +305,14 @@ private object CSVTypeCast {
         case '\'' => '\''
         case 'u' if str == """\u0000""" => '\u0000'
         case _ =>
-          throw new IllegalArgumentException(s"Unsupported special character for delimiter: $str")
+          throw new BadDelimiterFoundException("\nUnsupported special character for delimiter:[\"" + str + "\"]")
+
       }
     } else if (str.length == 1) {
       str.charAt(0)
     } else {
-      throw new IllegalArgumentException(s"Delimiter cannot be more than one character: $str")
+      throw new BadDelimiterFoundException("\nDelimiter cannot be more than one character:[\"" + str + "\"]")
+
     }
   }
 }

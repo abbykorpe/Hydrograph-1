@@ -15,12 +15,13 @@ package hydrograph.engine.spark.components
 import java.sql.SQLException
 import java.util
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{DbTableUtils, SchemaMisMatchException}
-import org.apache.spark.sql.Column
+import org.apache.spark.sql.{AnalysisException, Column}
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.functions._
 import org.slf4j.{Logger, LoggerFactory}
@@ -62,15 +63,30 @@ BaseComponentParams) extends SparkFlow {
       + " ] with load type " + outputRDBMSEntity.getLoadType
       +" at connection url  " + connectionURL)
 
-    outputRDBMSEntity.getLoadType match {
-      case "newTable" =>
-        executeQuery(connectionURL, properties, DbTableUtils().getCreateTableQuery(outputRDBMSEntity))
-        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+    try {
+      outputRDBMSEntity.getLoadType match {
+        case "newTable" =>
+          executeQuery(connectionURL, properties, DbTableUtils().getCreateTableQuery(outputRDBMSEntity))
+          cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
 
-      case "insert" => cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
-      case "truncateLoad" =>
-        executeQuery(connectionURL, properties, getTruncateQuery)
-        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+        case "insert" => cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+        case "truncateLoad" =>
+          executeQuery(connectionURL, properties, getTruncateQuery)
+          cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+      }
+    }
+    catch{
+      case e: AnalysisException =>
+        LOG.error("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+        throw new SchemaMisMatchException("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+
+      case e: Exception =>
+        LOG.error("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+        throw new RuntimeException("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
     }
   }
 
@@ -87,12 +103,24 @@ BaseComponentParams) extends SparkFlow {
       val resultSet = statment.executeUpdate()
       connection.close()
     } catch {
+
+      case e: MySQLSyntaxErrorException =>
+        LOG.error("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+        throw new MySQLSyntaxErrorException("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage)
+
       case e: SQLException =>
-       LOG.error("Error while connecting to database " + e.getMessage,e)
-        throw new SchemaMisMatchException("Error in Output File XML Component "+ outputRDBMSEntity.getComponentId, e)
-      case e: Exception =>
-        LOG.error("Error while executing '"+ query + "' query in executeQuery()" )
-        throw new RuntimeException("Error message " ,e)
+        LOG.error("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+        throw new SQLException("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+
+     case e: Exception =>
+       LOG.error("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+         "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+       throw new RuntimeException("\nException in Output Mysql Component - \nComponent Id:[\"" + outputRDBMSEntity.getComponentId + "\"]" +
+         "\nComponent Name:[\"" + outputRDBMSEntity.getComponentName + "\"]\nBatch:[\"" + outputRDBMSEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
     }
   }
 

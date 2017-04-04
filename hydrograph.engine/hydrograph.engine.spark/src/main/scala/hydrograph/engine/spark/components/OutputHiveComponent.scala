@@ -15,9 +15,13 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.OutputFileHiveTextEntity
 import hydrograph.engine.core.component.entity.base.HiveEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.custom.exceptions.{FieldNotFoundException, PathNotFoundException}
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.SchemaMisMatchException
+import org.apache.spark.sql.AnalysisException
 import org.slf4j.LoggerFactory
+import org.apache.spark.sql.catalyst.parser.ParseException
 
 import scala.collection.JavaConverters._
 
@@ -42,11 +46,40 @@ class OutputHiveComponent(entity: HiveEntityBase, oComponentParameters: BaseComp
     oComponentParameters.getDataFrame().createOrReplaceTempView(TEMPTABLE)
 
     LOG.debug("Setting hive.exec.dynamic.partition.mode to nonstrict as values for partition columns are known only during loading of the data into a Hive table")
-    sparkSession.sql("set hive.exec.dynamic.partition.mode=nonstrict")
-    sparkSession.sql("CREATE DATABASE IF NOT EXISTS "+entity.getDatabaseName)
-    sparkSession.sql(constructCreateTableQuery(entity))
-    sparkSession.sql(constructInsertIntoTableQuery(entity))
 
+
+    try {
+      sparkSession.sql("set hive.exec.dynamic.partition.mode=nonstrict")
+      sparkSession.sql("CREATE DATABASE IF NOT EXISTS "+entity.getDatabaseName)
+      sparkSession.sql(constructCreateTableQuery(entity))
+      sparkSession.sql(constructInsertIntoTableQuery(entity))
+    }
+    catch{
+
+
+      case e: IllegalArgumentException =>
+        LOG.error("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\nError being: Can not create external table path from empty string"  , e)
+        throw new PathNotFoundException("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\nError being: Can not create external table path from empty string"  , e)
+
+      case e: ParseException =>
+        LOG.error("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\nError being: " + e.message, e)
+        throw new FieldNotFoundException("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\nError being: " + e.message, e)
+
+      case e: AnalysisException =>
+        LOG.error("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\nError being: " + e.message,e)
+        throw new SchemaMisMatchException("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]\nError being: " + e.message,e)
+      case e: Exception =>
+        LOG.error("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]" + e.getMessage,e)
+        throw new RuntimeException("\nException in Output Hive Component - \nComponent Id:[\"" + entity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + entity.getComponentName + "\"]\nBatch:[\"" + entity.getBatch + "\"]" + e.getMessage,e)
+    }
     LOG.info("Created Output Hive Component " + entity.getComponentId + " in batch " + entity.getBatch + " to write Hive table " + entity.getDatabaseName + "." + entity.getTableName)
 
   }

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.spark.datasource.fixedwidth
 
+import hydrograph.engine.core.custom.exceptions.LengthMisMatchException
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.commons.lang3.time.FastDateFormat
 import org.apache.spark.rdd.RDD
@@ -56,16 +57,18 @@ class FixedWidthRelation(componentName:String, path: String, charset: String, fi
 
     fileRDD.map( row => {
       if (strict && (row.length != fieldlength.sum)){
-        LOG.error("Input row does not have enough length to parse all fields. Input length is "
-          + row.length()
-          + ". Sum of length of all fields is "
-          + fieldlength.sum
-          + "\nRow being parsed: " + row)
-        throw new RuntimeException("Error in Input Fixed Width Component:[\""+componentName+"\"]. Input Row does not have enough length to parse all fields. Input length is "
-          + row.length()
-          + ". Sum of length of all fields is "
-          + fieldlength.sum
-          + "\nRow being parsed: " + row)
+        LOG.error("\nException in Input Fixed Width Component - "
+          + "\nComponentName:[\""+componentName+"\"]. "
+          + "\nError being: Input Row does not have enough length to parse all fields"
+          + "\nExpectedInputRowLength:[\"" + row.length + "\"]"
+          + "\nActualInputRowLength:[\"" + fieldlength.sum + "\"]"
+          + "\nRow being parsed:[\"" + row + "\"]")
+        throw new LengthMisMatchException("\nException in Input Fixed Width Component - "
+          + "\nComponentName:[\""+componentName+"\"]. "
+          + "\nError being: Input Row does not have enough length to parse all fields"
+          + "\nExpectedInputRowLength:[\"" + row.length + "\"]"
+          + "\nActualInputRowLength:[\"" + fieldlength.sum + "\"]"
+          + "\nRow being parsed:[\"" + row + "\"]")
       }
 
       val tokenArray = new Array[Any](schemaFields.length)
@@ -80,22 +83,23 @@ class FixedWidthRelation(componentName:String, path: String, charset: String, fi
         }
         catch {
           case e:StringIndexOutOfBoundsException =>
-            LOG.error("Field "+ field.name +" does not have enough " +
-              "length as specified in the schema. Field value is : '" + row.substring(lengthForSubString(index)._1)
-              + "' which has length '" + row.substring(lengthForSubString(index)._1).length + "' but length specified " +
-              "in the schema is " + fieldlength(index))
-            throw new RuntimeException("Field "+ field.name +" does not have enough " +
-              "length as specified in the schema. Field value is : '" + row.substring(lengthForSubString(index)._1)
-              + "' which has length '" + row.substring(lengthForSubString(index)._1).length + "' but length specified " +
-              "in the schema is " + fieldlength(index),e)
+            LOG.error("\nFieldName:[\"" + field.name + "\"]"
+              + "\nError being: Input Row Field does not have enough data"
+              + "\nExpectedFieldLength:[\"" + fieldlength(index) + "\"]"
+              + "\nActualFieldLength:[\"" + row.substring(lengthForSubString(index)._1).length + "\"]"
+              + "\nRow being parsed:[\"" + row.substring(lengthForSubString(index)._1) + "\"]", e)
+            throw new RuntimeException("\nFieldName:[\"" + field.name + "\"]"
+              + "\nError being: Input Row Field does not have enough data"
+              + "\nExpectedFieldLength:[\"" + fieldlength(index) + "\"]"
+              + "\nActualFieldLength:[\"" + row.substring(lengthForSubString(index)._1).length + "\"]"
+              + "\nRow being parsed:[\"" + row.substring(lengthForSubString(index)._1) + "\"]", e)
           case e:Exception =>
-            LOG.error("Field "+ field.name +" does not have enough " +
-              "length as specified in the schema. Field value is : '" + row.substring(lengthForSubString(index)._1)
-              + "' which has length '" + row.substring(lengthForSubString(index)._1).length + "' but length specified " +
-              "in the schema is " + fieldlength(index))
-            throw new RuntimeException("Field "+ field.name +" has " +
-              "value "+ row.substring(lengthForSubString(index)._1, lengthForSubString(index)._2) + " cannot be coerced to "
-              + field.dataType ,e)
+            LOG.error("\nFieldName:[\"" + field.name + "\"]"
+              + "FieldValue:[\"" + row.substring(lengthForSubString(index)._1, lengthForSubString(index)._2) + "\"]"
+              + "Error being: cannot be coerced to " + field.dataType ,e)
+            throw new RuntimeException("\nFieldName:[\"" + field.name + "\"]"
+              + "FieldValue:[\"" + row.substring(lengthForSubString(index)._1, lengthForSubString(index)._2) + "\"]"
+              + "Error being: cannot be coerced to " + field.dataType ,e)
         }
       }
       Row.fromSeq(tokenArray)

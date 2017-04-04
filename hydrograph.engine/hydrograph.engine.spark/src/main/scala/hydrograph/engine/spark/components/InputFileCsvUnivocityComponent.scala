@@ -13,9 +13,11 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileDelimitedEntity
+import hydrograph.engine.core.custom.exceptions.{BadDelimiterFoundException, PathNotFoundException}
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
+import org.apache.hadoop.fs.Path
 import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -47,7 +49,7 @@ class InputFileCsvUnivocityComponent(iFileDelimitedEntity: InputFileDelimitedEnt
         .option("componentId", iFileDelimitedEntity.getComponentId)
         .schema(schemaCreator.makeSchema)
         .format("hydrograph.engine.spark.datasource.csvwithunivocity.CSVFileFormat")
-        .load(iFileDelimitedEntity.getPath)
+        .load(checkPath(iFileDelimitedEntity.getPath))
 
       val key = iFileDelimitedEntity.getOutSocketList.get(0).getSocketId
       LOG.info("Created Input File Delimited Component "+ iFileDelimitedEntity.getComponentId
@@ -63,12 +65,49 @@ class InputFileCsvUnivocityComponent(iFileDelimitedEntity: InputFileDelimitedEnt
       Map(key -> df)
     } catch {
 
+      case e: PathNotFoundException =>
+        LOG.error("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new PathNotFoundException("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+
+      case e: BadDelimiterFoundException =>
+        LOG.error("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new BadDelimiterFoundException("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+
+      case e : NumberFormatException =>
+        LOG.error("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new NumberFormatException("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage)
+
       case e : Exception =>
-        LOG.error("Error in Input File Delimited Component "+ iFileDelimitedEntity.getComponentId, e)
-        throw new RuntimeException("Error in Input File Delimited Component "+ iFileDelimitedEntity.getComponentId, e)
+        LOG.error("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new RuntimeException("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
     }
 
   }
+
+
+  def checkPath(path:String):String={
+
+    if (path == null || path.equals("")){
+
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "path option must be specified for Input File Delimited Component")
+    }
+
+    val fsPath = new Path(path)
+    val fs = fsPath.getFileSystem(iComponentsParams.getSparkSession().sparkContext.hadoopConfiguration)
+    if(!fs.exists(fsPath)){
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "input file path does not exist")
+    }
+    path
+  }
+
 
   /*def getDateFormats(): String = {
       LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")

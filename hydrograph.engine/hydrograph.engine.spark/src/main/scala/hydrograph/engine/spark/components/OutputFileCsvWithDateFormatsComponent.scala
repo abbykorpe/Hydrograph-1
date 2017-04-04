@@ -50,26 +50,72 @@ BaseComponentParams) extends SparkFlow with Serializable {
         .format("hydrograph.engine.spark.datasource.csv")
         .save(outputFileDelimitedEntity.getPath)
     } catch {
-      case e: AnalysisException => throw new SchemaMisMatchException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]\nError being: " + e.message, e)
-      case e: DateFormatException => throw new DateFormatException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
-      case e: PathNotFoundException => throw new PathNotFoundException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
-      case e: BadDelimiterFoundException => throw new BadDelimiterFoundException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
-      case e: BadQuoteFoundException => throw new BadQuoteFoundException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
-      case e: BadArgumentException => throw new BadArgumentException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
-      case e: Exception => throw new RuntimeException("\nException in Output File Csv With DateFormats Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
-        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+      case e: SchemaMisMatchException =>
+      LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]\nError being: " + e.message,e)
+      throw new SchemaMisMatchException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]\nError being: " + e.message,e)
+      case e: DateFormatException =>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new DateFormatException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: PathNotFoundException =>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new PathNotFoundException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: BadDelimiterFoundException =>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new BadDelimiterFoundException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: BadQuoteFoundException =>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new BadQuoteFoundException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: BadArgumentException =>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new BadArgumentException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: LengthMisMatchException=>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new LengthMisMatchException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+
+      case e: FileAppendException=>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new FileAppendException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: FileDeleteException=>
+
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new FileDeleteException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+
+      case e: FileAlreadyExistsException=>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new FileAlreadyExistsException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+
+      case e: Exception =>
+        LOG.error("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new RuntimeException("\nException in Output File Delimited  Component - \nComponent Id:[\"" + outputFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + outputFileDelimitedEntity.getBatch + "\"]" + e.getMessage,e)
+
         val inputFields = cp.getDataFrame().schema.fieldNames
         val outputFields = schemaCreator.makeSchema().fieldNames
         val unexpected = outputFields.filterNot(inputFields.toSet)
-        LOG.error("Error in Output File Delimited Component " + outputFileDelimitedEntity.getComponentId , e)
+        LOG.error("Error in Output File Delimited  Component " + outputFileDelimitedEntity.getComponentId , e)
     }
-    LOG.info("Created Output File Delimited Component " + outputFileDelimitedEntity.getComponentId
+    LOG.info("Created Output File Delimited  Component " + outputFileDelimitedEntity.getComponentId
       + " in Batch " + outputFileDelimitedEntity.getBatch + " with path " + outputFileDelimitedEntity.getPath)
     LOG.debug("Component Id: '" + outputFileDelimitedEntity.getComponentId
       + "' in Batch: " + outputFileDelimitedEntity.getBatch

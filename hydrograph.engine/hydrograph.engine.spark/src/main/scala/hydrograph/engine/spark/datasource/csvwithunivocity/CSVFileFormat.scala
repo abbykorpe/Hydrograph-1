@@ -19,6 +19,7 @@ package hydrograph.engine.spark.datasource.csvwithunivocity
 
 import java.nio.charset.{Charset, StandardCharsets}
 
+import hydrograph.engine.core.custom.exceptions.BadDelimiterFoundException
 import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, SerializableConfiguration}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.FileStatus

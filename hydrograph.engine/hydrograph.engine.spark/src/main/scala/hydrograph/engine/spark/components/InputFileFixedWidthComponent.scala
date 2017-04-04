@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileFixedWidthEntity
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -64,9 +65,44 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
         + " ] at Path: " + fileFixedWidthEntity.getPath)
       Map(key->df)
     } catch {
-      case e : Exception =>
-        LOG.error("Error in Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId, e)
-        throw new RuntimeException("Error in Input File Fixed Width Component " + fileFixedWidthEntity.getComponentId, e)
+
+      case e: DateFormatException =>
+
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+
+        throw new DateFormatException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: PathNotFoundException =>
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new PathNotFoundException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: BadDelimiterFoundException =>
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new BadDelimiterFoundException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: BadQuoteFoundException =>
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new BadQuoteFoundException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: BadArgumentException =>
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new BadArgumentException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: LengthMisMatchException=>
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new LengthMisMatchException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+      case e: Exception =>
+        LOG.error("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new RuntimeException("\nException in Input File FixedWidth Component - \nComponent Id:[\"" + fileFixedWidthEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + fileFixedWidthEntity.getComponentName + "\"]\nBatch:[\"" + fileFixedWidthEntity.getBatch + "\"]" + e.getMessage,e)
     }
   }
 

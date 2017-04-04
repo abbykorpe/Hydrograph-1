@@ -22,6 +22,7 @@ import org.apache.hadoop.fs.Path
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * The Class DefaultSource.
@@ -30,7 +31,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
   *
   */
 class DefaultSource extends RelationProvider with SchemaRelationProvider with CreatableRelationProvider {
-
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[DefaultSource])
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String]): BaseRelation = {
     createRelation(sqlContext, parameters, null)
@@ -38,12 +39,27 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): CsvRelation = {
 
-    val filePath = parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
-//    val filesystemPath = new Path(filePath)
-//    val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
-    val path=filePath
+    val path = parameters.get("path").get
 
-    val delimiter = parameters.getOrElse("delimiter", ",").charAt(0)
+    if (path == null || path.equals("")){
+
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "path option must be specified for Input File Delimited Component")
+    }
+
+    val fsPath = new Path(path)
+    val fs = fsPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
+    if(!fs.exists(fsPath)){
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "input file path does not exist")
+    }
+
+    val delimiter = parameters.getOrElse("delimiter", ",")
+    val delimiterChar= if(!delimiter.isEmpty)
+      {
+        delimiter.charAt(0)
+      }
+    else{
+      throw new BadDelimiterFoundException("\nDelimiter:[\"" + delimiter + "\"]\nError being: Bad Delimiter found")
+    }
     val dateFormats = parameters.getOrElse("dateFormats", "null")
     val quote = parameters.getOrElse("quote", "\"")
 
@@ -98,12 +114,13 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     }
     val charset = parameters.getOrElse("charset", TextFile.DEFAULT_CHARSET.name())
 
+
     CsvRelation(
       componentId,
       charset,
       path,
       headerFlag,
-      delimiter,
+      delimiterChar,
       quoteChar,
       treatEmptyValuesAsNullsFlag,
       dateFormat,
@@ -135,34 +152,47 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     date
   } else null
 
-
   /*Saving Data in csv format*/
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
-    parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
+   // parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
+
     val path = parameters.get("path").get
+
+    if (path == null || path.equals("")){
+
+      throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + "path option must be specified for Output File Delimited Component")
+    }
+
+   /* val path = parameters.get("path").get
     val filesystemPath = {
       try{
         new Path(path)
       } catch {
         case e: IllegalArgumentException => throw new PathNotFoundException("\nPath:[\"" + path + "\"]\nError being: " + e.getMessage)
       }
-
-    }
+    }*/
+   val filesystemPath = new Path(path)
     val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
 
     val doSave = if (fs.exists(filesystemPath)) {
       mode match {
+
         case SaveMode.Append =>
-          sys.error(s"Append mode is not supported by ${
-            this.getClass.getCanonicalName
-          }")
+          LOG.error("\nError being Output file append operation is not supported")
+          throw new FileAppendException("\nError being Output file append operation is not supported")
         case SaveMode.Overwrite =>
-          fs.delete(filesystemPath, true)
-          true
+          if (fs.delete(filesystemPath, true))
+            true
+          else{
+              LOG.error("\nError being Output directory path :[\"" + path + "\"] "+" cannot be deleted")
+            throw new FileDeleteException("\nError being Output directory path :[\"" + path + "\"] "+" cannot be deleted")
+          }
         case SaveMode.ErrorIfExists =>
-          sys.error(s"Output Path: $path already exists. Set Overwrite property to 'True' of OutputComponent to overwrite existing output path")
+          LOG.error("\nError being Output directory path :[\"" + path + "\"] "+" already exists Set Overwrite property to 'True' of OutputComponent to overwrite existing output path")
+          throw new FileAlreadyExistsException("\nError being Output directory path :[\"" + path + "\"] "+" already exists Set Overwrite property to 'True' of OutputComponent to overwrite existing output path")
         case SaveMode.Ignore => false
+
       }
     } else {
       true
@@ -177,9 +207,6 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
   }
 
   def saveAsCsvFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
-
-
-    /*new Code Added*/
 
 
     val delimiter = parameters.getOrElse("delimiter", ",")

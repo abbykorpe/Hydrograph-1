@@ -12,15 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components
 
+import java.sql.SQLException
 import java.util
 
 import hydrograph.engine.core.component.entity.OutputJdbcUpdateEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.custom.exceptions.{BadArgumentException, DateFormatException}
 import hydrograph.engine.jaxb.commontypes.TypeFieldName
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{DbTableUtils, InputOutputFieldsAndTypesCreator}
-import org.apache.spark.sql.Column
+import hydrograph.engine.spark.components.utils.{DbTableUtils, InputOutputFieldsAndTypesCreator, SchemaMisMatchException}
+import org.apache.spark.sql.{AnalysisException, Column}
 import org.apache.spark.sql.functions._
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -53,18 +55,50 @@ BaseComponentParams) extends SparkFlow {
       )
 
     //compare schema of user and database schema
-    cp.getDataFrame().select(createSchema(outputJdbcUpdateEntity.getFieldsList): _*).write
-      .mode("append")
-      .option("connectionURL", outputJdbcUpdateEntity.getUrl)
-      .option("tablename", outputJdbcUpdateEntity.getTableName)
-      .option("user", outputJdbcUpdateEntity.getUserName)
-      .option("password", outputJdbcUpdateEntity.getPassword)
-      .option("driver", outputJdbcUpdateEntity.getJdbcDriverClass)
-      .option("updateIndex", getColumnAndUpdateKeyIndexs(outputJdbcUpdateEntity).mkString(","))
-      .option("updateQuery", DbTableUtils().getUpdateQuery(outputJdbcUpdateEntity))
-      .option("batchsize", outputJdbcUpdateEntity.getBatchSize.toString)
-      .format("hydrograph.engine.spark.datasource.jdbc")
-      .save()
+    try {
+      cp.getDataFrame().select(createSchema(outputJdbcUpdateEntity.getFieldsList): _*).write
+        .mode("append")
+        .option("connectionURL", outputJdbcUpdateEntity.getUrl)
+        .option("tablename", outputJdbcUpdateEntity.getTableName)
+        .option("user", outputJdbcUpdateEntity.getUserName)
+        .option("password", outputJdbcUpdateEntity.getPassword)
+        .option("driver", outputJdbcUpdateEntity.getJdbcDriverClass)
+        .option("updateIndex", getColumnAndUpdateKeyIndexs(outputJdbcUpdateEntity).mkString(","))
+        .option("updateQuery", DbTableUtils().getUpdateQuery(outputJdbcUpdateEntity))
+        .option("batchsize", outputJdbcUpdateEntity.getBatchSize.toString)
+        .format("hydrograph.engine.spark.datasource.jdbc")
+        .save()
+    }   catch{
+      case e: AnalysisException =>
+        LOG.error("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.message,e)
+        throw new SchemaMisMatchException("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.message,e)
+
+      case e: DateFormatException =>
+        LOG.error("\nException in Output File Delimited Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]" + e.getMessage,e)
+        throw new DateFormatException("\nException in Output File Delimited Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]" + e.getMessage,e)
+
+      case e: BadArgumentException =>
+        LOG.error("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.getMessage,e)
+        throw new BadArgumentException("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch +"\"]\nBatchSize:[\"" + outputJdbcUpdateEntity.getBatchSize + "\"]\nError being: Bad BatchSize found")
+
+      case e: SQLException =>
+        LOG.error("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.getMessage)
+        throw new SQLException("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.getMessage)
+
+      case e: Exception =>
+        LOG.error("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.getMessage)
+        throw new RuntimeException("\nException in Output JdbcUpdate Component - \nComponent Id:[\"" + outputJdbcUpdateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + outputJdbcUpdateEntity.getComponentName + "\"]\nBatch:[\"" + outputJdbcUpdateEntity.getBatch + "\"]\nError being: " + e.getMessage)
+    }
   }
 
   def createSchema(getFieldsList: util.List[SchemaField]): Array[Column] =  {

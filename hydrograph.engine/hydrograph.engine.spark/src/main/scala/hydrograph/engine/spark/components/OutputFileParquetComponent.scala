@@ -13,10 +13,11 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.OutputFileParquetEntity
+import hydrograph.engine.core.custom.exceptions.PathNotFoundException
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.SchemaCreator
-import org.apache.spark.sql.SaveMode
+import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaMisMatchException}
+import org.apache.spark.sql.{AnalysisException, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -37,6 +38,12 @@ class OutputFileParquetComponent(oFileParquetEntity: OutputFileParquetEntity, co
 
       val schemaCreator = SchemaCreator(oFileParquetEntity)
       val filePathToWrite = oFileParquetEntity.getPath()
+
+    /*  if (filePathToWrite == null || filePathToWrite.equals("")){
+
+        throw new PathNotFoundException("\nPath:[\"" + filePathToWrite + "\"]\nError being: " + "path option must be specified for Output File Delimited Component")
+      }*/
+
       val fieldList = oFileParquetEntity.getFieldsList.asScala
 
       fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + oFileParquetEntity.getComponentId) }
@@ -48,9 +55,26 @@ class OutputFileParquetComponent(oFileParquetEntity: OutputFileParquetEntity, co
       LOG.debug("Created Output File Parquet Component '" + oFileParquetEntity.getComponentId + "' in Batch" + oFileParquetEntity.getBatch
         + ", file path " + oFileParquetEntity.getPath)
     } catch {
-      case ex: RuntimeException =>
-        LOG.error("Error in Output  File Parquet component '" + oFileParquetEntity.getComponentId + "', Error" , ex)
-        throw ex
+
+      case e: AnalysisException =>
+        LOG.error("\nException in Output File Parquet Component - \nComponent Id:[\"" + oFileParquetEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + oFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + oFileParquetEntity.getBatch + "\"]\nError being: " + e.message, e)
+        throw new SchemaMisMatchException("\nException in Output File Parquet Component - \nComponent Id:[\"" + oFileParquetEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + oFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + oFileParquetEntity.getBatch + "\"]\nError being: " + e.message, e)
+
+      case e: IllegalArgumentException =>
+        LOG.error("\nException in Output File Parquet Component - " +
+          "\nComponent Id:[\"" + oFileParquetEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + oFileParquetEntity.getComponentName
+          + "\"]\nBatch:[\"" + oFileParquetEntity.getBatch + "\"]\nError being: path option must be specified for Output File Parquet Component ", e)
+        throw new PathNotFoundException("\nException in Output File Parquet Component - " +
+        "\nComponent Id:[\"" + oFileParquetEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + oFileParquetEntity.getComponentName
+        + "\"]\nBatch:[\"" + oFileParquetEntity.getBatch + "\"]\nError being: path option must be specified for Output File Parquet Component ", e)
+
+      case e: Exception =>
+        LOG.error("\nException in Output File Parquet Component - \nComponent Id:[\"" + oFileParquetEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + oFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + oFileParquetEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new RuntimeException("\nException in Output File Parquet Component - \nComponent Id:[\"" + oFileParquetEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + oFileParquetEntity.getComponentName + "\"]\nBatch:[\"" + oFileParquetEntity.getBatch + "\"]" + e.getMessage, e)
     }
   }
 }

@@ -13,7 +13,7 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileDelimitedEntity
-import hydrograph.engine.core.custom.exceptions.BadDelimiterFoundException
+import hydrograph.engine.core.custom.exceptions._
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -51,7 +51,7 @@ class InputFileCsvWithDateFormatsComponent(iFileDelimitedEntity: InputFileDelimi
         .load(iFileDelimitedEntity.getPath)
 
       val key = iFileDelimitedEntity.getOutSocketList.get(0).getSocketId
-      LOG.info("Created Input File Delimited Component "+ iFileDelimitedEntity.getComponentId
+      LOG.info("Created Input File Delimited  Component "+ iFileDelimitedEntity.getComponentId
         + " in Batch "+ iFileDelimitedEntity.getBatch +" with output socket " + key
         + " and path "  + iFileDelimitedEntity.getPath)
       LOG.debug("Component Id: '"+ iFileDelimitedEntity.getComponentId
@@ -63,9 +63,38 @@ class InputFileCsvWithDateFormatsComponent(iFileDelimitedEntity: InputFileDelimi
         + " at Path: " + iFileDelimitedEntity.getPath)
       Map(key -> df)
     } catch {
-      case e : Exception =>
-        throw new BadDelimiterFoundException("\nException in Filter Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
-          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage())
+      case e: DateFormatException =>
+      LOG.error("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+      throw new DateFormatException("\nException in Input File Delimited Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+      case e: PathNotFoundException =>
+        LOG.error("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new PathNotFoundException("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+      case e: BadDelimiterFoundException =>
+        LOG.error("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new BadDelimiterFoundException("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+      case e: BadQuoteFoundException =>
+        LOG.error("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new BadQuoteFoundException("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+      case e: BadArgumentException =>
+        LOG.error("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new BadArgumentException("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+
+      case e: Exception =>
+        LOG.error("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new RuntimeException("\nException in Input File Delimited  Component - \nComponent Id:[\"" + iFileDelimitedEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + iFileDelimitedEntity.getComponentName + "\"]\nBatch:[\"" + iFileDelimitedEntity.getBatch + "\"]" + e.getMessage, e)
+
     }
 
   }
