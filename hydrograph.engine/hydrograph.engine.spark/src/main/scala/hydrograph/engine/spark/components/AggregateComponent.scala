@@ -49,8 +49,11 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   try {
     operationSchema = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
   } catch {
-    case e: Exception => throw new SchemaMisMatchException("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
-      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+    case e: Exception =>
+      LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+      throw new SchemaMisMatchException("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
   }
   val inSocketId: String = aggregateEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -68,8 +71,11 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
     keyFieldsIndexes = getIndexes(inputSchema, keyFields)
   }
   catch {
-    case e: Exception => throw new SchemaMisMatchException("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
-      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+    case e: Exception =>
+      LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+      throw new SchemaMisMatchException("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
   }
   var keyFieldsIndexes: Array[(Int, Int)] = null
 
@@ -104,13 +110,19 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           .getOperationsList, inputSchema, operationSchema)
       }
       catch {
-        case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+        case e: UserFunctionClassNotFoundException =>
+          LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+          throw new UserFunctionClassNotFoundException(
           "\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
-            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
 
-        case e: FieldNotFoundException => throw new FieldNotFoundException(
+        case e: FieldNotFoundException =>
+          LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+          throw new FieldNotFoundException(
           "\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
-            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage())
+            "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
       }
 
       aggregateList.foreach(sparkOperation => {
@@ -121,7 +133,10 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
               a.init()
               a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
             } catch {
-              case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+              case e: Exception =>
+                LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+                  "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+                throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
                 + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
                 + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
             }
@@ -131,7 +146,12 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
               a.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
                 .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields, keyFields)
             } catch {
-              case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+              case e: Exception =>
+
+                LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+                  "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+
+                throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
                 + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
                 + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
             }
@@ -161,7 +181,11 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
               try {
                 agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
               } catch {
-                case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                case e: Exception =>
+                  LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+                    "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+
+                  throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
                   + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
                   + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
               }
@@ -184,7 +208,11 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
                 try {
                   agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
                 } catch {
-                  case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+                  case e: Exception =>
+                    LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+                      "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+
+                    throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
                     + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
                     + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
                 }
@@ -200,7 +228,10 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
             try {
               agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
             } catch {
-              case e: Exception => throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
+              case e: Exception =>
+                LOG.error("\nException in Aggregate Component - \nComponent Id:[\"" + aggregateEntity.getComponentId + "\"]" +
+                  "\nComponent Name:[\"" + aggregateEntity.getComponentName + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]" + e.getMessage(),e)
+                throw new RuntimeException("\nException in Aggregate Component - \nComponent Id:[\""
                 + aggregateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + aggregateEntity.getComponentName
                 + "\"]\nBatch:[\"" + aggregateEntity.getBatch + "\"]\nError being: " + e.getMessage(), e)
             }

@@ -23,7 +23,11 @@ class DiscardComponent(discardEntity: DiscardEntity, componentsParams: BaseCompo
         + " in Batch " + discardEntity.getBatch)
       componentsParams.getDataFrame().count()
     } catch {
-      case e: Exception => throw new RuntimeException("\nException in Discard Component - \nComponent Id:[\""
+      case e: Exception =>
+        LOG.error("\nException in Discard Component - \nComponent Id:[\""
+          + discardEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + discardEntity.getComponentName + "\"]\nBatch:[\""
+          + discardEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new RuntimeException("\nException in Discard Component - \nComponent Id:[\""
         + discardEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + discardEntity.getComponentName + "\"]\nBatch:[\""
         + discardEntity.getBatch + "\"]" + e.getMessage(), e)
     }

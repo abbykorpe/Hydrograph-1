@@ -49,11 +49,16 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       val count = generateRecordEntity.getRecordCount.toInt
       if(count > 0)
         count
-      else
+      else {
+        LOG.error("\nException in Generate Record Component - \nComponent Id:[\"" +
+          generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
+          generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
+          + "\"]\nRecordCount:[\"" + count + "\"]\nError being: Bad Record Count found")
         throw new BadArgumentException("\nException in Generate Record Component - \nComponent Id:[\"" +
           generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
           generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
           + "\"]\nRecordCount:[\"" + count + "\"]\nError being: Bad Record Count found")
+      }
     }
 
     val prop = generateRecordEntity.getRuntimeProperties
@@ -61,7 +66,12 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       try {
         prop.getProperty("noOfPartitions").toInt
       } catch {
-        case e: NumberFormatException => throw new NumberFormatException(
+        case e: NumberFormatException =>
+          LOG.error("\nException in Generate Record Component - \nComponent Id:[\"" +
+            generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
+            generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
+            + "\"]" + e.getMessage)
+          throw new NumberFormatException(
           "\nException in Generate Record Component - \nComponent Id:[\"" +
             generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
             generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
@@ -81,6 +91,11 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
         }
       } catch {
         case e: ArithmeticException =>
+
+          LOG.error("\nException in Generate Record Component - \nComponent Id:[\"" +
+            generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
+            generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
+            + "\"]\nError being: " + e.getMessage)
           throw new ArithmeticException(
             "\nException in Generate Record Component - \nComponent Id:[\"" +
               generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
@@ -142,10 +157,18 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
       return rowFieldsList
     } catch {
-      case e: DateFormatException => throw new DateFormatException("\nException in Generate Record Component - \nComponent Id:[\""
+      case e: DateFormatException =>
+        LOG.error("\nException in Generate Record Component - \nComponent Id:[\""
           + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
           + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
-      case e: NumberFormatException => throw new NumberFormatException("\nException in Generate Record Component - \nComponent Id:[\""
+        throw new DateFormatException("\nException in Generate Record Component - \nComponent Id:[\""
+          + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
+          + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
+      case e: NumberFormatException =>
+        LOG.error("\nException in Generate Record Component - \nComponent Id:[\""
+          + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
+          + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
+        throw new NumberFormatException("\nException in Generate Record Component - \nComponent Id:[\""
         + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
         + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
     }
@@ -181,10 +204,17 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
 
     } catch {
-      case e: NumberFormatException => throw new NumberFormatException("\nError being: Cannot cast to Integer type")
-      case e: ParseException => throw new DateFormatException("\nDateFormat:[\""
+      case e: NumberFormatException =>
+        LOG.error("\nError being: Cannot cast to Integer type")
+        throw new NumberFormatException("\nError being: Cannot cast to Integer type")
+      case e: ParseException =>
+        LOG.error("\nDateFormat:[\""
+          + fieldEntityLists(fieldIndex).fieldFormat + "\"]\nError being: Unable to parse date")
+        throw new DateFormatException("\nDateFormat:[\""
         + fieldEntityLists(fieldIndex).fieldFormat + "\"]\nError being: Unable to parse date")
-      case e: Exception => throw new RuntimeException(e)
+      case e: Exception =>
+        LOG.error(e.getMessage)
+        throw new RuntimeException(e)
     }
 
   }
@@ -217,7 +247,12 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
       return (fieldEntityLists, dateFormatList)
     } catch {
-      case e: ArrayIndexOutOfBoundsException => throw new ArrayIndexOutOfBoundsException("\nException in Generate Record Component - \nComponent Id:[\""
+      case e: ArrayIndexOutOfBoundsException =>
+
+        LOG.error("\nException in Generate Record Component - \nComponent Id:[\""
+          + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
+          + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]" + e.getMessage)
+        throw new ArrayIndexOutOfBoundsException("\nException in Generate Record Component - \nComponent Id:[\""
         + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
         + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]" + e.getMessage)
     }

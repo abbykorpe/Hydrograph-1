@@ -184,7 +184,7 @@ class DefaultSource extends RelationProvider
             throw new FileDeleteException("\nError being Output directory path :[\"" + path + "\"] "+" cannot be deleted")
           }
         case SaveMode.ErrorIfExists =>
-          LOG.error(\nError being Output directory path :[\"" + path + "\"] "+" already exists")
+          LOG.error("\nError being Output directory path :[\"" + path + "\"] "+" already exists")
         throw new FileAlreadyExistsException("\nError being Output directory path :[\"" + path + "\"] "+" already exists")
         case SaveMode.Ignore => false
 

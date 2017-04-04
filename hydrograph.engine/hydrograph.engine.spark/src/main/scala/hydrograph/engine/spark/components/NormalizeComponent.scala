@@ -59,7 +59,10 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
   try {
     val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
   } catch {
-    case e: SchemaMismatchException => throw new SchemaMismatchException(
+    case e: SchemaMismatchException =>
+      LOG.error("\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
+      throw new SchemaMismatchException(
       "\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
         "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
   }
@@ -83,10 +86,17 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
           try {
             initializeOperationList[NormalizeForExpression](normalizeEntity.getOperationsList, inputSchema, outputSchema)
           } catch {
-            case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Normalize Component - \nComponent Id:[\""
+            case e: FieldNotFoundException =>
+
+              LOG.error("\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+                "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
+              throw new FieldNotFoundException("\nException in Normalize Component - \nComponent Id:[\""
               + normalizeEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + normalizeEntity.getComponentName
               + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
-            case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+            case e: UserFunctionClassNotFoundException =>
+              LOG.error("\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+                "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
+              throw new UserFunctionClassNotFoundException(
               "\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
                 "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage())
           }
@@ -116,6 +126,9 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
                 n.prepare(normalizeList.get(0).operationEntity.getOperationProperties)
               }  catch {
                 case e: RuntimeException =>
+
+                  LOG.error("\nException in Normalize Component - \nComponent Id:[\"" + normalizeEntity.getComponentId + "\"]" +
+                    "\nComponent Name:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" + e.getMessage(), e)
                   throw new RegexNotAvailableException("\nException in Normalize Component - \nComponentId:[\"" + normalizeEntity.getComponentId + "\"]" +
                     "\nComponentName:[\"" + normalizeEntity.getComponentName + "\"]\nBatch:[\"" + normalizeEntity.getBatch + "\"]" +
                     "\nOperationId:[\"" + normalizeList.get(0).operationEntity.getOperationId + "\"]\nOperationClass:[\""
@@ -139,7 +152,9 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
             }
           }
         } catch {
-          case e: Exception => throw new RuntimeException("Error in Normalize Component:[\"" + normalizeEntity.getComponentId + "\"] for " ,e)
+          case e: Exception =>
+            LOG.error("Error in Normalize Component:[\"" + normalizeEntity.getComponentId + "\"] for " ,e)
+            throw new RuntimeException("Error in Normalize Component:[\"" + normalizeEntity.getComponentId + "\"] for " ,e)
         }
 
         if (itr.isEmpty) {

@@ -44,7 +44,12 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
     try{
       operationSchema = EncoderHelper().getEncoder(filterEntity.getOperation.getOperationInputFields.toList, componentsParams.getSchemaFields())
     }  catch {
-      case e: Exception => throw new FieldNotFoundException("\nException in Filter Component - \nComponent Id:[\""
+      case e: Exception =>
+
+        LOG.error("\nException in Filter Component - \nComponent Id:[\""
+          + filterEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\""
+          + filterEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new FieldNotFoundException("\nException in Filter Component - \nComponent Id:[\""
         + filterEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\""
         + filterEntity.getBatch + "\"]" + e.getMessage(), e)
     }
@@ -60,9 +65,15 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
       try {
         initializeOperationList[FilterForExpression](filterEntity.getOperationsList, operationSchema, outputSchema).head
       } catch {
-        case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+        case e: UserFunctionClassNotFoundException =>
+          LOG.error("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage(), e)
+          throw new UserFunctionClassNotFoundException("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage(), e)
-        case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Filter Component - \nComponent Id:[\""
+        case e: FieldNotFoundException =>
+          LOG.error("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage(), e)
+          throw new FieldNotFoundException("\nException in Filter Component - \nComponent Id:[\""
           + filterEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\""
           + filterEntity.getBatch + "\"]" + e.getMessage(), e)
       }
@@ -76,7 +87,10 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
         case _ =>
       }
     } catch {
-      case e: Exception => throw new RuntimeException("\nException in Filter Component - \nComponent Id:[\""
+      case e: Exception =>
+        LOG.error("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new RuntimeException("\nException in Filter Component - \nComponent Id:[\""
         + filterEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\""
         + filterEntity.getBatch + "\"]" + e.getMessage(), e)
     }
@@ -90,7 +104,10 @@ class FilterComponentWithUDF(filterEntity: FilterEntity, componentsParams: BaseC
       try {
         filterClass.isRemove(filterSparkOperations.inputRow.setRow(cols))
       } catch {
-        case e: Exception => throw new RuntimeException("\nException in Filter Component - \nComponent Id:[\""
+        case e: Exception =>
+          LOG.error("\nException in Filter Component - \nComponent Id:[\"" + filterEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\"" + filterEntity.getBatch + "\"]" + e.getMessage(), e)
+          throw new RuntimeException("\nException in Filter Component - \nComponent Id:[\""
           + filterEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + filterEntity.getComponentName + "\"]\nBatch:[\""
           + filterEntity.getBatch + "\"]" + e.getMessage(), e)
       }

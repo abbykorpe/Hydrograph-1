@@ -125,6 +125,7 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
                     }
 
                     if(ex != null) {
+
                         throw new RuntimeException(ex);
                     }
                 }

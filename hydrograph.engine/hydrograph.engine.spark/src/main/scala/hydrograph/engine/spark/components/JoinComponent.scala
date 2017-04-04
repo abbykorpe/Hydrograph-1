@@ -52,7 +52,10 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
 
       join(joinOperationsSorted, passthroughFields, mapFields, copyOfInSocketFields)
     } catch {
-      case e: RuntimeException => throw new RuntimeException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
+      case e: RuntimeException =>
+        LOG.error("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" + e.getMessage, e)
+        throw new RuntimeException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
         "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" + e.getMessage, e)
     }
   }
@@ -95,7 +98,10 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
         rhsDF = rhsModified.dataFrame.select((rhsModified.keyFields ++ rhsModified.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
       }
       catch {
-        case e: Exception => throw new SchemaMisMatchException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
+        case e: Exception =>
+          LOG.error("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" + e.getMessage, e)
+          throw new SchemaMisMatchException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" + e.getMessage, e)
       }
 

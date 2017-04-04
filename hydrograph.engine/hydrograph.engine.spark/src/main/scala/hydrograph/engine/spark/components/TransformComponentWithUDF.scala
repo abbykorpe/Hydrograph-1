@@ -57,12 +57,19 @@ class TransformComponentWithUDF(transformEntity: TransformEntity, componentsPara
       transformsList = initializeOperationList[TransformForExpression](transformEntity.getOperationsList, inputSchema)
     }
     catch {
-      case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+      case e: UserFunctionClassNotFoundException =>
+
+        LOG.error( "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
+        throw new UserFunctionClassNotFoundException(
         "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
-          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
-      case e: FieldNotFoundException => throw new FieldNotFoundException(
+          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
+      case e: FieldNotFoundException =>
+        LOG.error( "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
+        throw new FieldNotFoundException(
         "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
-          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
+          "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
     }
     transformsList.foreach {
       sparkOperation =>
@@ -79,7 +86,7 @@ class TransformComponentWithUDF(transformEntity: TransformEntity, componentsPara
                 .operationEntity.getOperationInputFields.get(0) + "\nOutput Fields: " + sparkOperation.operationEntity.getOperationOutputFields.get(0), e)
               case e: Exception => throw new SchemaMisMatchException(
                 "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
-                  "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
+                  "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
 
             }
           case t: TransformBase => {
@@ -88,6 +95,11 @@ class TransformComponentWithUDF(transformEntity: TransformEntity, componentsPara
                 .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields)
             } catch {
               case e: RuntimeException =>
+
+                LOG.error("\nException in Transform Component - \nComponentId:[\"" + transformEntity.getComponentId + "\"]" +
+                  "\nComponentName:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" +
+                  "\nOperationId:[\"" + sparkOperation.operationEntity.getOperationId + "\"]\nOperationClass:[\"" + t.getClass.getName + "\"]" + e.getMessage())
+
                 throw new RegexNotAvailableException("\nException in Transform Component - \nComponentId:[\"" + transformEntity.getComponentId + "\"]" +
                   "\nComponentName:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" +
                   "\nOperationId:[\"" + sparkOperation.operationEntity.getOperationId + "\"]\nOperationClass:[\"" + t.getClass.getName + "\"]" + e.getMessage())
@@ -104,10 +116,13 @@ class TransformComponentWithUDF(transformEntity: TransformEntity, componentsPara
       try
         operation.baseClassInstance.transform(operation.inputRow.setRow(cols), operation.outputRow.setRow(outRow))
       catch {
+
         case e: Exception =>
-        case e: Exception => throw new SchemaMisMatchException(
+          LOG.error("\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
+          throw new SchemaMisMatchException(
           "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
-            "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
+            "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage(),e)
 
       }
       Row.fromSeq(outRow)
@@ -132,9 +147,13 @@ class TransformComponentWithUDF(transformEntity: TransformEntity, componentsPara
     try {
       df = transDF.select(finalList: _*)
     } catch {
-      case e: AnalysisException => throw new SchemaMismatchException("\nException in Transform Component - \nComponentId:[\""
+      case e: AnalysisException =>
+        LOG.error("\nException in Transform Component - \nComponentId:[\""
+          + transformEntity.getComponentId + "\"]" + "\nComponentName:[\"" + transformEntity.getComponentName +
+          "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]\nError being: " + e.message,e)
+        throw new SchemaMismatchException("\nException in Transform Component - \nComponentId:[\""
         + transformEntity.getComponentId + "\"]" + "\nComponentName:[\"" + transformEntity.getComponentName +
-        "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]\nError being: " + e.message )
+        "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]\nError being: " + e.message,e )
     }
 
     val key = transformEntity.getOutSocketList.get(0).getSocketId
