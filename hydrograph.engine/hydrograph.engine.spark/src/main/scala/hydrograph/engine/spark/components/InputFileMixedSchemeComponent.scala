@@ -83,10 +83,9 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
         + " at Path: " + iFileMixedSchemeEntity.getPath)
       Map(key -> df)
     } catch {
-
-      case e: RuntimeException =>
-        LOG.error("Error in Input File MixedScheme Component "+ iFileMixedSchemeEntity.getComponentId, e)
-        throw new RuntimeException("Error in Input File MixedScheme Component "+ iFileMixedSchemeEntity.getComponentId, e)
+      case e: Exception => throw new RuntimeException("\nException in Input File Mixed Scheme Component - \nComponent Id:[\""
+        + iFileMixedSchemeEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + iFileMixedSchemeEntity.getComponentName
+        + "\"]\nBatch:[\"" + iFileMixedSchemeEntity.getBatch + "\"]" + e.getMessage, e)
     }
 
   }

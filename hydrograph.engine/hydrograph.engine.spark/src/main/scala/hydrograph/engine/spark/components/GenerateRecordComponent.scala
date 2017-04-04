@@ -16,7 +16,7 @@ import java.sql.{Date, Timestamp}
 import java.text.{ParseException, SimpleDateFormat}
 
 import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import hydrograph.engine.core.custom.exceptions.{BadArgumentException, BadQuoteFoundException, DateFormatException}
+import hydrograph.engine.core.custom.exceptions.{BadArgumentException, DateFormatException}
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
@@ -80,8 +80,12 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
             ListBuffer((recordCount / noOfPartitions) + x)
         }
       } catch {
-        case ae: ArithmeticException =>
-          throw new RuntimeException("Error being: " + ae.getMessage)
+        case e: ArithmeticException =>
+          throw new ArithmeticException(
+            "\nException in Generate Record Component - \nComponent Id:[\"" +
+              generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" +
+              generateRecordEntity.getComponentName + "\"]\nBatch:[\"" + generateRecordEntity.getBatch
+              + "\"]\nError being: " + e.getMessage)
       }
 
     try {
@@ -115,8 +119,7 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       Map(key -> df)
 
     } catch {
-      case e: Exception =>
-        throw new RuntimeException("\nError being: " + e.getMessage)
+      case e: Exception => throw e
     }
   }
 
@@ -139,10 +142,12 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
       return rowFieldsList
     } catch {
-      case e: DateFormatException =>
-        throw new DateFormatException("\nException in Generate Record Component - \nComponent Id:[\""
+      case e: DateFormatException => throw new DateFormatException("\nException in Generate Record Component - \nComponent Id:[\""
           + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
           + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
+      case e: NumberFormatException => throw new NumberFormatException("\nException in Generate Record Component - \nComponent Id:[\""
+        + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
+        + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]\nFieldName:[\"" + fieldName + "\"]" + e.getMessage)
     }
   }
 
@@ -176,12 +181,10 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
 
     } catch {
-      case nfe: NumberFormatException =>
-        throw new RuntimeException("\nError being: Cannot cast to Integer type")
-      case pe: ParseException =>
-        throw new DateFormatException("\nDateFormat:[\"" + fieldEntityLists(fieldIndex).fieldFormat + "\"]\nError being: Unable to parse date")
-      case e: Exception =>
-        throw new RuntimeException(e)
+      case e: NumberFormatException => throw new NumberFormatException("\nError being: Cannot cast to Integer type")
+      case e: ParseException => throw new DateFormatException("\nDateFormat:[\""
+        + fieldEntityLists(fieldIndex).fieldFormat + "\"]\nError being: Unable to parse date")
+      case e: Exception => throw new RuntimeException(e)
     }
 
   }
@@ -214,8 +217,9 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       }
       return (fieldEntityLists, dateFormatList)
     } catch {
-      case aiob: ArrayIndexOutOfBoundsException =>
-        throw new RuntimeException("Error being: " + aiob.getMessage)
+      case e: ArrayIndexOutOfBoundsException => throw new ArrayIndexOutOfBoundsException("\nException in Generate Record Component - \nComponent Id:[\""
+        + generateRecordEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + generateRecordEntity.getComponentName
+        + "\"]\nBatch:[\"" + generateRecordEntity.getBatch + "\"]" + e.getMessage)
     }
   }
 }

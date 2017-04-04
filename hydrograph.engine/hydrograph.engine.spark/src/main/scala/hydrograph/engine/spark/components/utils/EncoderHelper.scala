@@ -78,7 +78,7 @@ class EncoderHelper extends Serializable {
     try {
       getDataType(schemaFields.filter(s => s.getFieldName.equals(fieldName))(0))
     } catch {
-      case e: Exception => throw new SchemaMismatchException(" Field:[\"" + fieldName + "\"]")
+      case e: Exception => throw new SchemaMismatchException("\nError being Field:[\"" + fieldName + "\"] not found", e)
     }
 
   }

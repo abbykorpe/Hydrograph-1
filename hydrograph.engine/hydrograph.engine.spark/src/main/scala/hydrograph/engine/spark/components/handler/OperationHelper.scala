@@ -49,7 +49,7 @@ trait OperationHelper[T] {
               .getOperationInputFields)), getOutputReusableRow(outputSchema, x), new ValidationAPI(x.getExpression, "")
               , x.getAccumulatorInitialValue, x.getOperationOutputFields, fieldName, fieldType)
           } catch {
-            case e: FieldNotFoundException => throw new FieldNotFoundException("\nOperation Id:[\"" + x.getOperationId + "\"]" + e.getMessage)
+            case e: FieldNotFoundException => throw new FieldNotFoundException("\nOperation Id:[\"" + x.getOperationId + "\"]" + e.getMessage, e)
           }
           so :: populateOperation(xs)
         }
@@ -61,8 +61,8 @@ trait OperationHelper[T] {
             so = SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
               .getOperationInputFields)), getOutputReusableRow(outputSchema, x), null, null, null, null, null)
           } catch {
-            case e: ClassNotFoundException => throw new UserFunctionClassNotFoundException("\nOperation Id:[\"" + x.getOperationId + "\"]" + e.getMessage)
-            case e: FieldNotFoundException => throw new FieldNotFoundException("\nOperation Id:[\"" + x.getOperationId + "\"]" + e.getMessage)
+            case e: ClassNotFoundException => throw new UserFunctionClassNotFoundException("\nOperation Id:[\"" + x.getOperationId + "\"]" + e.getMessage, e)
+            case e: FieldNotFoundException => throw new FieldNotFoundException("\nOperation Id:[\"" + x.getOperationId + "\"]" + e.getMessage, e)
           }
           so :: populateOperation(xs)
         }
@@ -89,7 +89,7 @@ trait OperationHelper[T] {
       clazz(0).setAccessible(true)
       clazz(0).newInstance().asInstanceOf[T]
     } catch {
-      case e: ClassNotFoundException => throw new UserFunctionClassNotFoundException("\nUser Function:[\"" + className + "\"] not found.")
+      case e: ClassNotFoundException => throw new UserFunctionClassNotFoundException("\nUser Function:[\"" + className + "\"] not found.", e)
     }
 
   }
@@ -143,7 +143,7 @@ trait OperationHelper[T] {
       try {
         outSchema = outSchema.add(schema(field))
       } catch {
-        case e: IllegalArgumentException => throw new FieldNotFoundException("\nField:[\"" + field + "\"] not found.")
+        case e: IllegalArgumentException => throw new FieldNotFoundException("\nField:[\"" + field + "\"] not found.", e)
       }
     })
     outSchema

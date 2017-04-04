@@ -32,7 +32,6 @@ import scala.collection.mutable.ListBuffer
   * @author Bitwise
   *
   */
-
 class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[JoinComponent])
@@ -53,8 +52,8 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
 
       join(joinOperationsSorted, passthroughFields, mapFields, copyOfInSocketFields)
     } catch {
-      case ex: RuntimeException =>
-        LOG.error("Error in Join component '" + joinEntity.getComponentId + "', Error" + ex.getMessage, ex); throw ex
+      case e: RuntimeException => throw new RuntimeException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" + e.getMessage, e)
     }
   }
 
@@ -97,7 +96,7 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
       }
       catch {
         case e: Exception => throw new SchemaMisMatchException("\nException in Join Component - \nComponent Id:[\"" + joinEntity.getComponentId + "\"]" +
-          "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" )
+          "\nComponent Name:[\"" + joinEntity.getComponentName + "\"]\nBatch:[\"" + joinEntity.getBatch + "\"]" + e.getMessage, e)
       }
 
 

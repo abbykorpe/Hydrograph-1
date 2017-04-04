@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.recordreader;
 
 import hydrograph.engine.core.constants.Constants;
+import hydrograph.engine.core.custom.exceptions.SchemaMismatchException;
 import hydrograph.engine.spark.helper.DelimitedAndFixedWidthHelper;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -172,10 +173,10 @@ public class DelimitedAndFixedWidthRecordReader implements
 							isThirdLastCharNewline = true;
 						} else {
 							fieldNotFound = false;
-							String message = "The input data is not according to specified schema. Expected data with delimiters or lengths as: "
-									+ Arrays.toString(lengthsAndDelimiters)
-									+ ", got: " + stringBuilder.toString();
-							throw new RuntimeException(message);
+							String message = "\nExpected Schema:[\"" + Arrays.toString(lengthsAndDelimiters) + "\"]" +
+									"\nError being: The input data is not according to specified schema. "
+									+ "\nData Found: " + stringBuilder.toString();
+							throw new SchemaMismatchException(message);
 						}
 					} while (fieldNotFound);
 				}

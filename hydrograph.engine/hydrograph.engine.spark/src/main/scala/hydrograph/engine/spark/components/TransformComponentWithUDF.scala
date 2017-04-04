@@ -60,7 +60,6 @@ class TransformComponentWithUDF(transformEntity: TransformEntity, componentsPara
       case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
         "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
-
       case e: FieldNotFoundException => throw new FieldNotFoundException(
         "\nException in Transform Component - \nComponent Id:[\"" + transformEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + transformEntity.getComponentName + "\"]\nBatch:[\"" + transformEntity.getBatch + "\"]" + e.getMessage())
