@@ -50,7 +50,10 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
     try {
       EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
     } catch {
-      case e: SchemaMismatchException => throw new SchemaMismatchException(
+      case e: SchemaMismatchException =>
+        LOG.error("\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new SchemaMismatchException(
         "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
     }
@@ -80,10 +83,16 @@ class GroupCombineComponent(groupCombineEntity: GroupCombineEntity, componentsPa
       try {
         initializeOperationList[GroupCombineForExpression](groupCombineEntity.getOperationsList, inputSchema, operationSchema)
       } catch {
-        case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException(
+        case e: UserFunctionClassNotFoundException =>
+          LOG.error("\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
+          throw new UserFunctionClassNotFoundException(
           "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
             "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
-        case e: FieldNotFoundException => throw new FieldNotFoundException(
+        case e: FieldNotFoundException =>
+          LOG.error( "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
+            "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
+          throw new FieldNotFoundException(
           "\nException in GroupCombine Component - \nComponent Id:[\"" + groupCombineEntity.getComponentId + "\"]" +
             "\nComponent Name:[\"" + groupCombineEntity.getComponentName + "\"]\nBatch:[\"" + groupCombineEntity.getBatch + "\"]" + e.getMessage(), e)
       }

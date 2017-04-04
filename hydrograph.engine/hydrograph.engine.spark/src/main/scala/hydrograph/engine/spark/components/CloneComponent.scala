@@ -33,7 +33,10 @@ class CloneComponent(cloneEntity: CloneEntity, componentsParams: BaseComponentPa
       }
       generateDataFrame(cloneEntity.getOutSocketList.toList)
     } catch {
-      case e: Exception => throw new RuntimeException(
+      case e: Exception =>
+        LOG.error("\nException in Clone Component - \nComponent Id:[\"" + cloneEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + cloneEntity.getComponentName + "\"]\nBatch:[\"" + cloneEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new RuntimeException(
         "\nException in Clone Component - \nComponent Id:[\"" + cloneEntity.getComponentId + "\"]" +
           "\nComponent Name:[\"" + cloneEntity.getComponentName + "\"]\nBatch:[\"" + cloneEntity.getBatch + "\"]" + e.getMessage(), e)
     }

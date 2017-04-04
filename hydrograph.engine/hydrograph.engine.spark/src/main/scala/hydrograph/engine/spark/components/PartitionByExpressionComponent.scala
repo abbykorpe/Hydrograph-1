@@ -80,13 +80,26 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
 
       map
     } catch {
-      case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException("\nException in Partition By Expression Component - "
+      case e: UserFunctionClassNotFoundException =>
+
+        LOG.error("\nException in Partition By Expression Component - "
+          + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new UserFunctionClassNotFoundException("\nException in Partition By Expression Component - "
         + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
-      case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Partition By Expression Component - "
+      case e: FieldNotFoundException =>
+        LOG.error("\nException in Partition By Expression Component - "
+          + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new FieldNotFoundException("\nException in Partition By Expression Component - "
         + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
-      case e: Exception => throw new RuntimeException("\nException in Partition By Expression Component - "
+      case e: Exception =>
+        LOG.error("\nException in Partition By Expression Component - "
+          + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new RuntimeException("\nException in Partition By Expression Component - "
         + "\nComponent Id:[\"" + partitionByExpressionEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + partitionByExpressionEntity.getComponentName + "\"]\nBatch:[\"" + partitionByExpressionEntity.getBatch + "\"]" + e.getMessage(), e)
     }

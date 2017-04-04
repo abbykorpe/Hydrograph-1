@@ -50,7 +50,12 @@ class UniqueSequenceComponent(uniqueSequenceEntity: UniqueSequenceEntity, baseCo
 
       Map(outSocketId -> df)
     } catch {
-      case e: Exception => throw new RuntimeException("\nException in Unique Sequence Component - "
+      case e: Exception =>
+        LOG.error("\nException in Unique Sequence Component - "
+          + "\nComponent Id:[\"" + uniqueSequenceEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + uniqueSequenceEntity.getComponentName + "\"]\nBatch:[\"" + uniqueSequenceEntity.getBatch
+          + "\"]\nError being: " + e.getMessage, e)
+        throw new RuntimeException("\nException in Unique Sequence Component - "
         + "\nComponent Id:[\"" + uniqueSequenceEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + uniqueSequenceEntity.getComponentName + "\"]\nBatch:[\"" + uniqueSequenceEntity.getBatch
         + "\"]\nError being: " + e.getMessage, e)

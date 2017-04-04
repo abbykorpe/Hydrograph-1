@@ -51,6 +51,9 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
           df.select(mergedFields.map(field => col(field._1).as(field._2)): _*)
         } catch {
           case e: AnalysisException => {
+            LOG.error("\nException in Lookup Component - \nComponent Id:[\""
+              + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+              + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
             throw new BadArgumentException("\nException in Lookup Component - \nComponent Id:[\""
               + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
               + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
@@ -69,6 +72,10 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
           driverJoinOp.dataFrame.select((driverJoinOp.keyFields ++ driverJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
         } catch {
           case e: AnalysisException => {
+
+            LOG.error("\nException in Lookup Component - \nComponent Id:[\""
+              + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+              + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
             throw new BadArgumentException("\nException in Lookup Component - \nComponent Id:[\""
               + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
               + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
@@ -80,6 +87,10 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
           lookupJoinOp.dataFrame.select((lookupJoinOp.keyFields ++ lookupJoinOp.dataFrame.columns.filter(p => mergedInputs.contains(p))).distinct.map(f => col(f)): _*)
         } catch {
           case e: AnalysisException => {
+
+            LOG.error("\nException in Lookup Component - \nComponent Id:[\""
+            + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+            + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
             throw new BadArgumentException("\nException in Lookup Component - \nComponent Id:[\""
               + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
               + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.message, e)
@@ -112,7 +123,11 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       Map(key -> outputDF)
     }
     catch {
-      case e: RuntimeException => throw new RuntimeException("\nException in Lookup Component - \nComponent Id:[\""
+      case e: RuntimeException =>
+        LOG.error("\nException in Lookup Component - \nComponent Id:[\""
+          + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
+          + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.getMessage, e)
+        throw new RuntimeException("\nException in Lookup Component - \nComponent Id:[\""
         + lookupEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + lookupEntity.getComponentName
         + "\"]\nBatch:[\"" + lookupEntity.getBatch + "\"]\nError being: " + e.getMessage, e)
     }

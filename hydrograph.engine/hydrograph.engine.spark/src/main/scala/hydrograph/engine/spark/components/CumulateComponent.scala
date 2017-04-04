@@ -50,7 +50,10 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   try {
     operationSchema= EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
   } catch {
-    case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+    case e: Exception =>
+      LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+        "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+      throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
       "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
   }
 
@@ -67,7 +70,10 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
     try {
       getIndexes(inputSchema, keyFields)
     } catch {
-      case e: Exception => throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+      case e: Exception =>
+        LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+          "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+        throw new SchemaMisMatchException("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
         "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
     }
   }
@@ -97,10 +103,17 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
         try {
           cumulateList = initializeOperationList[CumulateForExpression](cumulateEntity.getOperationsList, inputSchema, operationSchema)
         } catch {
-          case e: UserFunctionClassNotFoundException => throw new UserFunctionClassNotFoundException("\nException in Cumulate Component - \nComponent Id:[\""
+          case e: UserFunctionClassNotFoundException =>
+            LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+            throw new UserFunctionClassNotFoundException("\nException in Cumulate Component - \nComponent Id:[\""
             + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
             + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
-          case e: FieldNotFoundException => throw new FieldNotFoundException("\nException in Cumulate Component - \nComponent Id:[\""
+          case e: FieldNotFoundException =>
+
+            LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+              "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+            throw new FieldNotFoundException("\nException in Cumulate Component - \nComponent Id:[\""
             + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
             + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
         }
@@ -113,7 +126,10 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
                 a.init()
                 a.callPrepare(sparkOperation.fieldName, sparkOperation.fieldType)
               } catch {
-                case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                case e: Exception =>
+                  LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+                    "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+                  throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
                   + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
                   + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
               }
@@ -124,7 +140,10 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
                   sparkOperation.operationEntity.getOperationInputFields,
                   sparkOperation.operationEntity.getOperationOutputFields, keyFields)
               }  catch {
-                case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                case e: Exception =>
+                  LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+                    "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+                  throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
                   + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
                   + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
               }
@@ -167,7 +186,11 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
               try {
                 cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
               } catch {
-                case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                case e: Exception =>
+
+                  LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+                    "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+                  throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
                   + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
                   + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
               }
@@ -178,7 +201,10 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
                 try {
                   cmt.baseClassInstance.onCompleteGroup()
                 } catch {
-                  case e: Exception => throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
+                  case e: Exception =>
+                    LOG.error("\nException in Cumulate Component - \nComponent Id:[\"" + cumulateEntity.getComponentId + "\"]" +
+                      "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\"" + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
+                    throw new RuntimeException("\nException in Cumulate Component - \nComponent Id:[\""
                     + cumulateEntity.getComponentId + "\"]" + "\nComponent Name:[\"" + cumulateEntity.getComponentName + "\"]\nBatch:[\""
                     + cumulateEntity.getBatch + "\"]" + e.getMessage(), e)
                 }

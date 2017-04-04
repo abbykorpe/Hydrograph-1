@@ -53,11 +53,22 @@ class SortComponent(sortEntity: SortEntity, componentsParams: BaseComponentParam
       Map(outSocketId -> sortedDF)
 
     } catch {
-      case e: AnalysisException => throw new SchemaMismatchException("\nException in Sort Component - "
+      case e: AnalysisException =>
+        LOG.error("\nException in Sort Component - "
+          + "\nComponent Id:[\"" + sortEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + sortEntity.getComponentName + "\"]\nBatch:[\"" + sortEntity.getBatch
+          + "\"]\nError being: " + e.message, e)
+        throw new SchemaMismatchException("\nException in Sort Component - "
         + "\nComponent Id:[\"" + sortEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + sortEntity.getComponentName + "\"]\nBatch:[\"" + sortEntity.getBatch
         + "\"]\nError being: " + e.message, e)
-      case e: Exception => throw new RuntimeException("\nException in Sort Component - "
+      case e: Exception =>
+
+        LOG.error("\nException in Sort Component - "
+          + "\nComponent Id:[\"" + sortEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + sortEntity.getComponentName + "\"]\nBatch:[\"" + sortEntity.getBatch
+          + "\"]\nError being: " + e.getMessage, e)
+        throw new RuntimeException("\nException in Sort Component - "
         + "\nComponent Id:[\"" + sortEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + sortEntity.getComponentName + "\"]\nBatch:[\"" + sortEntity.getBatch
         + "\"]\nError being: " + e.getMessage, e)

@@ -53,13 +53,24 @@ class RunProgramComponent(assemblyEntityBase: AssemblyEntityBase) extends Comman
         }
       }
       catch {
-        case e => throw new RuntimeException("\nException in Run Program Component - "
+        case e =>
+
+          LOG.error("\nException in Run Program Component - "
+            + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+            + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+            + "\"]\nError being: " + e.getMessage, e)
+          throw new RuntimeException("\nException in Run Program Component - "
           + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
           + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
           + "\"]\nError being: " + e.getMessage, e)
       }
       finally {
         if (errorMessage != null) {
+
+          LOG.error("\nException in Run Program Component - "
+            + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+            + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+            + "\"]\nError being: " + errorMessage)
           throw new IOException("\nException in Run Program Component - "
             + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
             + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
@@ -69,11 +80,22 @@ class RunProgramComponent(assemblyEntityBase: AssemblyEntityBase) extends Comman
       }
     }
     catch {
-      case e: IOException => throw new IOException("\nException in Run Program Component - "
+      case e: IOException =>
+
+        LOG.error("\nException in Run Program Component - "
+          + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+          + "\"]\nError being: " + e.getMessage, e)
+        throw new IOException("\nException in Run Program Component - "
         + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
         + "\"]\nError being: " + e.getMessage, e)
-      case e: InterruptedException => throw new InterruptedException("\nException in Run Program Component - "
+      case e: InterruptedException =>
+        LOG.error("\nException in Run Program Component - "
+          + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
+          + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
+          + "\"]\nError being: " + e.getMessage)
+        throw new InterruptedException("\nException in Run Program Component - "
         + "\nComponent Id:[\"" + runProgramEntity.getComponentId + "\"]" + "\nComponent Name:[\""
         + runProgramEntity.getComponentName + "\"]\nBatch:[\"" + runProgramEntity.getBatch
         + "\"]\nError being: " + e.getMessage)
